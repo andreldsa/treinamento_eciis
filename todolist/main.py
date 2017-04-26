@@ -3,35 +3,25 @@ import json
 import datetime
 
 from models import *
+from utils import *
 
-def date_handler(obj):
-  if hasattr(obj, 'isoformat'):
-    return obj.isoformat()
-  elif hasattr(obj, 'email'):
-    return obj.email()
-
-  return obj
-
-def data2json(data):
-  return json.dumps(
-    data,
-    default=date_handler,
-    indent=2,
-    separators=(',', ': '),
-    ensure_ascii=False)
-
-
-class MainHandler(webapp2.RequestHandler):
+class ToDosHandler(webapp2.RequestHandler):
     def get(self):
-            query = Todo.query()
-            data = [todo.to_dict() for todo in query]
+            query = ToDo.query()
+            todos = [todo.to_dict() for todo in query]
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            counter = Counter.get_or_insert("total")
+            data = {
+                'total_updates': counter.updates,
+                'minutes': counter.minutes,
+                'todos': todos
+            }
             self.response.write(data2json(data))
                 
 
     def post(self):
         data = json.loads(self.request.body)
-        newtodo = Todo()
+        newtodo = ToDo()
         newtodo.title = data['title']
         newtodo.author = data.get('author')
         newtodo.text = data.get('text')
@@ -42,6 +32,43 @@ class MainHandler(webapp2.RequestHandler):
         self.response.set_status(201)
 
 
+def _assert(condition, status_code, msg):
+    if condition:
+        return
+
+    # TODO: logging here
+    webapp2.abort(status_code, msg)
+
+
+class UpdateHandler(webapp2.RequestHandler):
+    def get(self):
+        counter = Counter.get_or_insert('total')
+        counter.minutes += 1
+        counter.put()
+
+
+class ToDoHandler(webapp2.RequestHandler):
+    def put(self, iid):
+        @ndb.transactional(retries=0, xg=True)
+        def updateToDo(todo, data):
+            todo.title = data.get('title', todo.title)
+            todo.author = data.get('author', todo.author)
+            todo.text = data.get('text', todo.author)
+            todo.updates = (todo.updates or 0) + 1
+            todo.put()
+            counter = Counter.get_or_insert("total")
+            counter.updates += 1
+            counter.put()
+
+            
+        data = json.loads(self.request.body)
+        todo = ToDo.get_by_id(int(iid))
+        _assert(todo, 400, '{"msg": "invalid integer id"}')
+        updateToDo(todo, data)
+        self.response.set_status(200)
+
 app = webapp2.WSGIApplication([
-    ('/api/todo', MainHandler),
+    ('/api/todo', ToDosHandler),
+    ('/api/update', UpdateHandler),
+    ('/api/todo/(.*)', ToDoHandler),
 ], debug=True)

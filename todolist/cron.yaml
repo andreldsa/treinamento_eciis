@@ -1,0 +1,4 @@
+cron:
+- description: contagem
+  url: /api/update
+  schedule: every 1 minutes
