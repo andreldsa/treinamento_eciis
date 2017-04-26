@@ -8,14 +8,13 @@ class InstituicaoWebapp(webapp2.RequestHandler):
 	
 	def get(self):
 		
+		query = Instituicao.query()			
+		
 		instituicao = self.request.get('nome')
-		
+			
 		if instituicao:		
-			query = Instituicao.query().filter(Instituicao.nome_instituicao == instituicao)
+			query = query.filter(Instituicao.nome_instituicao == instituicao)
 		
-		else:			
-			query = Instituicao.query()				
-
 		dados = [inst.to_dict() for inst in query]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(dados))
@@ -48,7 +47,13 @@ class InstituicaoWebapp(webapp2.RequestHandler):
 class UsuarioWebapp(webapp2.RequestHandler):
 	
 	def get(self):
+		
 		query = Usuario.query()
+		
+		nome_usuario = self.request.get('nome')
+		
+		if nome_usuario:		
+			query = query.filter(Usuario.nome == nome_usuario)
 
 		dados = [usuario.to_dict() for usuario in query]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -79,6 +84,7 @@ class PostsWebapp(webapp2.RequestHandler):
 	def get(self):
 		
 		query = Posts.query()
+
 		
 		dados = [post.to_dict() for post in query]
 		
