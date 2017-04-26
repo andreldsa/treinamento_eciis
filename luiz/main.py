@@ -38,8 +38,8 @@ class ApInstituicao(webapp2.RequestHandler):
         else:
             resultado_busca = operacao.buscarInstituicaoPorNome(tipo_busca)
 
-        buscar = [instituicao.to_dict() for instituicao in resultado_busca]
-        self.response.write(data2json(buscar))
+        resultado_busca = [instituicao.to_dict() for instituicao in resultado_busca]
+        self.response.write(data2json(resultado_busca))
 
     def post(self):
 
@@ -52,6 +52,14 @@ class ApInstituicao(webapp2.RequestHandler):
             data['email_contato'], data['telefone_contato'], data['descricao'])
 
 class ApiUser(webapp2.RequestHandler):
+
+    def get(self):
+
+        operacao = OperacoesUser()
+        resultado_busca = [user.to_dict() for user in operacao.buscarTodosUsuarios()]
+
+        self.response.write(data2json(resultado_busca))
+
     def post(self):
         data = json.loads(self.request.body)
         operacao = OperacoesUser()
@@ -59,6 +67,13 @@ class ApiUser(webapp2.RequestHandler):
         operacao.cadastrarUsuario(data['nome'], data['senha'], data['cpf'], data['email'])
 
 class ApiPost(webapp2.RequestHandler):
+
+    def get(self):
+        operacao = OperacoesPost()
+        resultado_busca = [post.to_dict() for post in operacao.buscarTodosPosts()]
+
+        self.response.write(data2json(resultado_busca))
+
     def post(self):
         data = json.loads(self.request.body)
         operacao = OperacoesPost()

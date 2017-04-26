@@ -42,6 +42,10 @@ class OperacoesUser(object):
 
         usuario.put()
 
+    def buscarTodosUsuarios(self):
+        busca = User.query()
+        return busca.fetch()
+
 
 class OperacoesPost(object):
 
@@ -54,3 +58,7 @@ class OperacoesPost(object):
         post.num_curtidas = num_curtidas
 
         post.put()
+
+    def buscarTodosPosts(self):
+        busca = Post.query()
+        return busca.fetch()
