@@ -1,0 +1,9 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+default_expiration: "3s"
+
+handlers:
+- url: .*
+  script: main.app
