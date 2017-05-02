@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+
 class User(ndb.Model):
 
     # The id of the institutions to which the user belongs
@@ -27,7 +28,7 @@ class User(ndb.Model):
         'active',
         'inactive'
     ]), default='pending')
-   
+
 
 class Timeline(ndb.Model):
 
@@ -59,12 +60,15 @@ class Institution(ndb.Model):
     # Posts created by members of this institution
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
+    #
+    timeline = ndb.KeyProperty(kind="Timeline")
+
     state = ndb.StringProperty(choices=set([
         'pending',
         'active',
         'inactive'
     ]), default='pending')
-   
+
 
 class Post(ndb.Model):
 
