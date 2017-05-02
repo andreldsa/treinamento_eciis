@@ -34,5 +34,5 @@ app = webapp2.WSGIApplication([
     ("/api/user/:id", SEU_HANDLER),
     ("/api/user/:id/timeline", SEU_HANDLER),
     ("/api/user/:id/notifications", SEU_HANDLER),
-    (".*", ErroHandler)
+    ("/api/.*", ErroHandler)
 ], debug=True)
