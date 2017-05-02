@@ -9,7 +9,7 @@ handlers:
   static_files: app/index.html
   upload: app/index.html
 
-- url: /api.*
+- url: /api/.*
   script: main.app
 
 - url: (.*)

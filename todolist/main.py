@@ -1,16 +1,36 @@
 import webapp2
 import json
 import datetime
+import logging
 
 from models import *
 from utils import *
+def _assert(condition, status_code, msg):
+    if condition:
+        return
 
-class ToDosHandler(webapp2.RequestHandler):
+    # TODO: logging here
+    webapp2.abort(status_code, msg)
+
+class MinhaException(Exception): pass
+class MinhaOutraException(Exception): pass
+class MaisUmaException(Exception): pass
+
+
+class BaseHandler(webapp2.RequestHandler):
+    def handle_exception(self, exception, debug):
+        logging.error("bla bla")
+        self.response.write("oops! deu ruim: " + str(exception))
+
+
+
+class ToDosHandler(BaseHandler):
     def get(self):
             query = ToDo.query()
             todos = [todo.to_dict() for todo in query]
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
             counter = Counter.get_or_insert("total")
+            raise MinhaException("aqui eu forcei a barra")
             data = {
                 'total_updates': counter.updates,
                 'minutes': counter.minutes,
@@ -32,22 +52,16 @@ class ToDosHandler(webapp2.RequestHandler):
         self.response.set_status(201)
 
 
-def _assert(condition, status_code, msg):
-    if condition:
-        return
-
-    # TODO: logging here
-    webapp2.abort(status_code, msg)
-
-
-class UpdateHandler(webapp2.RequestHandler):
+class UpdateHandler(BaseHandler):
     def get(self):
         counter = Counter.get_or_insert('total')
         counter.minutes += 1
         counter.put()
 
 
-class ToDoHandler(webapp2.RequestHandler):
+class ToDoHandler(BaseHandler):
+
+
     def put(self, iid):
         @ndb.transactional(retries=0, xg=True)
         def updateToDo(todo, data):
@@ -72,3 +86,8 @@ app = webapp2.WSGIApplication([
     ('/api/update', UpdateHandler),
     ('/api/todo/(.*)', ToDoHandler),
 ], debug=True)
+
+def erro404(request, response, exception):
+    response.write("url invalida: " + str(exception))
+
+app.error_handlers[404] = erro404
