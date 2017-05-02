@@ -104,7 +104,7 @@ class InstitutionPostHandler(webapp2.RequestHandler):
                 post.state = 'deleted'
                 post.put()
 
-class UserNotifications(webapp2.RequestHandler):
+class UserNotificationsHandler(webapp2.RequestHandler):
 
     def get(self, user_id):
 
@@ -169,6 +169,6 @@ app = webapp2.WSGIApplication([
     ("/api/user", UserHandler),
     ("/api/user/(\d+)", UserHandler),
     ("/api/user/(\d+)/timeline", UserTimelineHandler),
-    ("/api/user/(\d+)/notifications", UserNotifications),
+    ("/api/user/(\d+)/notifications", UserNotificationsHandler),
     ("/api/.*", ErroHandler)
 ], debug=True)
