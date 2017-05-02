@@ -22,7 +22,7 @@ class institutionHandler(BaseHandler):
         data = Intitution.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data))
-    
+
 
     def post(self):
         data = json.loads(self.request.body)
@@ -72,7 +72,6 @@ class UserNotifications(webapp2.RequestHandler):
     def get(self, user_id):
 
         user = User.get_by_id(int(user_id))
-
         notifications = user.notifications
 
         self.response.write(notifications)
@@ -91,6 +90,6 @@ app = webapp2.WSGIApplication([
     ("/api/user", SEU_HANDLER),
     ("/api/user/:id", SEU_HANDLER),
     ("/api/user/:id/timeline", SEU_HANDLER),
-    ("/api/user/:id/notifications", SEU_HANDLER),
+    ("/api/user/(\d+)/notifications", UserNotifications),
     ("/api/.*", ErroHandler)
 ], debug=True)
