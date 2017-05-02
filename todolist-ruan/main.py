@@ -1,42 +1,17 @@
 import webapp2
-import json
-import datetime
 
 from models import *
-
-def date_handler(obj):
-  if hasattr(obj, 'isoformat'):
-    return obj.isoformat()
-  elif hasattr(obj, 'email'):
-    return obj.email()
-
-  return obj
-
-def data2json(data):
-  return json.dumps(
-    data,
-    default=date_handler,
-    indent=2,
-    separators=(',', ': '),
-    ensure_ascii=False)
-
-
-def getParamName(url):
-    param_name = ''
-    if('?' in url):
-        param_name = url.split('?')[1].split('=')[0]
-
-    return param_name
+from utils import *
 
 
 class InstituteHandler(webapp2.RequestHandler):
     def get(self):
         query = Institute.query()
         paramName = getParamName(self.request.url)
-        param_value = self.request.get(paramName)     
+        paramValue = self.request.get(paramName)     
 
         if(param_value):
-            query = query.filter(getattr(Institute, paramName) == param_value)
+            query = query.filter(getattr(Institute, paramName) == paraValue)
 
         data = [institute.to_dict() for institute in query]
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -57,7 +32,7 @@ class InstituteHandler(webapp2.RequestHandler):
         newInstitute.email = data['email']
         newInstitute.phone_number = data['phone_number']
         newInstitute.put()
-        self.response.set_status(201)  
+        self.response.set_status(201)
    
    
 
@@ -97,7 +72,6 @@ class PostHandler(webapp2.RequestHandler):
         newPost.likes = data['likes']
         newPost.put()
         self.response.set_status(201)
-
 
 
 app = webapp2.WSGIApplication([

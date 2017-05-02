@@ -17,6 +17,35 @@ class BaseHandler(webapp2.RequestHandler):
 class SEU_HANDLER(BaseHandler):
     pass
 
+class institutionHandler(BaseHandler):
+
+    def get(self, institutionId):
+        id = int(institutionId)
+        data = Intitution.get_by_id(id)
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(data))
+    
+
+    def post(self):
+        data = json.loads(self.request.body)
+        newInstitution = Institution()
+        newInstitution.admin = User()
+        newInstitution.parent_institution = data.get('parent_institution')
+        newInstitution.state = data.get('state')
+        newInstitution.put()
+        self.response.set_status(201)
+
+
+    def patch(self):
+
+
+
+    def delete(self, institutionId):
+        id = int(institutionId)
+        institution = Intitution.get_by_id(id)
+        institution.state = 'inactive'
+        institution.put()
+
 
 class ErroHandler(webapp2.RequestHandler):
 
@@ -67,10 +96,17 @@ class InstitutionFollowersHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
+<<<<<<< HEAD
     ("/api/institution", SEU_HANDLER),
     ("/api/institution/:id", SEU_HANDLER),
     ("/api/institution/(\d+)/members", InstitutionMembersHandler),
     ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
+=======
+    ("/api/institution", institutionHandler),
+    ("/api/institution/:id", institutionHandler),
+    ("/api/institution/:id/members", SEU_HANDLER),
+    ("/api/institution/:id/followers", SEU_HANDLER),
+>>>>>>> 2d0f7b974b28ac92d9f91eb49fcc6f14fe8ebc6e
     ("/api/institution/:id/timeline", SEU_HANDLER),
     ("/api/institution/:id/post", SEU_HANDLER),
     ("/api/institution/:id/post/:id", SEU_HANDLER),
