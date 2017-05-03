@@ -28,32 +28,32 @@ class CommentsHandler(BaseHandler):
 
     def post(self, id_institution, id_post):
 		
-		data = self.request.body()
+        data = self.request.body()
 		
-		post = Post.get_by_id(int(id_post))
-        comments = post.comments # Array of JSON
+        post = Post.get_by_id(int(id_post))
+        comments = post.comments
         
         if(not comments):
-			comments = []
+            comments = []
 		
-		comments.append(data)      
+        comments.append(data)      
      
     def patch(self, id_institution, id_post):
 		
-		data = json.loads(self.request.body)
-		index = data.indice
+        data = json.loads(self.request.body)
+        index = data.indice
 		
-		post = Post.get_by_id(int(id_post))
+        post = Post.get_by_id(int(id_post))
         comments = post.comments
 		
-		comment = comments[indice]
+        comment = comments[indice]
 		
-		pass
+        pass
 		
 
 class TimelineInstitutionHandler(BaseHandler):
 	
-	 #Util
+     #Util
     def date_handler(obj):
         if hasattr(obj, 'isoformat'):
             return obj.isoformat()
@@ -73,11 +73,11 @@ class TimelineInstitutionHandler(BaseHandler):
 	
     def get(self, id_institution):
 		
-		institution = Institution.get_by_id(id_institution)
-		timeline = institution.timeline
+        institution = Institution.get_by_id(id_institution)
+        timeline = institution.timeline
 		
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(timeline))
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(timeline))
 		
 class InstitutionHandler(BaseHandler):
 
