@@ -15,7 +15,7 @@ class BaseHandler(webapp2.RequestHandler):
 class SEU_HANDLER(BaseHandler):
     pass
 
-class institutionHandler(BaseHandler):
+class InstitutionHandler(BaseHandler):
 
     def get(self, institutionId):
         id = int(institutionId)
@@ -35,7 +35,7 @@ class institutionHandler(BaseHandler):
 
 
     def patch(self):
-
+        pass
 
 
     def delete(self, institutionId):
@@ -158,8 +158,8 @@ app = webapp2.WSGIApplication([
     ("/api/institution/:id", SEU_HANDLER),
     ("/api/institution/(\d+)/members", InstitutionMembersHandler),
     ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
-    ("/api/institution", institutionHandler),
-    ("/api/institution/:id", institutionHandler),
+    ("/api/institution", InstitutionHandler),
+    ("/api/institution/:id", InstitutionHandler),
     ("/api/institution/:id/members", SEU_HANDLER),
     ("/api/institution/:id/followers", SEU_HANDLER),
     ("/api/institution/:id/timeline", SEU_HANDLER),
