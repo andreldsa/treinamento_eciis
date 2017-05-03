@@ -87,7 +87,7 @@ class InstitutionFollowersHandler(webapp2.RequestHandler):
         self.response.write(data)
 
 
-class InstitutionPostHandler(webapp2.RequestHandler):
+class InstitutionPostHandler(BaseHandler):
 
     def get(self, institution_id, post_id):
 
@@ -97,14 +97,14 @@ class InstitutionPostHandler(webapp2.RequestHandler):
     def patch(self):
         pass
 
-    def delete(self):
+    def delete(self, institution_id, post_id):
 
         post = Post.get_by_id(int(post_id))
 
         post.state = 'deleted'
         post.put()
 
-class UserNotificationsHandler(webapp2.RequestHandler):
+class UserNotificationsHandler(BaseHandler):
 
     def get(self, user_id):
 
