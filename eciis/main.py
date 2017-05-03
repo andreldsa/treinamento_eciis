@@ -15,6 +15,70 @@ class BaseHandler(webapp2.RequestHandler):
 class SEU_HANDLER(BaseHandler):
     pass
 
+class CommentsHandler(BaseHandler):
+
+    #This method return the comments of post informed
+    def get(self, id_institution, id_post):
+
+        post = Post.get_by_id(int(id_post))
+        all_comments = post.comments #Array of comments, how i convert for JSON ?
+		
+
+        self.response.write(all_comments)
+
+    def post(self, id_institution, id_post):
+		
+        data = self.request.body()
+		
+        post = Post.get_by_id(int(id_post))
+        comments = post.comments
+        
+        if(not comments):
+            comments = []
+		
+        comments.append(data)      
+     
+    def patch(self, id_institution, id_post):
+		
+        data = json.loads(self.request.body)
+        index = data.indice
+		
+        post = Post.get_by_id(int(id_post))
+        comments = post.comments
+		
+        comment = comments[indice]
+		
+        pass
+		
+
+class TimelineInstitutionHandler(BaseHandler):
+	
+     #Util
+    def date_handler(obj):
+        if hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        elif hasattr(obj, 'email'):
+            return obj.email()
+
+        return obj
+
+    def data2json(data):
+        return json.dumps(
+        data,
+        default=date_handler,
+        indent=2,
+        separators=(',', ': '),
+        ensure_ascii=False
+    )
+	
+    def get(self, id_institution):
+		
+        institution = Institution.get_by_id(id_institution)
+        timeline = institution.timeline
+		
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(timeline))
+		
 class InstitutionHandler(BaseHandler):
 
     def get(self, institutionId):
@@ -43,7 +107,6 @@ class InstitutionHandler(BaseHandler):
         institution = Intitution.get_by_id(id)
         institution.state = 'inactive'
         institution.put()
-
 
 class ErroHandler(webapp2.RequestHandler):
 
@@ -177,17 +240,17 @@ class UserTimelineHandler(BaseHandler):
 
 app = webapp2.WSGIApplication([
     ("/api/institution", SEU_HANDLER),
-    ("/api/institution/:id", SEU_HANDLER),
+    ("/api/institution/(\d+)", TimelineInstitutionHandler),
     ("/api/institution/(\d+)/members", InstitutionMembersHandler),
     ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
     ("/api/institution", InstitutionHandler),
     ("/api/institution/:id", InstitutionHandler),
     ("/api/institution/:id/members", SEU_HANDLER),
     ("/api/institution/:id/followers", SEU_HANDLER),
-    ("/api/institution/:id/timeline", SEU_HANDLER),
+    ("/api/institution/:id/timeline", TimelineInstitutionHandler),
     ("/api/institution/:id/post", SEU_HANDLER),
     ("/api/institution/(\d+)/post/(\d+)", InstitutionPostHandler),
-    ("/api/institution/:id/post/:id/comments", SEU_HANDLER),
+    ("/api/institution/(\d+)/post/(\d+)/comments", CommentsHandler),
     ("/api/user", UserHandler),
     ("/api/user/(\d+)", UserHandler),
     ("/api/user/(\d+)/timeline", UserTimelineHandler),
