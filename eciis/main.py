@@ -123,6 +123,7 @@ class InstitutionMembersHandler(BaseHandlers):
         members = institution.members
         #builds a list of members' keys
         list = [member.key.integer_id() for member in members]
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         #send the response
         self.response.write(list)
 
@@ -139,6 +140,7 @@ class InstitutionMembersHandler(BaseHandlers):
         institution.members.append(user)
         #saves the institution in datastore
         institution.put()
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         #send the response
         self.response.write(data)
 
@@ -152,6 +154,7 @@ class InstitutionFollowersHandler(BaseHandler):
         followers = institution.followers
         #builds a list of followers' keys
         list = [follower.key.integer_id() for follower in followers]
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         #sends the response
         self.response.write(list)
 
@@ -168,6 +171,7 @@ class InstitutionFollowersHandler(BaseHandler):
         institution.followers.append(user)
         #saves the institution in datastore
         institution.put()
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         #sends the response
         self.response.write(data)
 
