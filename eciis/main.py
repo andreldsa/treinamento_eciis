@@ -89,20 +89,20 @@ class InstitutionFollowersHandler(webapp2.RequestHandler):
 
 class InstitutionPostHandler(webapp2.RequestHandler):
 
-	def get(self, institution_id, post_id):
+    def get(self, institution_id, post_id):
 
-                post = Post.get_by_id(int(post_id))
-                self.response.write(post)
+        post = Post.get_by_id(int(post_id))
+        self.response.write(post)
 
-            def patch(self):
-                pass
+    def patch(self):
+        pass
 
-            def delete(self):
+    def delete(self):
 
-                post = Post.get_by_id(int(post_id))
+        post = Post.get_by_id(int(post_id))
 
-                post.state = 'deleted'
-                post.put()
+        post.state = 'deleted'
+        post.put()
 
 class UserNotificationsHandler(webapp2.RequestHandler):
 
@@ -115,9 +115,9 @@ class UserNotificationsHandler(webapp2.RequestHandler):
 
 
 class UserHandler(BaseHandler):
-  
+
     def get(self, userId):
-        
+
         id = int(userId)
         user = User.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
