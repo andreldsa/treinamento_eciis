@@ -189,9 +189,34 @@ class InstitutionFollowersHandler(BaseHandler):
 class InstitutionPostHandler(BaseHandler):
 
     def get(self, institution_id, post_id):
+        
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+            
+            if isinstance(obj, ndb.Key):
+                return obj.integer_id()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+                data,
+                default=date_handler,
+                indent=2,
+                separators=(',', ': '),
+                ensure_ascii=False)
+
 
         post = Post.get_by_id(int(post_id))
-        self.response.write(post)
+
+        if post.state != 'deleted':
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write(data2json(post.to_dict()))
+        else:
+            self.response.write("Post not found")
 
     def patch(self):
         pass
