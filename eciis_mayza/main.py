@@ -247,11 +247,13 @@ class InstitutionPostHandler(BaseHandler):
                 separators=(',', ': '),
                 ensure_ascii=False)
 
-
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Verify of the post is deleted
         if post.state != 'deleted':
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #Converts the post to json and writes to the output
             self.response.write(data2json(post.to_dict()))
         else:
             self.response.write("Post not found")
@@ -260,9 +262,11 @@ class InstitutionPostHandler(BaseHandler):
         pass
 
     def delete(self, institution_id, post_id):
-
+        
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Modify state for deleted
         post.state = 'deleted'
         post.put()
 
