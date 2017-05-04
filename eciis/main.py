@@ -12,17 +12,14 @@ class BaseHandler(webapp2.RequestHandler):
     pass
 
 
-class SEU_HANDLER(BaseHandler):
-    pass
-
 class InstitutionHandler(BaseHandler):
 
     def get(self, institutionId):
         id = int(institutionId)
         data = Intitution.get_by_id(id)
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data))
-
 
     def post(self):
         data = json.loads(self.request.body)
@@ -33,10 +30,8 @@ class InstitutionHandler(BaseHandler):
         newInstitution.put()
         self.response.set_status(201)
 
-
     def patch(self):
         pass
-
 
     def delete(self, institutionId):
         id = int(institutionId)
@@ -45,13 +40,13 @@ class InstitutionHandler(BaseHandler):
         institution.put()
 
 
-class ErroHandler(webapp2.RequestHandler):
+class ErroHandler(BaseHandler):
 
     def get(self):
         self.response.write("Rota Inesistente")
 
 
-class InstitutionMembersHandler(webapp2.RequestHandler):
+class InstitutionMembersHandler(BaseHandler):
 
     def get(self, id):
         institution = Institution.get_by_id(int(id))
@@ -69,7 +64,7 @@ class InstitutionMembersHandler(webapp2.RequestHandler):
         self.response.write(data)
 
 
-class InstitutionFollowersHandler(webapp2.RequestHandler):
+class InstitutionFollowersHandler(BaseHandler):
 
     def get(self, id):
         institution = Institution.get_by_id(int(id))
@@ -90,7 +85,6 @@ class InstitutionFollowersHandler(webapp2.RequestHandler):
 class InstitutionPostHandler(BaseHandler):
 
     def get(self, institution_id, post_id):
-
         post = Post.get_by_id(int(post_id))
         self.response.write(post)
 
@@ -98,33 +92,29 @@ class InstitutionPostHandler(BaseHandler):
         pass
 
     def delete(self, institution_id, post_id):
-
         post = Post.get_by_id(int(post_id))
-
         post.state = 'deleted'
         post.put()
+
 
 class UserNotificationsHandler(BaseHandler):
 
     def get(self, user_id):
-
         user = User.get_by_id(int(user_id))
         notifications = user.notifications
-
         self.response.write(notifications)
 
 
 class UserHandler(BaseHandler):
 
     def get(self, userId):
-
         id = int(userId)
         user = User.get_by_id(id)
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(user))
 
     def post(self):
-
         data = json.loads(self.request.body)
         newuser = User()
         newuser.institutions = data.get('institution')
@@ -133,7 +123,6 @@ class UserHandler(BaseHandler):
         self.response.set_status(201)
 
     def delete(self, userId):
-
         id = int(userId)
         user = User.get_by_id(id)
         user.state = 'inactive'
@@ -146,23 +135,20 @@ class UserHandler(BaseHandler):
 class UserTimelineHandler(BaseHandler):
 
     def get(self, id):
-
         user = User.get_by_id(int(id))
         posts = user.timeline
         list = [posts.key.integer_id() for posts in posts]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(list)
 
+
 app = webapp2.WSGIApplication([
-    ("/api/institution", SEU_HANDLER),
-    ("/api/institution/:id", SEU_HANDLER),
-    ("/api/institution/(\d+)/members", InstitutionMembersHandler),
-    ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
     ("/api/institution", InstitutionHandler),
     ("/api/institution/:id", InstitutionHandler),
-    ("/api/institution/:id/members", SEU_HANDLER),
-    ("/api/institution/:id/followers", SEU_HANDLER),
-    ("/api/institution/:id/timeline", SEU_HANDLER),
+    ("/api/institution/(\d+)/members", InstitutionMembersHandler),
+    ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
+    ("/api/institution/(\d+)/timeline", UserTimelineHandler),
     ("/api/institution/:id/post", SEU_HANDLER),
     ("/api/institution/(\d+)/post/(\d+)", InstitutionPostHandler),
     ("/api/institution/:id/post/:id/comments", SEU_HANDLER),
