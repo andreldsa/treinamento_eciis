@@ -267,11 +267,13 @@ class InstitutionPostHandler(BaseHandler):
                 separators=(',', ': '),
                 ensure_ascii=False)
 
-
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Verify of the post is deleted
         if post.state != 'deleted':
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #Converts the post to json and writes to the output
             self.response.write(data2json(post.to_dict()))
         else:
             self.response.write("Post not found")
@@ -280,9 +282,11 @@ class InstitutionPostHandler(BaseHandler):
         pass
 
     def delete(self, institution_id, post_id):
-
+        
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Modify state for deleted
         post.state = 'deleted'
         post.put()
 
@@ -296,23 +300,32 @@ class UserNotificationsHandler(BaseHandler):
         self.response.write(notifications)
 
 
-class UserHandler(BaseHandler):
+cclass UserHandler(BaseHandler):
 
     def get(self, userId):
 
-        id = int(userId)
-        user = User.get_by_id(id)
+        user = User.get_by_id(int(userId))
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(user))
+        self.response.write(user)
 
     def post(self):
 
         data = json.loads(self.request.body)
-        newuser = User()
-        newuser.institutions = data.get('institution')
-        newuser.state = data.get('state')
-        newuser.put()
-        self.response.set_status(201)
+        Ids = data.get('institutions')
+
+        if Ids:
+            newuser = User()
+            newuser.email = data.get('email')
+            
+            for institutionId in Ids:
+                newuser.institutions.append(Institution.get_by_id(int(institutionId)).key)
+
+            newuser.state = data.get('state')
+            newuser.put()
+            self.response.set_status(201)
+        else:
+            self.response.write("Wrong id")
+
 
     def delete(self, userId):
 
@@ -321,9 +334,9 @@ class UserHandler(BaseHandler):
         user.state = 'inactive'
         user.put()
 
+
     def patch(self):
         pass
-
 
 class UserTimelineHandler(BaseHandler):
 
