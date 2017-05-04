@@ -16,6 +16,24 @@ class SEU_HANDLER(BaseHandler):
     pass
 
 class CommentsHandler(BaseHandler):
+    
+     #Util
+    def date_handler(obj):
+        if hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        elif hasattr(obj, 'email'):
+            return obj.email()
+
+        return obj
+
+    def data2json(data):
+        return json.dumps(
+        data,
+        default=date_handler,
+        indent=2,
+        separators=(',', ': '),
+        ensure_ascii=False
+    )
 
     #This method return the comments of post informed
     def get(self, id_institution, id_post):
@@ -23,8 +41,8 @@ class CommentsHandler(BaseHandler):
         post = Post.get_by_id(int(id_post))
         all_comments = post.comments #Array of comments, how i convert for JSON ?
 		
-
-        self.response.write(all_comments)
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(all_comments))
 
     def post(self, id_institution, id_post):
 		
@@ -128,30 +146,40 @@ class InstitutionMembersHandler(BaseHandler):
     def get(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the institution's members
-        members = institution.members
-        #builds a list of members' keys
-        list = [member.key.integer_id() for member in members]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #send the response
-        self.response.write(list)
+        if institution:
+            #gets the institution's members
+            members = institution.members
+            #builds a list of members' keys
+            list = [member.integer_id() for member in members]
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #send the response
+            self.response.write(list)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.responde.write("Wrong id")
 
     def post(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the data body
-        data = json.loads(self.request.body)
-        #gets the user's id
-        user_id = data['id']
-        #gets the user by id
-        user = User.get_by_id(int(user_id))
-        #makes the user a member
-        institution.members.append(user)
-        #saves the institution in datastore
-        institution.put()
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #send the response
-        self.response.write(data)
+        if institution:
+            #gets the data body
+            data = json.loads(self.request.body)
+            #gets the user's id
+            user_id = data['id']
+            #gets the user by id
+            user = User.get_by_id(int(user_id))
+            #makes the user a member
+            institution.members.append(user.key)
+            user.institutions.append(institution.key)
+            #saves the institution and the user in datastore
+            user.put()
+            institution.put()
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #send the response
+            self.response.write(data)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
 
 class InstitutionFollowersHandler(BaseHandler):
@@ -159,30 +187,40 @@ class InstitutionFollowersHandler(BaseHandler):
     def get(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the institution's followers
-        followers = institution.followers
-        #builds a list of followers' keys
-        list = [follower.key.integer_id() for follower in followers]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #sends the response
-        self.response.write(list)
+        if institution:
+            #gets the institution's followers
+            followers = institution.followers
+            #builds a list of followers' keys
+            list = [follower.integer_id() for follower in followers]
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #sends the response
+            self.response.write(list)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
     def post(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the data body
-        data = json.loads(self.request.body)
-        #gets the user's id
-        user_id = data['id']
-        #gets the user by id
-        user = User.get_by_id(int(user_id))
-        #makes the user a follower
-        institution.followers.append(user)
-        #saves the institution in datastore
-        institution.put()
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #sends the response
-        self.response.write(data)
+        if institution:
+            #gets the data body
+            data = json.loads(self.request.body)
+            #gets the user's id
+            user_id = data['id']
+            #gets the user by id
+            user = User.get_by_id(int(user_id))
+            #makes the user a follower
+            institution.followers.append(user.key)
+            user.follows.append(institution.key)
+            #saves the institution and the user in datastore
+            user.put()
+            institution.put()
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #sends the response
+            self.response.write(data)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
 
 class InstitutionPostHandler(BaseHandler):
@@ -284,14 +322,14 @@ class PostHandler(BaseHandler):
 
 app = webapp2.WSGIApplication([
     ("/api/institution", InstitutionHandler),
-    ("/api/institution/(\d+)", TimelineInstitutionHandler),
+    ("/api/institution/(\d+)", InstitutionHandler),
     ("/api/institution/(\d+)/members", InstitutionMembersHandler),
     ("/api/institution/(\d+)/followers", InstitutionFollowersHandler),
     ("/api/institution", InstitutionHandler),
     ("/api/institution/:id", InstitutionHandler),
     ("/api/institution/:id/members", SEU_HANDLER),
     ("/api/institution/:id/followers", SEU_HANDLER),
-    ("/api/institution/:id/timeline", TimelineInstitutionHandler),
+    ("/api/institution/(\d+)/timeline", TimelineInstitutionHandler),
     ("/api/institution/(\d+)/post", PostHandler),
     ("/api/institution/(\d+)/post/(\d+)", InstitutionPostHandler),
     ("/api/institution/(\d+)/post/(\d+)/comments", CommentsHandler),
