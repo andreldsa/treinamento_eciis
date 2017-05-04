@@ -259,5 +259,5 @@ app = webapp2.WSGIApplication([
     ("/api/user/(\d+)", UserHandler),
     ("/api/user/(\d+)/timeline", UserTimelineHandler),
     ("/api/user/(\d+)/notifications", UserNotificationsHandler),
-    ("/api/.*", ErroHandler)
+    ("/api/.*", ErroHangit dler)
 ], debug=True)

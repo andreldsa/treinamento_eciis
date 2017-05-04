@@ -87,7 +87,6 @@ class InstitutionHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data))
 
-
     def post(self):
         data = json.loads(self.request.body)
         newInstitution = Institution()
