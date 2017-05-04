@@ -91,7 +91,7 @@ class TimelineInstitutionHandler(BaseHandler):
 	
     def get(self, id_institution):
 		
-        institution = Institution.get_by_id(id_institution)
+        institution = Institution.get_by_id(int(id_institution))
         timeline = institution.timeline
 		
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -101,7 +101,7 @@ class InstitutionHandler(BaseHandler):
 
     def get(self, institutionId):
         id = int(institutionId)
-        data = Intitution.get_by_id(id)
+        data = Institution.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data))
 
@@ -120,9 +120,17 @@ class InstitutionHandler(BaseHandler):
         newInstitution.parent_institution = data.get('parent_institution')
         newInstitution.state = data.get('state')
         newInstitution.put()
+        
         #Att User Admin
         admin.institutions_admin.append(newInstitution.key)
         admin.put()
+        #Create Timeline
+        timeline = Timeline()
+        timeline.put()
+        newInstitution.timeline = timeline.key
+        newInstitution.put()
+        
+
         self.response.set_status(201)
 
 
