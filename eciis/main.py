@@ -16,15 +16,33 @@ class SEU_HANDLER(BaseHandler):
     pass
 
 class CommentsHandler(BaseHandler):
+    
+     #Util
+    def date_handler(obj):
+        if hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        elif hasattr(obj, 'email'):
+            return obj.email()
+
+        return obj
+
+    def data2json(data):
+        return json.dumps(
+        data,
+        default=date_handler,
+        indent=2,
+        separators=(',', ': '),
+        ensure_ascii=False
+    )
 
     #This method return the comments of post informed
     def get(self, id_institution, id_post):
 
         post = Post.get_by_id(int(id_post))
-        all_comments = post.comments #Array of comments, how i convert for JSON ?
-		
+        all_comments = post.comments	
 
-        self.response.write(all_comments)
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(all_comments))
 
     def post(self, id_institution, id_post):
 		
@@ -36,7 +54,9 @@ class CommentsHandler(BaseHandler):
         if(not comments):
             comments = []
 		
-        comments.append(data)      
+        comments.append(data)
+        self.response.write(data)
+      
      
     def patch(self, id_institution, id_post):
 		
@@ -46,7 +66,7 @@ class CommentsHandler(BaseHandler):
         post = Post.get_by_id(int(id_post))
         comments = post.comments
 		
-        comment = comments[indice]
+        comment = comments[index]
 		
         pass
 		

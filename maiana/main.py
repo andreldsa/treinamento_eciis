@@ -5,22 +5,21 @@ from models import *
 from util import *
 
 class InstituicaoWebapp(webapp2.RequestHandler):
-	
-	def get(self):
-		
+
+    def get(self):
+    	
 		query = Instituicao.query()			
-		
 		instituicao = self.request.get('nome')
-			
+
 		if instituicao:		
 			query = query.filter(Instituicao.nome_instituicao == instituicao)
 		
 		dados = [inst.to_dict() for inst in query]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(dados))
-		
-	
-	def post(self):		
+
+
+	def post(self):#Devolve o próprio objeto
 		
 		dados = json.loads(self.request.body)
 		
@@ -60,7 +59,7 @@ class UsuarioWebapp(webapp2.RequestHandler):
 		self.response.write(data2json(dados))
 		
 	
-	def post(self):		
+	def post(self):		#DEVE RETORNAR O OBEJTO, COM O ID NO HEADER
 		
 		dados = json.loads(self.request.body)
 		
