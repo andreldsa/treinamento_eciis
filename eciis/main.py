@@ -39,7 +39,7 @@ class CommentsHandler(BaseHandler):
     def get(self, id_institution, id_post):
 
         post = Post.get_by_id(int(id_post))
-        all_comments = post.comments #Array of comments, how i convert for JSON ?	
+        all_comments = post.comments	
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(all_comments))
