@@ -6,6 +6,7 @@ import logging
 import json
 
 from models import *
+from utils import *
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -71,25 +72,27 @@ class CommentsHandler(BaseHandler):
 
 class TimelineInstitutionHandler(BaseHandler):
 	
-     #Util
-    def date_handler(obj):
-        if hasattr(obj, 'isoformat'):
-            return obj.isoformat()
-        elif hasattr(obj, 'email'):
-            return obj.email()
-
-        return obj
-
-    def data2json(data):
-        return json.dumps(
-        data,
-        default=date_handler,
-        indent=2,
-        separators=(',', ': '),
-        ensure_ascii=False
-    )
+   
 	
     def get(self, id_institution):
+
+            #Util
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+            data,
+            default=date_handler,
+            indent=2,
+            separators=(',', ': '),
+            ensure_ascii=False
+        )
 		
         institution = Institution.get_by_id(id_institution)
         timeline = institution.timeline
@@ -98,13 +101,15 @@ class TimelineInstitutionHandler(BaseHandler):
         self.response.write(data2json(timeline))
 		
 class InstitutionHandler(BaseHandler):
-
+    
+    #Method to get the institution by id
     def get(self, institutionId):
         id = int(institutionId)
-        data = Intitution.get_by_id(id)
+        data = Institution.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(data))
+        self.response.write(data2json(data.to_dict()))
 
+    #Method to post a new institution
     def post(self):
         data = json.loads(self.request.body)
         newInstitution = Institution()
@@ -122,18 +127,21 @@ class InstitutionHandler(BaseHandler):
         #Att User Admin
         admin.institutions_admin.append(newInstitution.key)
         admin.put()
+        self.response.write(data2json(newInstitution.to_dict()))
         self.response.set_status(201)
 
-
+    #Method to update an institution
     def patch(self):
         pass
 
-
+    #Method to delete an institution by id
     def delete(self, institutionId):
         id = int(institutionId)
-        institution = Intitution.get_by_id(id)
+        institution = Institution.get_by_id(id)
         institution.state = 'inactive'
         institution.put()
+        self.response.write(data2json(institution.to_dict()))
+
 
 class ErroHandler(webapp2.RequestHandler):
 
