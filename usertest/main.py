@@ -21,7 +21,6 @@ class BaseHandler(webapp2.RequestHandler):
             self.response.write(
                 '<html><body>{}</body></html>'.format(greeting))
             return func(self)
-
         return checkLoggedIn
 
 
