@@ -129,30 +129,40 @@ class InstitutionMembersHandler(BaseHandler):
     def get(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the institution's members
-        members = institution.members
-        #builds a list of members' keys
-        list = [member.key.integer_id() for member in members]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #send the response
-        self.response.write(list)
+        if institution:
+            #gets the institution's members
+            members = institution.members
+            #builds a list of members' keys
+            list = [member.integer_id() for member in members]
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #send the response
+            self.response.write(list)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.responde.write("Wrong id")
 
     def post(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the data body
-        data = json.loads(self.request.body)
-        #gets the user's id
-        user_id = data['id']
-        #gets the user by id
-        user = User.get_by_id(int(user_id))
-        #makes the user a member
-        institution.members.append(user)
-        #saves the institution in datastore
-        institution.put()
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #send the response
-        self.response.write(data)
+        if institution:
+            #gets the data body
+            data = json.loads(self.request.body)
+            #gets the user's id
+            user_id = data['id']
+            #gets the user by id
+            user = User.get_by_id(int(user_id))
+            #makes the user a member
+            institution.members.append(user.key)
+            user.institutions.append(institution.key)
+            #saves the institution and the user in datastore
+            user.put()
+            institution.put()
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #send the response
+            self.response.write(data)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
 
 class InstitutionFollowersHandler(BaseHandler):
@@ -160,30 +170,40 @@ class InstitutionFollowersHandler(BaseHandler):
     def get(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the institution's followers
-        followers = institution.followers
-        #builds a list of followers' keys
-        list = [follower.key.integer_id() for follower in followers]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #sends the response
-        self.response.write(list)
+        if institution:
+            #gets the institution's followers
+            followers = institution.followers
+            #builds a list of followers' keys
+            list = [follower.integer_id() for follower in followers]
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #sends the response
+            self.response.write(list)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
     def post(self, id):
         #gets the institution by id
         institution = Institution.get_by_id(int(id))
-        #gets the data body
-        data = json.loads(self.request.body)
-        #gets the user's id
-        user_id = data['id']
-        #gets the user by id
-        user = User.get_by_id(int(user_id))
-        #makes the user a follower
-        institution.followers.append(user)
-        #saves the institution in datastore
-        institution.put()
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        #sends the response
-        self.response.write(data)
+        if institution:
+            #gets the data body
+            data = json.loads(self.request.body)
+            #gets the user's id
+            user_id = data['id']
+            #gets the user by id
+            user = User.get_by_id(int(user_id))
+            #makes the user a follower
+            institution.followers.append(user.key)
+            user.follows.append(institution.key)
+            #saves the institution and the user in datastore
+            user.put()
+            institution.put()
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #sends the response
+            self.response.write(data)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write("Wrong id")
 
 
 class InstitutionPostHandler(BaseHandler):
