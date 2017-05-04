@@ -16,6 +16,7 @@ class BaseHandler(webapp2.RequestHandler):
 class SEU_HANDLER(BaseHandler):
     pass
 
+
 class CommentsHandler(BaseHandler):
     
      #Util
@@ -94,7 +95,7 @@ class TimelineInstitutionHandler(BaseHandler):
             ensure_ascii=False
         )
 		
-        institution = Institution.get_by_id(id_institution)
+        institution = Institution.get_by_id(int(id_institution))
         timeline = institution.timeline
 		
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -108,6 +109,7 @@ class InstitutionHandler(BaseHandler):
         data = Institution.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data.to_dict()))
+
 
     #Method to post a new institution
     def post(self):
@@ -124,15 +126,25 @@ class InstitutionHandler(BaseHandler):
         newInstitution.parent_institution = data.get('parent_institution')
         newInstitution.state = data.get('state')
         newInstitution.put()
+        
         #Att User Admin
         admin.institutions_admin.append(newInstitution.key)
         admin.put()
-        self.response.write(data2json(newInstitution.to_dict()))
+        
+        #Create Timeline
+        timeline = Timeline()
+        timeline.put()
+        newInstitution.timeline = timeline.key
+        newInstitution.put()
+
+        self.response.write(data2json(newInstitution.to_dict()))        
         self.response.set_status(201)
+
 
     #Method to update an institution
     def patch(self):
         pass
+
 
     #Method to delete an institution by id
     def delete(self, institutionId):
@@ -165,6 +177,7 @@ class InstitutionMembersHandler(BaseHandler):
         else:
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
             self.responde.write("Wrong id")
+
 
     def post(self, id):
         #gets the institution by id
@@ -234,9 +247,34 @@ class InstitutionFollowersHandler(BaseHandler):
 class InstitutionPostHandler(BaseHandler):
 
     def get(self, institution_id, post_id):
+        
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+            
+            if isinstance(obj, ndb.Key):
+                return obj.integer_id()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+                data,
+                default=date_handler,
+                indent=2,
+                separators=(',', ': '),
+                ensure_ascii=False)
+
 
         post = Post.get_by_id(int(post_id))
-        self.response.write(post)
+
+        if post.state != 'deleted':
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write(data2json(post.to_dict()))
+        else:
+            self.response.write("Post not found")
 
     def patch(self):
         pass
