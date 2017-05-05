@@ -300,7 +300,7 @@ class UserNotificationsHandler(BaseHandler):
         self.response.write(notifications)
 
 
-cclass UserHandler(BaseHandler):
+class UserHandler(BaseHandler):
 
     def get(self, userId):
 
@@ -340,13 +340,15 @@ cclass UserHandler(BaseHandler):
 
 class UserTimelineHandler(BaseHandler):
 
-    def get(self, id):
+    def get(self, userId):
 
-        user = User.get_by_id(int(id))
+        user = User.get_by_id(int(userId))
         posts = user.timeline
-        list = [posts.key.integer_id() for posts in posts]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(list)
+        if posts is not None:
+            list = [posts.integer_id() for posts in posts]
+            self.response.write(list)
+        else:
+            self. response.write("No posts yet")
 
 
 class PostHandler(BaseHandler):
