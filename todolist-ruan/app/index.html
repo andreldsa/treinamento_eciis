@@ -1,5 +1,44 @@
-<html>
-    <body>
-        <h1>Hello, it's me...</h1>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>TodoList</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Angular Material stylesheet -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.css">
+    </head>
+    <body ng-app="todolistApp" ng-cloak>
+        <md-content class="md-padding">
+            <md-nav-bar
+                md-selected-nav-item="currentNavItem"
+                nav-bar-aria-label="navigation links">
+                <md-nav-item md-nav-sref="lists" name="lists">Lists</md-nav-item>
+                <md-nav-item md-nav-sref="tasks" name="tasks">Tasks</md-nav-item>
+                <md-nav-item md-nav-sref="about" name="about">About</md-nav-item>
+            
+            </md-nav-bar>
+        </md-content>
+
+
+        <ui-view ></ui-view>
+
+
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-animate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-aria.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular-messages.min.js"></script>
+
+        <!-- Angular Material Library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>    
+
+        <!-- Ui-Router-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0/angular-ui-router.min.js"></script>
+
+        <script src="app.module.js"></script>
+        <script src="app.route.js"></script>
+        <script src="components/about/about-controller.js"></script>
+        <script src="components/lists/lists-controller.js"></script>
+        <script src="components/tasks/tasks-controller.js"></script>
     </body>
 </html>
