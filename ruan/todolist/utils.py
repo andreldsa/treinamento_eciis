@@ -1,3 +1,5 @@
+from google.appengine.ext import ndb
+
 import json
 import datetime
 
@@ -7,6 +9,9 @@ def date_handler(obj):
     return obj.isoformat()
   elif hasattr(obj, 'email'):
     return obj.email()
+  
+  if isinstance(obj, ndb.Key):
+      return obj.integer_id()
 
   return obj
 
@@ -18,11 +23,3 @@ def data2json(data):
     indent=2,
     separators=(',', ': '),
     ensure_ascii=False)
-
-
-def getParamName(url):
-    param_name = ''
-    if('?' in url):
-        param_name = url.split('?')[1].split('=')[0]
-
-    return param_name

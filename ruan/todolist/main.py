@@ -10,12 +10,11 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 class ListHandler(BaseHandler): 
-
     # Get a List by id
     def get(self, listId):
         _list = List.get_by_id(int(listId))    
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(_list))
+        self.response.write(data2json(_list.to_dict()))
     
 
     # Create a list
@@ -30,7 +29,6 @@ class ListHandler(BaseHandler):
 
 
 class ListsHandler(BaseHandler):
-
     # Get all lists
     def get(self):
         query = List.query()
@@ -41,16 +39,15 @@ class ListsHandler(BaseHandler):
 
 
 class TaskHandler(BaseHandler):
-
     # Get a task by id
     def get(self, taskId):
         task = Task.get_by_id(int(taskId))
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
-        self.response.write(data2json(task))
+        self.response.write(data2json(task.to_dict()))
+
 
 
 class TasksHandler(BaseHandler):
-
     # Get all tasks
     def get(self):
         query = Task.query()
@@ -61,37 +58,48 @@ class TasksHandler(BaseHandler):
 
 
 class ListTasksHandler(BaseHandler):
-
+    
     # Get all tasks from a list 
     def get(self, listId):
         _list = List.get_by_id(int(listId))
-        tasksKeys = _list.tasks
-        tasks = [key.get().to_dict() for key in tasksKeys]
+        tasks = ndb.get_multi(_list.tasks)
+        # Convert a task to a dictionary and add to a list if not none
+        tasks = [t.to_dict() for t in tasks if t]
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(tasks))
     
-
+    
     # Add a new task to a list
     def post(self, listId):
+        # get task data
         data = json.loads(self.request.body)
+        
+        # get list by id
         _list = List.get_by_id(int(listId))
-        listKey = _list.Key()
+        list_key = _list.key
+        
+        # create task
         newTask = Task()
         newTask.title = data.get('title')
         newTask.description = data.get('description')
-        newTask.done = data.get('done')
         newTask.priority = data.get('priority')        
-        newTask.list = listKey
-        newTask.put()
-        self.response.set_status(201)
+        newTask.list = list_key
+        task_key = newTask.put()
         
+        # add task key to list
+        _list.tasks.append(task_key)
+        _list.put()
+        self.response.set_status(201)
+    
+            
 
 
 app = webapp2.WSGIApplication([
-    ('/api/list', ListHandler), 
     ('/api/list/(\d+)', ListHandler), 
+    ('/api/list', ListHandler), 
     ('/api/lists', ListsHandler), 
     ('/api/list/(\d+)/task', ListTasksHandler), 
+    ('/api/list/(\d+)/tasks', ListTasksHandler), 
     ('/api/task/(\d+)', TaskHandler), 
     ('/api/tasks', TasksHandler)
 ], debug=True)
