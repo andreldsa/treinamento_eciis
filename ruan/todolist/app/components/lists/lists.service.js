@@ -2,26 +2,17 @@
 
     angular
         .module('todolistApp')
-        .service('ListService', ListService);
+        .service('ListService', ['$http', ListService]);
 
-    function ListService(){
-        var lists = [
-            {
-                "title": "Livros 2016",
-                "description": "Melhores livros do ano",
-                "tasks": []
-            },
-            {
-                "title": "Supermercado",
-                "description": "compras do mês",
-                "tasks": []
-            },
-            {
-                "title": "Semana Acadêmica",
-                "description": "Cursos ofercidos",
-                "tasks": []
-            }
-        ];
+    function ListService($http){
+        var url = 'https://todolist-20171.appspot.com/api/lists';
+        var lists = [];
+        
+        $http.get(url).then(function(response) {
+            lists = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
 
         this.getLists = function getLists() {
             return lists;
