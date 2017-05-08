@@ -1,11 +1,11 @@
-(function () {
+(function() {
 
     angular
         .module('todolistApp')
         .service('ListService', ['$http', ListService]);
 
-    function ListService($http){
-        var url = 'https://todolist-20171.appspot.com/api/lists';
+    function ListService($http) {
+        var url = 'http://localhost:8080/api/lists';
         var lists = [];
         
         $http.get(url).then(function(response) {

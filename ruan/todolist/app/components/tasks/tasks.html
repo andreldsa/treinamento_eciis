@@ -1,1 +1,8 @@
-<h2>{{ vm.text }}</h2>
+<md-list flex>
+    <md-list-item class="md-3-line" ng-repeat="task in vm.tasks" ng-click="null">
+        <div class="md-list-item-text" layout="column">
+            <h3>{{ task.title }}</h3>
+            <h4>{{ task.description }}</h4>
+            <p>{{ task.priority }}</p>
+        </div>
+</md-list-item>

@@ -2,8 +2,10 @@
 
     angular
         .module('todolistApp')
-        .controller('TasksController', function TasksController() {
-            var vm = this;
-            vm.text = "tasks working";
-        });
+        .controller('TasksController', ['TaskService', TasksController]);
+        
+    function TasksController(TaskService) {
+        var vm = this;
+        vm.tasks = TaskService.getTasks();
+    };
 })();
