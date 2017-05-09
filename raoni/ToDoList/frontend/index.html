@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="todoList" ng-cloak>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="app.js"> </script>
+    <script src="js/controllers/taskController.js"></script>
+<head >
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+</head>
+<body ng-controller="taskController as ctrl" ng-init="ctrl.fetchTasks()">
+    <ul>
+        <li ng-repeat="task in ctrl.tasks">
+            {{task.name}}
+            {{task.description}}
+
+        </li>
+
+    </ul>
+
+</body>
+</html>
