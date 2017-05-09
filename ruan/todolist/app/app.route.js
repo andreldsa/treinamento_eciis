@@ -11,20 +11,24 @@
         $stateProvider
             .state('about', {
                 url: '/about',
-                templateUrl: 'components/about/about.html',
-                controller: 'AboutController as vm'
+                component: 'about'
             })
             .state('lists', {
                 url: '/lists',
-                templateUrl: 'components/lists/lists.html',
-                controller: 'ListsController as vm'
+                component: 'lists'
+            })
+            .state('list-details', {
+                url: '/list/details',
+                component: 'listDetails'
             })
             .state('tasks', {
                 url: '/tasks',
-                templateUrl: 'components/tasks/tasks.html',
-                controller: 'TasksController as vm'
+                component: 'tasks'
             })
-
+            .state('task-details', {
+                url: '/task/details',
+                component: 'taskDetails'
+            })
     }
 
 })();

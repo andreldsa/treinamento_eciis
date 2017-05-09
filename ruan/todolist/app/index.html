@@ -15,6 +15,8 @@
                 <md-nav-item md-nav-sref="lists" name="lists">Lists</md-nav-item>
                 <md-nav-item md-nav-sref="tasks" name="tasks">Tasks</md-nav-item>
                 <md-nav-item md-nav-sref="about" name="about">About</md-nav-item>
+                <md-nav-item md-nav-sref="list-details" name="list-details">List Detail</md-nav-item>
+                <md-nav-item md-nav-sref="task-details" name="task-details">Task Detail</md-nav-item>
             </md-nav-bar>
 
             <div layout="column">
@@ -37,17 +39,21 @@
         <!-- Ui-Router-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0/angular-ui-router.min.js"></script>
 
-        <!---->
+        <!--App Config -->
         <script src="app.module.js"></script>
         <script src="app.route.js"></script>
         
-        <!-- Controllers -->
-        <script src="components/about/about.controller.js"></script>
-        <script src="components/lists/lists.controller.js"></script>
-        <script src="components/tasks/tasks.controller.js"></script>
+        <!-- Components -->
+        <script src="components/lists/lists.component.js"></script>
+        <script src="components/tasks/tasks.component.js"></script>
+        <script src="components/about/about.component.js"></script>
+        <script src="components/list-details/list-details.component.js"></script>
+        <script src="components/task-details/task-details.component.js"></script>
+        
 
         <!-- Services -->
         <script src="components/lists/lists.service.js"></script>
+        <script src="components/list-details/list-details.service.js"></script>
         <script src="components/tasks/tasks.service.js"></script>
 
     </body>

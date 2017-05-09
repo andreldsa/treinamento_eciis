@@ -9,9 +9,10 @@ BASE = "http://localhost:8080/api/"
 ENTITY = "list/{0}/task"
 
 # set the ids according to the lists ids created in the listsSeed
-lists_ids = ['4714705859903488',
-                '5418393301680128',
-                    '6544293208522752']
+lists_ids = ['5066549580791808',
+                '5629499534213120',
+                    '6192449487634432'];
+
 
 data = [
     {
