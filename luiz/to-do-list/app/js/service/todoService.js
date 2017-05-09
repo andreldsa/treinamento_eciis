@@ -4,12 +4,14 @@
     app.service('todoService', function($http){
         var model = this;
 
+        var TODO_URI = '/api/todo';
+
         model.buscarTodas = function() {
-            return $http.get('/api/todo')
+            return $http.get(TODO_URI);
         }
 
         model.salvar = function(tarefa) {
-            return $http.post('/api/todo', tarefa)
+            return $http.post(TODO_URI, tarefa);
         }
     });
 })()

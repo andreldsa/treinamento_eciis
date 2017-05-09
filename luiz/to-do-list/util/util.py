@@ -28,7 +28,7 @@ def isLoggedIn(func):
     if user:
       nickname = user.nickname()
       logout_url = users.create_logout_url('/')
-      greeting = 'Welcome, {}! (<a href = "{}">sign out</a>)'.format(nickname, logout_url)
+      #self.redirect(logout_url)
         
     else:     
       login_url = users.create_login_url('/')
