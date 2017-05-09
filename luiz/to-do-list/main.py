@@ -9,6 +9,7 @@ from util import *
 
 class TaskHandler(webapp2.RequestHandler):
 
+    @isLoggedIn
     def get(self):
         data = Task.getAllTasks()
 
@@ -17,7 +18,7 @@ class TaskHandler(webapp2.RequestHandler):
 
     def post(self):
         data = json2data(self.request.body)
-        task = Task.createTask(data['nome_tarefa'])
+        task = Task.createTask(data['name_task'])
 
         self.response.set_status("201")
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
