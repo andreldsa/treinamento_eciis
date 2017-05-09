@@ -14,4 +14,4 @@
             return $http.post(TODO_URI, tarefa);
         }
     });
-})()
+})();

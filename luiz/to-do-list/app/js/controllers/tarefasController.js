@@ -9,7 +9,7 @@
             todoService.salvar(tarefa).then(function(response) {
                 vm.tarefa = "";
 
-            }, function(response){})
-        }
+            }, function(response){});
+        };
     });
-})()
+})();

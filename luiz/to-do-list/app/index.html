@@ -1,123 +1,81 @@
-<html lang="pt" >
+<html lang="pt">
+
 <head>
-    <title>Todo List</title>
+  <title>Todo List</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="/css/teste.css">
-   <!--Angular Material style sheet--> 
+  <!--Angular Material style sheet-->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<!--<body ng-app="tarefasApp" ng-cloak>-->
-<body ng-app="panelGroupsDemo">
-  
-  <!--
-    <md-content class="md-padding">
-        <md-nav-bar
-        md-selected-nav-item="currentNavItem"
-        nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-href="#/tarefa"  name="page1">
-            Adiciona Tarefa
-        </md-nav-item>
-        <md-nav-item md-nav-href="#/todas-tarefas" name="page2">
-            Todas as Tarefas
-        </md-nav-item>
 
-        </md-nav-bar>
-    </md-content>-->
+<body ng-app="tarefasApp" ng-cloak>
 
+  <div ng-controller="sideNavCtrl as vm">
 
+    <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row">
 
-    <!--<div ui-view></div>-->
-
-    <div ng-controller="PanelGroupsCtrl as ctrl" ng-cloak>
-
-  <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row">
-
-     <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
-        <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
+      <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
+        <md-button class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft()">
           <md-icon>menu</md-icon>
         </md-button>
 
-        <md-button disabled="true">
-          <img src="https://nacoesunidas.org/wp-content/uploads/2014/10/WHO_Logo_c300.png" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1)">
-        </md-button>
-        <h2 flex md-truncate>e-CIIS</h2>
+        <h2 flex md-truncate></h2>
 
-        <md-button class="md-icon-button" aria-label="Favorite">
-          <md-icon style="color: white;">account_circle</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button" aria-label="Favorite">
-          <md-icon style="color: white;">build</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button" aria-label="More">
-          <md-icon>more_vert</md-icon>
-        </md-button>
+        <md-menu md-offset="0 -7">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+            <md-icon>account_circle</md-icon>
+          </md-button>
+          <md-menu-content width="2">
+            <md-menu-item ng-repeat="item in ['sigin in', 'sign out']">
+              <md-button> {{item}} </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
+    </md-toolbar>
 
+    <div layout="column" style="height: 500px;">
 
-  </md-toolbar>
+      <div ui-view></div>
 
-  <md-content layout-padding>
-    <p>
-      Panels can be added to a group. Groups are used to configure specific
-      behaviors on multiple panels. To add a panel to a group, use the
-      <code>$mdPanel.newPanelGroup</code> method, or simply add a group name
-      to the configuration object passed into the <code>$mdPanel.create</code>
-      method.
-    </p>
-    <p>
-      Grouping allows for methods to be applied to several panels at once, i.e.
-      closing all panels within the toolbar group, or destroying all panels
-      within a dialog group. With the <code>maxOpen</code> property, you can
-      also limit the number of panels allowed open within a specific group. This
-      can be useful in limiting the number of menu panels allowed open at a
-      time, etc.
-    </p>
+      <section layout="row" flex>
 
-    <div layout="row">
-      <div layout="column" flex>
-        <h2>Multiple Groups</h2>
-        <p>
-          Panels can be added to multiple groups. The <code>groupName</code>
-          parameter in the panel configuration can be a string or an array of
-          strings. This allows for the functionality or constraints of multiple
-          groups to apply to each created panel.
-        </p>
-        <p>
-          To give an example, the menus within the toolbar above have been added
-          to the <strong>toolbar</strong> and <strong>menus</strong> groups.
-          The menus to the right have been added to the <strong>menus</strong>
-          group as well. The maximum number of open panels within the
-          <strong>toolbar</strong> group is <strong>2</strong>. Within the
-          <strong>menus</strong> group it is <strong>3</strong>. Opening the
-          menus to the right and more than one in the toolbar will result in
-          the first opened panel to the right to close.
-        </p>
-      </div>
-      <div style="width: 45px;"></div>
-      <div layout="row" flex="nogrow">
-        <md-button
-          class="md-fab md-primary"
-          aria-label="Tools"
-          ng-click="ctrl.showContentMenu($event, ctrl.tools)">
-          <md-icon md-svg-icon="img/icons/ic_build_24px.svg"></md-icon>
-        </md-button>
-        <md-button
-          class="md-fab md-accent"
-          aria-label="Code"
-          ng-click="ctrl.showContentMenu($event, ctrl.code)">
-          <md-icon md-svg-icon="img/icons/ic_code_24px.svg"></md-icon>
-        </md-button>
-      </div>
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop md-whiteframe="4">
+
+          <md-toolbar class="md-theme-indigo">
+            <h1 class="md-toolbar-tools">Disabled Backdrop</h1>
+          </md-toolbar>
+
+          <md-content layout-margin>
+            <p>
+              This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
+            </p>
+
+            <md-button ng-click="vm.changeView('adicionar-tarefa')" class="md-accent">
+              Adicionar Tarefa
+            </md-button>
+            <div></div>
+            <md-button ng-click="vm.changeView('tarefas')" class="md-accent">
+              Ver tarefas
+            </md-button>
+
+            <md-button ng-click="vm.toggleLeft()" class="md-accent">
+              Close this Sidenav
+            </md-button>
+          </md-content>
+
+        </md-sidenav>
+      </section>
     </div>
-  </md-content>
 
-</div>
-  
+  </div>
+
+
+
+
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
@@ -125,16 +83,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
   <!-- Angular Material Library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
 
-  <script src="/js/teste.js"></script>
-
-<!--
   <script src="/js/app.js"></script>
   <script src="/js/service/todoService.js"></script>
   <script src="/js/controllers/tarefasController.js"></script>
-  <script src="/js/controllers/listaTarefasCtrl.js"></script> -->
-  
+  <script src="/js/controllers/listaTarefasCtrl.js"></script>
+  <script src="/js/controllers/sideNavCtrl.js"></script>
+
 </body>
+
 </html>

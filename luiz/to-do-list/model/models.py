@@ -3,7 +3,6 @@
 from google.appengine.ext import ndb
 
 class Task(ndb.Model):
-
     name_task = ndb.StringProperty(required=True)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
@@ -21,6 +20,5 @@ class Task(ndb.Model):
         return tasks
 
 class User(ndb.Model):
-
     email = ndb.StringProperty(required=True)
     todo_list = ndb.KeyProperty(kind='Task', repeated=True)
