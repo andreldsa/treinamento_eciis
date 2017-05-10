@@ -19,26 +19,26 @@ class SEU_HANDLER(BaseHandler):
 
 class CommentsHandler(BaseHandler):
     
-     #Util
-    def date_handler(obj):
-        if hasattr(obj, 'isoformat'):
-            return obj.isoformat()
-        elif hasattr(obj, 'email'):
-            return obj.email()
-
-        return obj
-
-    def data2json(data):
-        return json.dumps(
-        data,
-        default=date_handler,
-        indent=2,
-        separators=(',', ': '),
-        ensure_ascii=False
-    )
-
     #This method return the comments of post informed
     def get(self, id_institution, id_post):
+        
+        #Util
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+            data,
+            default=date_handler,
+            indent=2,
+            separators=(',', ': '),
+            ensure_ascii=False
+        )
 
         post = Post.get_by_id(int(id_post))
         all_comments = post.comments #Array of comments, how i convert for JSON ?
@@ -48,16 +48,19 @@ class CommentsHandler(BaseHandler):
 
     def post(self, id_institution, id_post):
 		
-        data = self.request.body()
-		
+        data = self.request.body	
         post = Post.get_by_id(int(id_post))
-        comments = post.comments
-        
-        if(not comments):
-            comments = []
+          
+        if(not post.comments):
+            post.comments = []
 		
-        comments.append(data)      
+        post.comments.append(data)
+        post.put()
+
+        self.response.write(data)
+      
      
+ 
     def patch(self, id_institution, id_post):
 		
         data = json.loads(self.request.body)
@@ -73,16 +76,16 @@ class CommentsHandler(BaseHandler):
 
 class TimelineInstitutionHandler(BaseHandler):
 	
-   
-	
     def get(self, id_institution):
-
-            #Util
+        
         def date_handler(obj):
             if hasattr(obj, 'isoformat'):
-                return obj.isoformat()
+             return obj.isoformat()
             elif hasattr(obj, 'email'):
                 return obj.email()
+            
+            if isinstance(obj, ndb.Key):
+                return obj.integer_id()
 
             return obj
 
