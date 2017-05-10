@@ -1,6 +1,27 @@
 (function() {
 
-var app = angular.module('app', ['ui.router']);
+var app = angular.module('app', ['ui.router', 'ngMaterial']);
+
+app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider){
+
+    $urlRouterProvider.otherwise('/api');
+
+    $stateProvider
+        .state("home", {
+                url: "/api",
+                templateUrl: "templates/home.html",
+                controller: "HomeController",
+        })
+        .state("register", {
+                url: "/register",
+                templateUrl: "templates/register.html",
+                controller: "RegisterController",
+        });
+
+         
+
+
+});
 
 app.controller('HomeController', function HomeController(DoListService){
     var vm = this;
@@ -12,22 +33,34 @@ app.controller('HomeController', function HomeController(DoListService){
             }, function error(response){}
         );
     
+    vm.stateGo = function stateGo(state){
+        DoListService.stateGo(state);
+    }
+        
+});
 
+app.controller('RegisterController', function RegisterController(DoListService){    
+    var vm = this;
     vm.activity = {}
 
     vm.register = function register(){
         DoListService.register(vm.activity).then(
             function sucess(response){
-                activity = {};
+                vm.activity = {};
+                // vm.ActivityForm.$setPristine(); Tornar o campo pristine novamente
                 return response.data;
         }, function error(response){
 
         });
     }; 
+
+    vm.stateGo = function stateGo(state){
+        DoListService.stateGo(state);
+    }
     
 });
 
-app.service('DoListService', function DoListService($http){
+app.service('DoListService', function DoListService($http, $state){
 
     var sv = this;
     sv.getList = function getList(){
@@ -39,11 +72,10 @@ app.service('DoListService', function DoListService($http){
 
     };
 
-    sv.loggin = function loggin(){
-
+    sv.stateGo = function stateGo(state){
+        $state.go(state);
     }
+
 });
-
-
 
 })()
