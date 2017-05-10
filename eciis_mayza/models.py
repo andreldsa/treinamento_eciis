@@ -3,6 +3,9 @@ from google.appengine.ext import ndb
 
 class User(ndb.Model):
 
+    # MAYZA CHANGE
+    email = ndb.StringProperty(required=True)
+
     # The id of the institutions to which the user belongs
     # minimum = 1
     institutions = ndb.KeyProperty(kind="Institution", repeated=True)
@@ -42,7 +45,12 @@ class Timeline(ndb.Model):
 class Institution(ndb.Model):
 
     # The admin user of this institution
-    admin = ndb.KeyProperty(kind="User", required=True)
+    admin = ndb.KeyProperty(kind="User")
+
+    # MAYZA CHANGE
+    email_admin = ndb.StringProperty(required=True)
+
+    name = ndb.StringProperty(required=True)
 
     # The parent institution
     # Value is None for institutions without parent
@@ -71,6 +79,10 @@ class Institution(ndb.Model):
 
 
 class Post(ndb.Model):
+
+    # Mayza Change
+    title = ndb.StringProperty(required = True)
+    body = ndb.StringProperty(required = True)
 
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
