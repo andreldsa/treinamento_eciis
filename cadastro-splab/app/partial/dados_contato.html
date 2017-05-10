@@ -1,0 +1,58 @@
+<!-- dados de contato -->
+<md-card flex md-whiteframe="2" layout="column">
+
+  <md-toolbar class="md-hue-1 md-accent">
+    <div class="md-toolbar-tools">
+      <md-icon class="section-icon" md-font-icon="md">email</md-icon>
+      <h2 flex md-truncate> Dados de contato </h2>
+    </div>
+  </md-toolbar>
+
+  <div style="padding: 16px;">
+    <div layout-xs="column" layout="row" layout-wrap layout-align="start">
+      <md-list flex-gt-sm="45">
+        <md-list-item style="background-color: rgb(250,250,250);">
+          <p class="subheader">Fones</p>
+          <md-button ng-click="vm.add_fone($event)" class="md-secondary md-icon-button md-primary md-hue-1" aria-label="Open sample menu">
+            <md-icon md-font-icon="md" aria-label="">add</md-icon>
+          </md-button>
+        </md-list-item>
+
+        <md-list-item ng-repeat="fone in vm.user.fones" ng-click="null" ng-mouseover="vm.hovering_fone = $index" ng-mouseleave="vm.hovering_fone = null">
+          <md-icon md-font-icon="md" aria-label="">phone</md-icon>
+          <p>{{ fone }}</p>
+          <md-button ng-show="vm.hovering_fone == $index" class="md-secondary md-icon-button md-primary md-hue-1" ng-click="vm.user.del_fone($index); vm.user._state = 'changed'">
+            <md-icon md-font-icon="md" aria-label="">delete</md-icon>
+          </md-button>
+        </md-list-item>
+
+      </md-list>
+
+      <div flex="5"></div>
+
+      <md-list flex-gt-sm="45">
+        <md-list-item style="background-color: rgb(250,250,250);">
+          <p class="subheader">Emails</p>
+          <md-button ng-click="vm.add_email($event)" class="md-secondary md-icon-button md-primary md-hue-1" aria-label="Open sample menu">
+            <md-icon md-font-icon="md" aria-label="">add</md-icon>
+          </md-button>
+        </md-list-item>
+        <md-list-item ng-repeat="email in vm.user.emails" ng-click="null" ng-mouseover="vm.hovering = $index" ng-mouseleave="vm.hovering = null">
+          <md-icon md-font-icon="md" aria-label="">email</md-icon>
+          <p>{{ email }}</p>
+          <md-button ng-if="!vm.splab_email(email)" ng-show="vm.hovering == $index" class="md-secondary md-icon-button md-primary md-hue-1" ng-click="vm.user.del_email($index)">
+            <md-icon md-font-icon="md" aria-label="">delete</md-icon>
+          </md-button>
+        </md-list-item>
+      </md-list>
+
+      <md-input-container class="md-block" flex="100">
+        <label>Endereço</label>
+        <textarea ng-model="vm.user.endereco" md-maxlength="150" rows="3" md-select-on-focus ng-change="vm.user._state = 'changed'"></textarea>
+        <div class="input-hint">Seu endereço físico</div>
+      </md-input-container>
+
+    </div>
+  </div>
+
+</md-card>

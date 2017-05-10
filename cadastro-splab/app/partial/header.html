@@ -1,0 +1,61 @@
+<!-- toolbar with menu -->
+<md-toolbar class="md-primary">
+  <div class="md-toolbar-tools">
+    <h2 flex ui-sref="app.home" style="cursor: pointer;">Cadastro SPLab (v0.1.0 experimental!)</h2>
+    <div ng-if="app.eh_perfil">
+      <md-button ng-click="null" ui-sref="app.dpessoais" class="md-secondary md-icon-button md-mini" aria-label="Open sample menu">
+        <md-icon md-font-icon="md" aria-label="">perm_identity</md-icon>
+      </md-button>
+      <md-button ng-click="null" ui-sref="app.dcontato" class="md-secondary md-icon-button" aria-label="Open sample menu">
+        <md-icon md-font-icon="md" aria-label="">email</md-icon>
+      </md-button>
+      <md-button ng-click="null" ui-sref="app.projetos" class="md-secondary md-icon-button" aria-label="Open sample menu">
+        <md-icon md-font-icon="md" aria-label="">computer</md-icon>
+      </md-button>
+      <md-button ng-disabled="app.user._state != 'changed'" ng-click="app.save_user()" class="md-fab md-accent md-hue-2 md-mini" aria-label="Open sample menu">
+        <md-icon md-font-icon="md" aria-label="">save</md-icon>
+      </md-button>
+    </div>
+
+    <md-menu>
+      <md-button ng-click="$mdMenu.open($event)" class="md-fab md-primary md-hue-3" aria-label="User menu">
+        <img ng-if="app.user" class="avatar" ng-src="{{app.user.gravatar_url}}" alt="">
+        <md-icon ng-if="!app.user" md-font-icon="md" aria-label="">person</md-icon>
+      </md-button>
+      <md-menu-content>
+        <md-menu-item ng-if="app.user"><p>{{app.user.nome || app.user.email}}<br><span class="md-caption">{{app.user.email}}</span></p></md-menu-item>
+        <md-divider ng-if="app.user"></md-divider>
+        <md-menu-item ng-if="!app.user">
+          <md-button ng-href="/login">
+            Login
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="app.eh_perfil">
+          <md-button ng-click="null" ui-sref="app.dpessoais">
+            <md-icon md-font-icon="md" aria-label="">person</md-icon>
+            Dados pessoais
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="app.eh_perfil">
+          <md-button ng-click="null" ui-sref="app.dcontato">
+            <md-icon md-font-icon="md" aria-label="">email</md-icon>
+            Dados de contato
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="app.eh_perfil" ui-sref="app.projetos">
+          <md-button ng-click="app.view = 'dados_de_vinculos'">
+            <md-icon md-font-icon="md" aria-label="">computer</md-icon>
+            Projetos
+          </md-button>
+        </md-menu-item>
+        <md-divider ng-if="app.user"></md-divider>
+        <md-menu-item ng-if="app.user">
+          <md-button ng-click="null" href="/logout">
+            Logout
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
+  </div>
+</md-toolbar>
