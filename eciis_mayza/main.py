@@ -6,6 +6,7 @@ import logging
 import json
 
 from models import *
+from utils import *
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -15,28 +16,29 @@ class BaseHandler(webapp2.RequestHandler):
 class SEU_HANDLER(BaseHandler):
     pass
 
+
 class CommentsHandler(BaseHandler):
     
-     #Util
-    def date_handler(obj):
-        if hasattr(obj, 'isoformat'):
-            return obj.isoformat()
-        elif hasattr(obj, 'email'):
-            return obj.email()
-
-        return obj
-
-    def data2json(data):
-        return json.dumps(
-        data,
-        default=date_handler,
-        indent=2,
-        separators=(',', ': '),
-        ensure_ascii=False
-    )
-
     #This method return the comments of post informed
     def get(self, id_institution, id_post):
+        
+        #Util
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+            data,
+            default=date_handler,
+            indent=2,
+            separators=(',', ': '),
+            ensure_ascii=False
+        )
 
         post = Post.get_by_id(int(id_post))
         all_comments = post.comments #Array of comments, how i convert for JSON ?
@@ -46,16 +48,19 @@ class CommentsHandler(BaseHandler):
 
     def post(self, id_institution, id_post):
 		
-        data = self.request.body()
-		
+        data = self.request.body	
         post = Post.get_by_id(int(id_post))
-        comments = post.comments
-        
-        if(not comments):
-            comments = []
+          
+        if(not post.comments):
+            post.comments = []
 		
-        comments.append(data)      
+        post.comments.append(data)
+        post.put()
+
+        self.response.write(data)
+      
      
+ 
     def patch(self, id_institution, id_post):
 		
         data = json.loads(self.request.body)
@@ -71,25 +76,27 @@ class CommentsHandler(BaseHandler):
 
 class TimelineInstitutionHandler(BaseHandler):
 	
-     #Util
-    def date_handler(obj):
-        if hasattr(obj, 'isoformat'):
-            return obj.isoformat()
-        elif hasattr(obj, 'email'):
-            return obj.email()
-
-        return obj
-
-    def data2json(data):
-        return json.dumps(
-        data,
-        default=date_handler,
-        indent=2,
-        separators=(',', ': '),
-        ensure_ascii=False
-    )
-	
     def get(self, id_institution):
+        
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+             return obj.isoformat()
+            elif hasattr(obj, 'email'):
+                return obj.email()
+            
+            if isinstance(obj, ndb.Key):
+                return obj.integer_id()
+
+            return obj
+
+        def data2json(data):
+            return json.dumps(
+            data,
+            default=date_handler,
+            indent=2,
+            separators=(',', ': '),
+            ensure_ascii=False
+        )
 		
         institution = Institution.get_by_id(int(id_institution))
         timeline = institution.timeline
@@ -98,14 +105,16 @@ class TimelineInstitutionHandler(BaseHandler):
         self.response.write(data2json(timeline))
 		
 class InstitutionHandler(BaseHandler):
-
+    
+    #Method to get the institution by id
     def get(self, institutionId):
         id = int(institutionId)
         data = Institution.get_by_id(id)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(data))
+        self.response.write(data2json(data.to_dict()))
 
 
+    #Method to post a new institution
     def post(self):
         data = json.loads(self.request.body)
         newInstitution = Institution()
@@ -124,25 +133,30 @@ class InstitutionHandler(BaseHandler):
         #Att User Admin
         admin.institutions_admin.append(newInstitution.key)
         admin.put()
+        
         #Create Timeline
         timeline = Timeline()
         timeline.put()
         newInstitution.timeline = timeline.key
         newInstitution.put()
-        
 
+        self.response.write(data2json(newInstitution.to_dict()))        
         self.response.set_status(201)
 
 
+    #Method to update an institution
     def patch(self):
         pass
 
 
+    #Method to delete an institution by id
     def delete(self, institutionId):
         id = int(institutionId)
-        institution = Intitution.get_by_id(id)
+        institution = Institution.get_by_id(id)
         institution.state = 'inactive'
         institution.put()
+        self.response.write(data2json(institution.to_dict()))
+
 
 class ErroHandler(webapp2.RequestHandler):
 
@@ -166,6 +180,7 @@ class InstitutionMembersHandler(BaseHandler):
         else:
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
             self.responde.write("Wrong id")
+
 
     def post(self, id):
         #gets the institution by id
@@ -255,11 +270,13 @@ class InstitutionPostHandler(BaseHandler):
                 separators=(',', ': '),
                 ensure_ascii=False)
 
-
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Verify of the post is deleted
         if post.state != 'deleted':
             self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            #Converts the post to json and writes to the output
             self.response.write(data2json(post.to_dict()))
         else:
             self.response.write("Post not found")
@@ -268,9 +285,11 @@ class InstitutionPostHandler(BaseHandler):
         pass
 
     def delete(self, institution_id, post_id):
-
+        
+        #Get the datastore post
         post = Post.get_by_id(int(post_id))
 
+        #Modify state for deleted
         post.state = 'deleted'
         post.put()
 
@@ -288,19 +307,28 @@ class UserHandler(BaseHandler):
 
     def get(self, userId):
 
-        id = int(userId)
-        user = User.get_by_id(id)
+        user = User.get_by_id(int(userId))
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(user))
+        self.response.write(user)
 
     def post(self):
 
         data = json.loads(self.request.body)
-        newuser = User()
-        newuser.institutions = data.get('institution')
-        newuser.state = data.get('state')
-        newuser.put()
-        self.response.set_status(201)
+        Ids = data.get('institutions')
+
+        if Ids:
+            newuser = User()
+            newuser.email = data.get('email')
+            
+            for institutionId in Ids:
+                newuser.institutions.append(Institution.get_by_id(int(institutionId)).key)
+
+            newuser.state = data.get('state')
+            newuser.put()
+            self.response.set_status(201)
+        else:
+            self.response.write("Wrong id")
+
 
     def delete(self, userId):
 
@@ -309,19 +337,21 @@ class UserHandler(BaseHandler):
         user.state = 'inactive'
         user.put()
 
+
     def patch(self):
         pass
 
-
 class UserTimelineHandler(BaseHandler):
 
-    def get(self, id):
+    def get(self, userId):
 
-        user = User.get_by_id(int(id))
+        user = User.get_by_id(int(userId))
         posts = user.timeline
-        list = [posts.key.integer_id() for posts in posts]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(list)
+        if posts is not None:
+            list = [posts.integer_id() for posts in posts]
+            self.response.write(list)
+        else:
+            self. response.write("No posts yet")
 
 
 class PostHandler(BaseHandler):
