@@ -16,18 +16,18 @@ lists_ids = ['5066549580791808',
 
 data = [
     {
-        'title': 'Task 01',
-        'description': 'Very importat task 01',
+        'title': 'Task A',
+        'description': 'Very importat task A',
         'priority': 'high'
     },
     {
-        'title': 'Task 02',
-        'description': 'Important task 02',
+        'title': 'Task B',
+        'description': 'Important task B',
         'priority': 'medium'        
     },
     {
-        'title': 'Task 03',
-        'description': 'Not so much important task 03',
+        'title': 'Task C',
+        'description': 'Not so much important task C',
         'priority': 'low'       
     },
 ]

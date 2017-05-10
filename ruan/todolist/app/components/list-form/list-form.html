@@ -1,0 +1,30 @@
+
+<p>{{ vm.newList | json }}</p>
+
+
+<md-content layout-gt-md="column" layout-padding>
+    <div>
+        <form name="listForm">
+            <md-input-container class="md-block">
+                <label>Title</label>
+                <input ng-model="vm.list.title" name="listTitle" required>
+                <div ng-messages="listForm.listTitle.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Description</label>
+                <textarea ng-model="vm.list.description" rows="2" 
+                    md-maxlength="150" md-select-on-focus>
+                </textarea>
+            </md-input-container>
+
+            <md-button class="md-raised md-primary" ng-disabled="listForm.$invalid" 
+            ng-click="vm.submit()">
+                Submit
+            </md-button>
+        </form>
+    </div>
+</md-content>
+

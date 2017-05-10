@@ -17,17 +17,21 @@
                 url: '/lists',
                 component: 'lists'
             })
-            .state('list-details', {
-                url: '/list/details',
-                component: 'listDetails'
-            })
             .state('tasks', {
                 url: '/tasks',
                 component: 'tasks'
             })
+            .state('list-details', {
+                url: '/list/details',
+                component: 'listDetails'
+            })
             .state('task-details', {
                 url: '/task/details',
                 component: 'taskDetails'
+            })
+            .state('list-form', {
+                url: '/list/new',
+                component: 'listForm'
             })
     }
 

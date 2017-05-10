@@ -5,7 +5,7 @@
         .service('ListDetailsService', ['$http', ListDetailsService]);
 
     function ListDetailsService($http) {
-        var url = 'http://localhost:8080/api/list';
+        var url = 'http://localhost:8080/api/lists';
         var list = null;
         
         $http.get(url).then(function(response) {
