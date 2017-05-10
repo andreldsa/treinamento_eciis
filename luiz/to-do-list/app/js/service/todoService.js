@@ -4,6 +4,8 @@
     app.service('todoService', function($http){
         var model = this;
         var TODO_URI = '/api/todo';
+        var LOGIN_URL = '/api/login';
+        var LOGOUT_URL = '/api/logout';
 
         model.buscarTodas = function() {
             return $http.get(TODO_URI);
@@ -14,11 +16,11 @@
         };
 
         model.login = function() {
-            window.location.replace('/api/login');
+            window.location.replace(LOGIN_URL);
         };
 
         model.logout = function() {
-            window.location.replace('/api/logout');
+            window.location.replace(LOGOUT_URL);
         };
 
         model.alertMessage = function() {

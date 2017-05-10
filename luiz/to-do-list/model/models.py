@@ -22,3 +22,6 @@ class Task(ndb.Model):
 class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     todo_list = ndb.KeyProperty(kind='Task', repeated=True)
+
+    def getUser(email):
+        User.get_or_insert()
