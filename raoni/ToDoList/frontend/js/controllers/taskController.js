@@ -3,17 +3,20 @@
  */
 var vm;
 (function() {
-
-    angular.module('todoList').controller('taskController', ['$http', function ($http) {
+    angular.module('todoList').config(function($mdIconProvider){
+        $mdIconProvider.fontSet('md', 'material-icons');
+    });
+    angular.module('todoList').controller('taskController', function (requestService) {
         vm = this;
         vm.tasks = [];
-
-        vm.fetchTasks = function () {
-            $http.get('http://localhost:8080/api/tasks',{headers:{'content-type':'application/json'}}).then(function (response) {
-                console.log("entrou");
-                vm.tasks = response.data;
-            });
+        vm.tasks_to_put = [{}];
+        vm.loadTasks = function(){
+            vm.tasks = vm.requestService.fetchTasks();
         };
-    }]);
+        vm.putTasks = function(){
+            requestService.putTasks(vm.tasks_to_put);
+        };
+
+    });
 
 })();

@@ -3,7 +3,13 @@ from google.appengine.ext import ndb
 
 class Task(ndb.Model):
     name = ndb.StringProperty(required=True)
-    date = ndb.DateProperty()
-    id_user = ndb.StringProperty()
+    deadline = ndb.DateProperty()
     description = ndb.StringProperty(required=True)
+
+
+class User(ndb.Model):
+    tasks = ndb.KeyProperty(repeated=True)
+    email = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
+
 
