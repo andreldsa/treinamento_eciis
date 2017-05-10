@@ -9,9 +9,10 @@
         var lists = [];
         
 
-        this.getLists = function getLists() {
-            
-            $http.get(url + 'lists').then(function(response) {
+        this.getAll = function getAll() {
+            var getUrl = url + 'lists';
+
+            $http.get(getUrl).then(function success(response) {
                 lists = response.data;
             }, function errorCallback(response) {
                 console.log(response);
@@ -20,8 +21,15 @@
             return lists;
         };
 
-        this.saveList = function saveList(newList) {
+        this.save = function save(newList) {
+            var postUrl = url + 'list';
 
+            $http.post(postUrl, newList)
+                .then(function success(response) {
+                    console.log(response);
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
         }
     }
 })();

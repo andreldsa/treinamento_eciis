@@ -13,7 +13,7 @@
         vm.tasks = [];
 
         vm.$onInit = function onInit() {
-            vm.tasks = TaskService.getTasks();
+            vm.tasks = TaskService.getAll();
         };
     };
 

@@ -33,6 +33,10 @@
                 url: '/list/new',
                 component: 'listForm'
             })
+            .state('task-form', {
+                url: '/task/new',
+                component: 'taskForm'
+            })
     }
 
 })();

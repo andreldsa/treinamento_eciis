@@ -13,7 +13,7 @@
         vm.lists = [];
 
         vm.$onInit = function onInit(){
-            vm.lists = ListService.getLists();
+            vm.lists = ListService.getAll();
         };
     };
 

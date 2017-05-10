@@ -1,0 +1,44 @@
+
+<md-content layout-gt-md="column" layout-padding>
+    <div>
+        <form name="taskForm">
+            <md-input-container class="md-block">
+                <label>Title</label>
+                <input ng-model="vm.task.title" name="taskTitle" required>
+                <div ng-messages="taskForm.taskTitle.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <label>Description</label>
+                <textarea ng-model="vm.task.description" rows="2" 
+                    md-maxlength="150" md-select-on-focus>
+                </textarea>
+            </md-input-container>
+
+            <!--<md-radio-group name="componentProperty" [(ngModel)]="componentProperty" [align]="'start|end'">
+                <md-radio-button value="high">High</md-radio-button>
+                <md-radio-button value="medium">Medium</md-radio-button>
+                <md-radio-button value="low">Low</md-radio-button>
+            </md-radio-group>-->
+
+            <md-input-container class="md-block">
+                <p>Priority</p>
+                <md-radio-group ng-model="vm.task.priority" layout="row">
+                    <md-radio-button ng-repeat="priority in vm.priorities" 
+                        name="{{priority}}" value="{{priority}}" class="md-primary">
+                        {{ priority | uppercase }}
+                    </md-radio-button>
+                </md-radio-group>
+            </md-input-container>         
+
+            <md-input-container class="md-block">
+                <md-button class="md-raised md-primary" ng-disabled="taskForm.$invalid" 
+                    ng-click="vm.submit()">
+                    Submit
+                </md-button>
+            </md-input-container>
+        </form>
+    </div>
+</md-content>

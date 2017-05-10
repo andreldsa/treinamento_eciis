@@ -19,6 +19,7 @@
 
         vm.submit = function submit() {
             console.log(vm.list);
+            ListService.save(vm.list);
         };
        
     };
