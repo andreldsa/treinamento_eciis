@@ -2,7 +2,10 @@
 
 var app = angular.module('app', ['ui.router', 'ngMaterial']);
 
-app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider){
+app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider){
+
+    $mdIconProvider
+        .iconSet();
 
     $urlRouterProvider.otherwise('/api');
 
@@ -16,10 +19,15 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider){
                 url: "/register",
                 templateUrl: "templates/register.html",
                 controller: "RegisterController",
+        }).state("login", {
+                url: "/api/login",
+                templateUrl: "templates/login.html",
+                controller: "LoginController",
+        }).state("logout", {
+                url: "/api/logout",
+                templateUrl: "templates/login.html",
+                controller: "LoginController",
         });
-
-         
-
 
 });
 
@@ -58,6 +66,16 @@ app.controller('RegisterController', function RegisterController(DoListService){
         DoListService.stateGo(state);
     }
     
+});
+
+app.controller('LoginController', function LoginController(DoListService){
+    var vm = this;
+    vm.tasks = {}
+    
+    vm.login = function login(){
+        
+    };
+        
 });
 
 app.service('DoListService', function DoListService($http, $state){
