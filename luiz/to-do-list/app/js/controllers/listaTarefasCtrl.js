@@ -11,8 +11,9 @@
                 vm.tarefas = response.data;
 
             }, function(response){
-                console.log(response.data);
-                window.location.replace(response.data.login_url);
+                if(response.status == 401) {
+                    todoService.alertMessage();
+                }
             });
         };
     });

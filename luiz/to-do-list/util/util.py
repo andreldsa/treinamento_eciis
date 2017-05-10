@@ -26,21 +26,22 @@ def isLoggedIn(func):
     user = users.get_current_user()
     
     if user:
-      nickname = user.nickname()
-      logout_url = users.create_logout_url('/')
-      #self.redirect(logout_url)
-        
+      return func(self)
     else:     
-      login_url = users.create_login_url('/')
       greeting = {
-        "login_url" : login_url
+        "message" : 'User is offline'
       }
     
       self.response.set_status("401")
       self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
       self.response.write(data2json(greeting))
 
-    if user:
-      return func(self)
-    
   return params
+
+def login():
+  login_url = users.create_login_url('/')
+  return login_url
+
+def logout():
+  logout_url = users.create_logout_url('/')
+  return logout_url

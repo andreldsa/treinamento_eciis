@@ -9,7 +9,11 @@
             todoService.salvar(tarefa).then(function(response) {
                 vm.tarefa = "";
 
-            }, function(response){});
+            }, function(response){
+                if (response.status == 401) {
+                    todoService.alertMessage();
+                }
+            });
         };
     });
 })();
