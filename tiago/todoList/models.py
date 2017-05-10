@@ -5,8 +5,6 @@ class User(ndb.Model):
 	# NOT IMPLEMENTED YET
 
 class Tarefa(ndb.Model):
-
 	name = ndb.StringProperty()
 	descricao = ndb.StringProperty()
-	data = ndb.StringProperty()
-	
+	data = ndb.StringProperty()	

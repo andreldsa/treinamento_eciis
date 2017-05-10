@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css" -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <title>To-Do List</title>
 </head>
-
 <body ng-app="todoListApp" ng-cloak ng-controller="ToDoController as vm" layout="column" layout-fill>
   <md-toolbar md-colors="{background: 'blue-800'}" layout-wrap layout-align="center" layout="row">
       <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
@@ -27,13 +25,8 @@
               </md-menu>
       </div>
     </md-toolbar>
-
-    
-    <!-- md-content flex md-whiteframe="6" style="margin: 8px; padding: 8px;" -->
     <md-content flex md-whiteframe="4" layout-margin style="padding: 4px;">
       <h1>Tarefas</h1>
-      
-
       <md-list>
         <md-list-item class="md-2-line secondary-button-padding" ng-repeat="tarefa in vm.tarefas" ng-click="vm.set_something()">
           <div class="md-list-item-text" layout="column">
@@ -49,13 +42,11 @@
     </md-content>
     <md-content flex md-whiteframe="4" layout-margin style="padding: 4px;">
       <h1>Criar Tarefa</h1>
-
       <div layout="row" layout-align="start" flex>
         <md-input-container flex="50">
           <label>Tarefa</label>
           <input type="text" name="quest" ng-model="vm.tarefa.nome"/>
         </md-input-container>
-
         <md-input-container flex="50">
           <label>Descricao</label>
           <input type="text" name="quest" ng-model="vm.tarefa.descricao"/>
@@ -66,25 +57,19 @@
             <h4>Deadline</h4>
             <md-datepicker ng-model="vm.tarefa.date" md-placeholder="Enter date"></md-datepicker>
           </div>
-
       <div layout="row" layout-align="end" flex>
         <md-button ng-click="vm.clear()" >Clear</md-button>
         <md-button ng-click="vm.save()" class="md-primary">Save</md-button>
       </div>
     </md-content>
-
     <!-- Angular Material requires Angular.js Libraries -->
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-
   <!-- Angular Material Library -->
-  <!-- script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
-  
-  <!-- Your application bootstrap  -->
+  <!-- application -->
   <script src="app.js"></script>
-
 </body>
 </html>
