@@ -9,6 +9,27 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 
+class UserHandler(webapp2.RequestHandler):
+
+    def get(self, userId):
+        user = User.get_by_id(int(userId))
+        user = data2dict(user)
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(user))
+
+    
+    def post(self):
+        data = json.loads(self.request.body)
+        newUser = User()
+        newUser.name = data.get('name')
+        newUser.email = data.get('email')
+        newUser.put()
+        newUser = data2dict(newUser)
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(newUser))
+        
+
+
 class ListHandler(BaseHandler): 
     # Get a List by id
     def get(self, listId):
@@ -26,12 +47,13 @@ class ListHandler(BaseHandler):
         newList.description = data.get('description')
         newList.put()
         newList = data2dict(newList)
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'        
         self.response.write(data2json(newList))
         self.response.set_status(201)
 
 
 
-class ListsHandler(BaseHandler):
+class ListCollectionHandler(BaseHandler):
     # Get all lists
     def get(self):
         query = List.query()
@@ -51,7 +73,7 @@ class TaskHandler(BaseHandler):
 
 
 
-class TasksHandler(BaseHandler):
+class TaskCollectionHandler(BaseHandler):
     # Get all tasks
     def get(self):
         query = Task.query()
@@ -92,6 +114,7 @@ class ListTasksHandler(BaseHandler):
         _list.put()
 
         newTask = data2dict(newTask)
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'        
         self.response.write(data2json(newTask))        
         self.response.set_status(201)
     
@@ -103,25 +126,10 @@ app = webapp2.WSGIApplication([
     ('/api/list/(\d+)', ListHandler), 
     ('/api/list/(\d+)/task', ListTasksHandler), 
     ('/api/list/(\d+)/tasks', ListTasksHandler), 
-    ('/api/lists', ListsHandler), 
+    ('/api/lists', ListCollectionHandler), 
     ('/api/task/(\d+)', TaskHandler), 
-    ('/api/tasks', TasksHandler)
+    ('/api/tasks', TaskCollectionHandler),
+    ('/api/users', UserHandler),
+    ('/api/users/(\d+)', UserHandler)
+
 ], debug=True)
-
-
-
-#lists
-#   get all lists
-#   get a list by id
-#   create a list
-#
-
-#tasks
-#   get all tasks
-#
-
-#lists-tasks
-#   get all tasks from a list
-#   get a task from list
-#   add a task to a list
-#
