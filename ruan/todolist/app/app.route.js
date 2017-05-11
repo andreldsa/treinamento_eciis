@@ -9,25 +9,17 @@
         $urlRouterProvider.otherwise('/lists');        
         
         $stateProvider
-            .state('about', {
-                url: '/about',
-                component: 'about'
-            })
             .state('lists', {
                 url: '/lists',
                 component: 'lists'
             })
-            .state('tasks', {
-                url: '/tasks',
-                component: 'tasks'
+            .state('task-card', {
+                url: '/taskCard',
+                component: 'taskCard'
             })
             .state('list-details', {
                 url: '/list/details',
                 component: 'listDetails'
-            })
-            .state('task-details', {
-                url: '/task/details',
-                component: 'taskDetails'
             })
             .state('list-form', {
                 url: '/list/new',

@@ -13,7 +13,7 @@
                 md-selected-nav-item="currentNavItem"
                 nav-bar-aria-label="navigation links">
                 <md-nav-item md-nav-sref="lists" name="lists">Lists</md-nav-item>
-                <md-nav-item md-nav-sref="tasks" name="tasks">Tasks</md-nav-item>
+                <md-nav-item md-nav-sref="task-card" name="task-card">Task Card</md-nav-item>
                 <md-nav-item md-nav-sref="list-details" name="list-details">List Detail</md-nav-item>
                 <md-nav-item md-nav-sref="list-form" name="list-form">List Form</md-nav-item>
                 <md-nav-item md-nav-sref="task-form" name="task-form">Task Form</md-nav-item>
@@ -23,8 +23,6 @@
                 <ui-view ></ui-view>
             </div>
         </md-content>
-
-       
 
 
         <!-- Angular Material requires Angular.js Libraries -->
@@ -45,16 +43,16 @@
         
         <!-- Components -->
         <script src="components/lists/lists.component.js"></script>
-        <script src="components/tasks/tasks.component.js"></script>
         <script src="components/list-details/list-details.component.js"></script>
         <script src="components/list-form/list-form.component.js"></script>
         <script src="components/task-form/task-form.component.js"></script>
+        <script src="components/task-card/task-card.component.js"></script>
         
 
         <!-- Services -->
-        <script src="components/lists/lists.service.js"></script>
-        <script src="components/list-details/list-details.service.js"></script>
-        <script src="components/tasks/tasks.service.js"></script>
+        <script src="services/lists.service.js"></script>
+        <script src="services/list-details.service.js"></script>
+        <script src="services/tasks.service.js"></script>
 
     </body>
 </html>

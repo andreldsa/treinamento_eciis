@@ -1,10 +1,10 @@
 
-<div flex-xs layout="column">
-    <md-card ng-repeat="task in vm.tasks" md-theme-watch>
+<div flex-xs layout="column" ng-if="vm.task">
+    <md-card md-theme-watch>
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">{{ task.title }}</span>
-                <span class="md-subhead">{{ task.description }}</span>
+                <span class="md-headline">{{ vm.task.title }}</span>
+                <span class="md-subhead">{{ vm.task.description }}</span>
             </md-card-title-text>
         </md-card-title>
         <md-divider></md-divider>
