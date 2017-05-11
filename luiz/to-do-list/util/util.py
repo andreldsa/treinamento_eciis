@@ -44,5 +44,5 @@ def login():
   return login_url
 
 def logout():
-  logout_url = users.create_logout_url('/')
+  logout_url = users.create_logout_url('/login')
   return logout_url
