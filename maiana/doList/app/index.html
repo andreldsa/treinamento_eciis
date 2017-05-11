@@ -20,14 +20,21 @@
                         <md-icon>more_vert</md-icon>
                     </md-button>
                     <md-menu-content width="2">
-                        <md-menu-item > 
-                            <md-button ng-click="vm.logout()"> <span md-menu-align-target>Logout</span></md-button>
+                        <md-menu-item> 
+                            <a href="/logout">
+                            <md-button> <span md-menu-align-target>Logout</span></md-button>
+                            </a>
+                        </md-menu-item>
+                        <md-menu-item> 
+                            <a href="/login">
+                            <md-button> <span md-menu-align-target>Login</span></md-button>
+                            </a>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
             </div>
         </md-toolbar>
-        <md-content class="md-padding">
+        <div class="md-padding">
             <md-nav-bar nav-bar-aria-label="navigation links">
                 <md-nav-item md-nav-click="vm.stateGo('home')">
                     Todas
@@ -39,7 +46,8 @@
             <div class="ext-content" ui-view>
             </div>
 
-        </md-content>        
+        </div>
+      <div ui-view="templates/login" ng-if="true"></div>        
       </div>
 
                   <!-- Angular Material requires Angular.js Libraries -->

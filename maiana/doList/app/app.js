@@ -29,16 +29,8 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
 
 app.controller('IndexController', function IndexController(DoListService){
     var vm = this;
-    vm.tasks = {}
-
-    vm.login = function login(){
-        DoListService.login();
-    }
-
-    vm.logout = function logout(){
-        DoListService.logout();
-        DoListService.stateGo('login');
-    }
+    vm.tasks = {};
+    vm.logged_in = DoListService.logged_in;
     
     vm.stateGo = function stateGo(state){
         DoListService.stateGo(state);
@@ -53,7 +45,11 @@ app.controller('HomeController', function HomeController(DoListService){
     DoListService.getList().then(
             function sucess(response){
                 vm.tasks = response.data;
-            }, function error(response){}
+            }, function error(response){
+                if(response.status == 401) {
+                    vm.stateGo('login');
+                }
+            }
         );
     
     vm.stateGo = function stateGo(state){
@@ -73,7 +69,9 @@ app.controller('RegisterController', function RegisterController(DoListService){
                 // vm.ActivityForm.$setPristine(); Tornar o campo pristine novamente
                 return response.data;
         }, function error(response){
-
+             if(response.status == 401) {
+                   vm.stateGo('login');
+                }
         });
     }; 
 
@@ -96,22 +94,14 @@ app.controller('LoginController', function LoginController(DoListService){
 app.service('DoListService', function DoListService($http, $state){
 
     var sv = this;
+    sv.logged_in = false;
+
     sv.getList = function getList(){
       return $http.get('/api');
     }
 
     sv.register = function register(activity){
         return $http.post('/api', activity);
-
-    };
-
-    sv.login = function login(){
-        return $http.get('/login');
-
-    };
-
-    sv.logout = function logout(){
-        return $http.get('/logout');
 
     };
 
