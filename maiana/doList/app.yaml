@@ -3,11 +3,15 @@ api_version: 1
 threadsafe: no
 
 handlers:
+- url: /login
+  script: main.app
+- url: /logout
+  script: main.app
+- url: /api.*
+  script: main.app
 - url: (.*)/
   static_files: app/index.html
   upload: app/index.html
-- url: /api.*
-  script: main.app
 - url: (.*)
   static_files: app\1
   upload: app/(.*)

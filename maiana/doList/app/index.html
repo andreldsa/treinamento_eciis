@@ -6,7 +6,7 @@
         href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
-    <body ng-app="app" ng-cloak ng-controller="HomeController as vm">
+    <body ng-app="app" ng-cloak ng-controller="IndexController as vm">
     
       <div>
         <md-toolbar>
@@ -15,9 +15,16 @@
                     Do List</md-truncate>
 
                 <span flex></span>
-                <md-button class="md-fab md-mini" aria-label="Favorite">
-                <md-icon>more_vert</md-icon>
-                </md-button>
+                <md-menu md-offset="0 -7">
+                    <md-button class="md-fab md-mini" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                        <md-icon>more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="2">
+                        <md-menu-item > 
+                            <md-button ng-click="vm.logout()"> <span md-menu-align-target>Logout</span></md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </md-toolbar>
         <md-content class="md-padding">
@@ -42,7 +49,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
             <!-- Angular Material Library -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
   
             <!-- Ui-Router -->
         <script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>

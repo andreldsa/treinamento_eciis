@@ -1,4 +1,17 @@
-<div ng-controller="LogginController as vm">
-    <h1>DO LIST</h1>
-    <button ng-click="vm.loggin()">LOGIN</button>
+<div ng-controller="LoginController as vm">
+    <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" align="middle"> Bem Vindo! </span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <p align="middle">
+            Para navegar no site precisa está logado.
+          </p>
+        </md-card-content>
+        <md-card-actions layout="column" layout-align="start">
+          <md-button ng-click="vm.login()">LOGIN</md-button>
+        </md-card-actions>
+      </md-card>
 </div>

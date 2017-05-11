@@ -13,41 +13,51 @@ class Task(ndb.Model):
 class LoginWebapp(webapp2.RequestHandler):
     
 	def get(self):
-		user = users.get_current_user() #"Pega" o usuario
+		user = users.get_current_user()
 
 		if user:
-			nickname = user.nickname()
-			logout_url = users.create_logout_url('/login')#continua a execucao
-			self.redirect('/')
 
-		else:    
-			login_url = users.create_login_url('/api') #Abrir a pag de loggin google e redireciona pra api
+			print "tem usuario"	
+
+			nickname = user.nickname()
+			logout_url = users.create_logout_url('/')
+			self.redirect(logout_url)
+
+		else: 
+
+			print "n tem usuario"
+
+			login_url = users.create_login_url('/')
 			self.redirect(login_url)
 
 class LogoutWebapp(webapp2.RequestHandler):
     
 	def get(self):
-		user = users.get_current_user() #"Pega" o usuario
+		user = users.get_current_user()
 
 		if user: 
-			nickname = user.nickname()
-			logout_url = users.create_logout_url('/api/login')
+			print "fez logout"
+			
+			logout_url = users.create_logout_url('/')
 			self.redirect(logout_url)
+		
+		else:
+    			print "n esta logado"
 			
 	
 class ListWebapp(webapp2.RequestHandler):
-    	
+	@is_logged	
 	def get(self):
 
 		all_task = Task.query()
 		response = [task.to_dict() for task in all_task]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(response))
-
+		
+	@is_logged	
 	def post(self):
     	
 		activity = json.loads(self.request.body)
-
 		task = Task(id=activity['name']) #definindo o id como nome.
 		task.name = activity['name']
 		task.comment = activity['comment']
@@ -60,16 +70,14 @@ class ListWebapp(webapp2.RequestHandler):
      
 	def patch(self):
 		
-		name_request = self.request.get('nome')
-		
+		name_request = self.request.get('nome')		
 		task = Task.get_by_id(name_request)
 		task.status = True
 		
 		task.put()
 
-
 app = webapp2.WSGIApplication([
-	('/api/login', LoginWebapp),
-	('/api/logout', LogoutWebapp),
+	('/login', LoginWebapp),
+	('/logout', LogoutWebapp),
 	('/api', ListWebapp)
 ], debug=True)

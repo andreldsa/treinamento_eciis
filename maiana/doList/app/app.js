@@ -10,7 +10,11 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
     $urlRouterProvider.otherwise('/api');
 
     $stateProvider
-        .state("home", {
+        .state("login", {
+                url: "/login",
+                templateUrl: "templates/login.html",
+                controller: "LoginController",
+        }).state("home", {
                 url: "/api",
                 templateUrl: "templates/home.html",
                 controller: "HomeController",
@@ -19,16 +23,27 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
                 url: "/register",
                 templateUrl: "templates/register.html",
                 controller: "RegisterController",
-        }).state("login", {
-                url: "/api/login",
-                templateUrl: "templates/login.html",
-                controller: "LoginController",
-        }).state("logout", {
-                url: "/api/logout",
-                templateUrl: "templates/login.html",
-                controller: "LoginController",
         });
 
+});
+
+app.controller('IndexController', function IndexController(DoListService){
+    var vm = this;
+    vm.tasks = {}
+
+    vm.login = function login(){
+        DoListService.login();
+    }
+
+    vm.logout = function logout(){
+        DoListService.logout();
+        DoListService.stateGo('login');
+    }
+    
+    vm.stateGo = function stateGo(state){
+        DoListService.stateGo(state);
+    }
+        
 });
 
 app.controller('HomeController', function HomeController(DoListService){
@@ -71,9 +86,9 @@ app.controller('RegisterController', function RegisterController(DoListService){
 app.controller('LoginController', function LoginController(DoListService){
     var vm = this;
     vm.tasks = {}
-    
+
     vm.login = function login(){
-        
+        DoListService.login();
     };
         
 });
@@ -87,6 +102,16 @@ app.service('DoListService', function DoListService($http, $state){
 
     sv.register = function register(activity){
         return $http.post('/api', activity);
+
+    };
+
+    sv.login = function login(){
+        return $http.get('/login');
+
+    };
+
+    sv.logout = function logout(){
+        return $http.get('/logout');
 
     };
 
