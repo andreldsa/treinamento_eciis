@@ -21,13 +21,11 @@ def data2json(data):
 def json2data(jsonStr):
   return json.loads(jsonStr)
 
-def isLoggedIn(func):
-  def params(self):
+def login_required(func):
+  def params(self, *args):
     user = users.get_current_user()
     
-    if user:
-      return func(self)
-    else:     
+    if user is None:
       greeting = {
         "message" : 'User is offline'
       }
@@ -35,6 +33,9 @@ def isLoggedIn(func):
       self.response.set_status("401")
       self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
       self.response.write(data2json(greeting))
+      return
+
+    return func(self, user, *args)
 
   return params
 

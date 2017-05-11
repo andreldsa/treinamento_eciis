@@ -11,7 +11,7 @@ class Task(ndb.Model):
         task = Task()
         task.name_task = name_task
         task.put()
-        return task
+        return task.key
 
     @staticmethod
     def getAllTasks():
@@ -20,8 +20,15 @@ class Task(ndb.Model):
         return tasks
 
 class User(ndb.Model):
-    email = ndb.StringProperty(required=True)
-    todo_list = ndb.KeyProperty(kind='Task', repeated=True)
+    email = ndb.StringProperty()
+    tasks = ndb.KeyProperty(kind='Task', repeated=True)
 
-    def getUser(email):
-        User.get_or_insert()
+    @staticmethod
+    def get_by_email(email):
+        user = User.get_or_insert(email)
+        user.email = email
+        user.put()
+        return user
+
+    def get_tasks(self):
+        return [task_key.get().to_dict() for task_key in self.tasks]

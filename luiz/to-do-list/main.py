@@ -4,26 +4,31 @@ import sys
 sys.path.append("model")
 sys.path.append("util")
 
-from models import Task
+from models import *
 from util import *
 
 class TaskHandler(webapp2.RequestHandler):
 
-    @isLoggedIn
-    def get(self):
-        data = Task.getAllTasks()
+    @login_required
+    def get(self, user):
+        userData = User.get_by_email(user.email().lower())
+        data = userData.get_tasks()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(data))
 
-    @isLoggedIn
-    def post(self):
+    @login_required
+    def post(self, user):
         data = json2data(self.request.body)
-        task = Task.createTask(data['name_task'])
+        task_key = Task.createTask(data['name_task'])
+
+        userData = User.get_by_email(user.email().lower())
+        userData.tasks.append(task_key)
+        userData.put()
 
         self.response.set_status("201")
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(task.to_dict()))
+        self.response.write(data2json(task_key.get().to_dict()))
 
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
@@ -31,12 +36,13 @@ class LoginHandler(webapp2.RequestHandler):
         self.redirect(login_url)
 
 class LogoutHandler(webapp2.RequestHandler):
-    def get(self):
+    @login_required
+    def get(self, user):
         logout_url = logout()
         self.redirect(logout_url)
 
 app = webapp2.WSGIApplication([
     ("/api/todo", TaskHandler),
-    ("/api/login", LoginHandler),
-    ("/api/logout", LogoutHandler),
+    ("/login", LoginHandler),
+    ("/logout", LogoutHandler),
 ], debug=True)
