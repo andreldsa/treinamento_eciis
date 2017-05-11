@@ -1,8 +1,16 @@
-<md-list flex>
-    <md-list-item class="md-3-line" ng-repeat="task in vm.tasks" ng-click="null">
-        <div class="md-list-item-text" layout="column">
-            <h3>{{ task.title }}</h3>
-            <h4>{{ task.description }}</h4>
-            <p>{{ task.priority }}</p>
-        </div>
-</md-list-item>
+
+<div flex-xs layout="column">
+    <md-card ng-repeat="task in vm.tasks" md-theme-watch>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{ task.title }}</span>
+                <span class="md-subhead">{{ task.description }}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-divider></md-divider>
+        <md-card-actions layout="row" layout-align="end">
+            <md-button>Edit</md-button>
+            <md-button>Delete</md-button>
+        </md-card-actions>
+    </md-card>
+</div>
