@@ -13,8 +13,9 @@ class ListHandler(BaseHandler):
     # Get a List by id
     def get(self, listId):
         _list = List.get_by_id(int(listId))    
+        _list = data2dict(_list)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(_list.to_dict()))
+        self.response.write(data2json(_list))
     
 
     # Create a list
@@ -24,7 +25,8 @@ class ListHandler(BaseHandler):
         newList.title = data.get('title')
         newList.description = data.get('description')
         newList.put()
-        self.response.write(data2json(newList.to_dict()))
+        newList = data2dict(newList)
+        self.response.write(data2json(newList))
         self.response.set_status(201)
 
 
@@ -33,7 +35,7 @@ class ListsHandler(BaseHandler):
     # Get all lists
     def get(self):
         query = List.query()
-        lists = [_list.to_dict() for _list in query]
+        lists = [data2dict(_list) for _list in query]
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(lists))
 
@@ -43,8 +45,9 @@ class TaskHandler(BaseHandler):
     # Get a task by id
     def get(self, taskId):
         task = Task.get_by_id(int(taskId))
+        task = data2dict(task)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
-        self.response.write(data2json(task.to_dict()))
+        self.response.write(data2json(task))
 
 
 
@@ -52,7 +55,7 @@ class TasksHandler(BaseHandler):
     # Get all tasks
     def get(self):
         query = Task.query()
-        tasks = [task.to_dict() for task in query]
+        tasks = [data2dict(task) for task in query]
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(tasks))
 
@@ -64,7 +67,7 @@ class ListTasksHandler(BaseHandler):
         _list = List.get_by_id(int(listId))
         tasks = ndb.get_multi(_list.tasks)
         # Convert a task to a dictionary and add to a list if not none
-        tasks = [t.to_dict() for t in tasks if t]
+        tasks = [data2dict(t) for t in tasks if t]
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(tasks))
     
@@ -73,11 +76,9 @@ class ListTasksHandler(BaseHandler):
     def post(self, listId):
         # get task data
         data = json.loads(self.request.body)
-        
         # get list by id
         _list = List.get_by_id(int(listId))
         list_key = _list.key
-        
         # create task
         newTask = Task()
         newTask.title = data.get('title')
@@ -89,7 +90,9 @@ class ListTasksHandler(BaseHandler):
         # add task key to list
         _list.tasks.append(task_key)
         _list.put()
-        self.response.write(data2json(newTask.to_dict()))        
+
+        newTask = data2dict(newTask)
+        self.response.write(data2json(newTask))        
         self.response.set_status(201)
     
             

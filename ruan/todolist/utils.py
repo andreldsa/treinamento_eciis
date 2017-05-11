@@ -23,3 +23,9 @@ def data2json(data):
     indent=2,
     separators=(',', ': '),
     ensure_ascii=False)
+
+
+def data2dict(data):
+    newDict = data.to_dict()
+    newDict['id'] = data.key.id()
+    return newDict

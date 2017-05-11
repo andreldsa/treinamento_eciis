@@ -10,16 +10,23 @@
 
     function ListFormController(ListService) {
         var vm = this;
-        
-        vm.list = {
-            "title": "",
-            "description": "",
-            "tasks": []
+
+        vm.$onInit = function onInit() {
+            resetForm();
         };
 
+        function resetForm() {
+            vm.list = {
+                "title": "",
+                "description": "",
+                "tasks": []
+            };
+        };
+
+
         vm.submit = function submit() {
-            console.log(vm.list);
             ListService.save(vm.list);
+            resetForm();
         };
        
     };

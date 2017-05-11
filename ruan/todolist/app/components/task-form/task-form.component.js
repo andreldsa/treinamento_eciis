@@ -11,15 +11,24 @@
     function TaskFormController(TaskService) {
         var vm = this;
         vm.priorities = ['high','medium','low'];
-        vm.task = {
-            "title": "",
-            "description": "",
-            "priority": "low"  
+
+        vm.$onInit = function onInit() {
+            resetForm();
+        }
+
+        function resetForm() {
+            vm.task = {
+                "title": "",
+                "description": "",
+                "priority": "low"  
+            };
         };
+        
 
         vm.submit = function submit() {
             console.log(vm.task);
             TaskService.save(vm.task)
+            resetForm();
         };
         
     };

@@ -13,8 +13,12 @@
         vm.lists = [];
 
         vm.$onInit = function onInit(){
-            vm.lists = ListService.getAll();
+            getLists();
         };
+
+        function getLists() {
+          vm.lists = ListService.getAll();
+        }
     };
 
 })();
