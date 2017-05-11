@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.css">
+  <link rel="stylesheet" href="assets/app.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Cadastro SPLab / UFCG</title>
+</head>
+
+<body ng-app="app" ng-cloak ng-controller="AppCtrl as app" layout="column" layout-fill>
+
+  <!-- app header -->
+  <div ui-view="header"></div>
+
+  <!-- to logged in users only -->
+  <md-content ng-if="app.user" flex>
+    <div flex ui-view="contents"></div>
+  </md-content>
+
+  <!-- to NOT logged in users -->
+  <div ng-if="!app.user">
+    <md-card flex md-whiteframe="2" layout-margin style="padding: 8px;">
+      <p>Para prosseguir, você precisa fazer <a href="/login">login</a>.</p>
+      <md-divider></md-divider>
+      <p class="md-caption">
+        Se você não tem login, deve pedir a seu gerente de projeto ou orientador, 
+        para que ele lhe registre neste sistema.
+      </p>
+      </div>
+    </md-card>
+  </div>
+
+  <!-- Angular.js + ui-router Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0/angular-ui-router.js"></script>
+
+  <!-- Angular Material Library -->
+  <!-- script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>  
+
+  <!-- Your application bootstrap  -->
+
+  <!-- models e app -->
+  <script src="models.js"></script>
+  <script src="app.js"></script>
+  
+  <!-- services -->
+  <script src="userservice.js"></script>
+  <script src="splabservice.js"></script>
+
+  <!-- controllers -->
+  <script src="dadoscontato.js"></script>
+  <script src="dadospessoais.js"></script>
+  <script src="projetos.js"></script>
+
+</body>
+</html>

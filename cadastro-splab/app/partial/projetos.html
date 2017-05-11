@@ -1,0 +1,72 @@
+<!-- dados de vínculos ao splab -->
+<md-card flex md-whiteframe="2" layout="column">
+  <md-toolbar class="md-hue-1 md-accent">
+    <div class="md-toolbar-tools">
+      <md-icon class="section-icon" md-font-icon="md">computer</md-icon>
+      <h2 flex md-truncate>Participação em projetos</h2>
+      <md-button ng-click="vm.user.new_vinculo()" class="md-secondary md-fab md-mini" aria-label="Open sample menu">
+        <md-icon md-font-icon="md" aria-label="">add</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-card ng-repeat="vinculo in vm.user.vinculos" style="padding: 16px;">
+    <div layout-xs="column" layout="row" layout-wrap layout-align="start">
+      <md-input-container flex-gt-sm="50" flex="100">
+        <label>Projeto</label>
+        <md-select ng-model="vinculo.projeto" ng-disabled="vinculo.state != 'new'" ng-change="vm.user._state = 'changed'">
+          <md-option value="{{projeto.key}}" ng-repeat="projeto in vm.projetos">{{projeto.nome}}</md-option>
+        </md-select>
+        <div ng-show="vinculo.state == 'new'" class="input-hint">Projeto do SPLab</div>
+      </md-input-container>
+
+      <div flex="5"></div>
+
+      <md-input-container flex-gt-sm="45" flex="100">
+        <label>Função</label>
+        <input required ng-model="vinculo.funcao" ng-disabled="vinculo.state == 'ended'">
+        <div ng-hide="vinculo.state == 'new'" class="input-hint">Sua função ou papel no projeto (dev, líder, etc)</div>
+        <div ng-message="required">Campo obrigatório.</div>
+      </md-input-container>
+
+    </div>
+      
+    <div layout="column" layout-gt-sm="row" layout-align="start">
+
+      <md-input-container flex="30">
+        <label>Início</label>
+        <md-datepicker ng-model="vinculo.inicio_at"
+                       ng-disabled="vinculo.state != 'new'"
+                       md-current-view="{{vm.user.data_nascimento ? 'day': 'year'}}"
+                       md-placeholder="dd/mm/aaaa" ng-change="vm.user._state = 'changed'"></md-datepicker> 
+        <div class="input-hint" class="truncate">Data de sua entrada no projeto</div>
+      </md-input-container>
+
+      <md-input-container flex="30">
+        <label>Saída</label>
+        <md-datepicker ng-model="vinculo.fim_at"
+                       ng-disabled="vinculo.state == 'ended'"
+                       md-current-view="{{vm.user.data_nascimento ? 'day': 'year'}}"
+                       md-placeholder="dd/mm/aaaa" ng-change="vm.user._state = 'changed'"></md-datepicker> 
+        <div class="input-hint" class="truncate">Data de sua saída do projeto</div>
+      </md-input-container>
+
+      <div flex></div>
+
+      <md-input-container flex="30">
+        <label>Sala</label>
+        <input required ng-model="vinculo.sala" ng-disabled="vinculo.state == 'ended'" ng-change="vm.user._state = 'changed'">
+        <div class="input-hint">Sala em que você está lotado neste projeto</div>
+        <div ng-message="required">Campo obrigatório.</div>
+      </md-input-container>
+
+    </div>
+
+    <div ng-if="vinculo.state == 'new'" flex layout="row" layout-align="end">
+      <md-button ng-click="vm.del_vinculo($index)" aria-label="Open sample menu" class="md-primary md-hue-1 md-fab md-mini">
+        <md-icon md-font-icon="md" aria-label="">delete</md-icon>
+      </md-button>
+    </div>
+
+  </md-card>
+</md-card>

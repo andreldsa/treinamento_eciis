@@ -1,0 +1,67 @@
+<!-- dados pessoais -->
+<md-card flex layout="column">
+
+  <md-toolbar class="md-hue-1 md-accent">
+    <div class="md-toolbar-tools">
+      <md-icon class="section-icon" md-font-icon="md">perm_identity</md-icon>
+      <h2 flex md-truncate> Dados pessoais </h2>
+    </div>
+  </md-toolbar>
+
+
+  <div style="padding: 16px;">
+    <div layout-xs="column" layout="row" layout-wrap layout-align="start">
+      <md-input-container flex-gt-sm="55">
+        <label>Nome</label>
+        <input required ng-model="vm.user.nome" ng-change="vm.user._state = 'changed';">
+        <div class="input-hint">Seu nome completo</div>
+        <div ng-message="required">Campo obrigatório.</div>
+      </md-input-container>
+
+      <div flex="5"></div>
+
+      <md-input-container flex-gt-sm="40">
+        <label>Lattes</label>
+        <input ng-model="vm.user.lattes" xng-pattern="/^[0-9]*$/" ng-change="vm.user.lattes = vm.force_num(vm.user.lattes); vm.user._state = 'changed'">
+        <div class="input-hint">Número p/ url de currículo Lattes: <a class="lightlink" target="_blank" href="http://lattes.cnpq.br/{{vm.user.lattes}}">http://lattes.cnpq.br/{{vm.user.lattes}}</a></div>
+      </md-input-container>
+
+      <md-input-container flex-gt-sm="40">
+        <label>CPF</label>
+        <input ng-model="vm.user.cpf" xng-pattern="/^[0-9\.\-]{11,14}$/" ng-change="vm.force_cpf(vm.user.cpf); vm.user._state = 'changed'">
+        <div class="input-hint">Apenas os dígitos</div>
+      </md-input-container>
+
+      <div flex="5"></div>
+
+      <md-input-container flex-gt-sm="30">
+        <label>Nascimento</label>
+        <md-datepicker ng-model="vm.user.data_nascimento"
+                       md-current-view="{{vm.user.data_nascimento ? 'day': 'year'}}"
+                       md-placeholder="dd/mm/aaaa" ng-change="vm.user._state = 'changed'"></md-datepicker> 
+      </md-input-container>
+
+      <md-input-container flex-gt-sm="30">
+        <label>Vínculo atual com a UFCG</label>
+        <md-select ng-model="vm.user.vinculo_ufcg" ng-change="vm.user._state = 'changed'">
+          <md-option><em>None</em></md-option>
+          <md-option value="graduando">Graduando</md-option>
+          <md-option value="mestrando">Mestrando</md-option>
+          <md-option value="doutorando">Doutorando</md-option>
+          <md-option value="professor">Professor</md-option>
+          <md-option value="servidor">Servidor</md-option>
+        </md-select>
+        <div class="input-hint">Seu vínculo formal com a UFCG hoje, se houver</div>
+      </md-input-container>
+
+      <div flex="5"></div>
+
+      <md-input-container flex-gt-sm="40">
+        <label>Cartão SPLab</label>
+        <input ng-model="vm.user.cartao_acesso" ng-change="vm.user.cartao_acesso = vm.force_num(vm.user.cartao_acesso); vm.user._state = 'changed'">
+        <div class="input-hint">Número de seu cartão de acesso ao SPLab</div>
+      </md-input-container>
+
+    </div>
+  </div>
+</md-card>

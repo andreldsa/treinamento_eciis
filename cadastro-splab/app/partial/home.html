@@ -1,0 +1,81 @@
+<md-card ng-if="app.user" flex md-whiteframe="2" layout="column" style="padding: 16px;">
+
+  <md-card style="padding: 8px;" layout="column" layout-align="center center" layout-padding layout-margin>
+
+    <p><b>ATENÇÃO</b> Esta versão do sistema está disponível apenas
+    para testes. Todos os dados serão apagados em breve.</p>
+
+    <p>Por favor, reporte todos os bugs e/ou sugestões de mudanças para <i>dalton@computacao.ufcg.edu.br</i>.</p>
+
+  </md-card>
+
+  <div ng-if="!app.eh_perfil">
+    <h3>Olá {{app.user.email}},</h3>
+    
+    <p>Seu email não está em nosso cadastro. Para cadastrar-se você deve usar
+    seu email <b>@splab.ufcg.edu.br</b> (se você não tem email @splab, procure
+    os professores João Arthur ou Matheus Gaudêncio). Faça <a
+    href="/login">login</a> novamente.</p>
+
+    <p>Observação. Depois de se cadastrar, você poderá adicionar
+    este email e usá-lo para atualizar seus dados.</p>
+
+  </div>
+
+  <div ng-if="app.eh_perfil">
+    <h2>Instruções de uso</h2>
+
+    <p>Clique nos ícones acima
+        (<md-icon md-font-icon="md" aria-label="">perm_identity</md-icon>,
+        <md-icon md-font-icon="md" aria-label="">email</md-icon> e
+        <md-icon md-font-icon="md" aria-label="">computer</md-icon>)
+    e preencha os dados solicitados. Ao final,
+    clique no ícone
+        <md-icon md-font-icon="md" aria-label="">save</md-icon>, para salvá-los. Clique no título
+        do site para voltar a esta página.
+    </p>
+
+    <h4>Cadastro de emails</h4>
+    <p>Pedimos que você cadastre seus outros emails
+    (institucionais e pessoais), para que possamos, em caso de necessidade,
+    contactar você. Observe que ao cadastrar outro email, o sistema permitirá
+    que você edite seus dados, se usar esse email para fazer o login.  Logo,
+    <b>cuidado</b>! Se você cadastrar o email de outra pessoa, ela poderá
+    editar seus dados por você.</p>
+
+    <p>Por favor, cadastre seu email <i>@splab</i> no <a
+    href="http://gravatar.com">Gravatar</a>. Isso permitirá vincular
+    sua conta ao seu gravatar.</p>
+
+    <p>Dados sensíveis (CPF, endereços, telefones e emails pessoais) não serão
+    tornados publicos.</p>
+
+    <h4>Cadastro de projetos</h4>
+    <p>Para cadastrar sua participação em um projeto, é
+    preciso que o coordenador tenha cadastrado o projeto no sistema antes. Se
+    você não encontra seu projeto, entre em contato com o professor coordenador
+    do projeto ou com seu gerente.</p> 
+
+    <h4>Atualize sempre</h4>
+    <p>Você pode voltar a este site e editar os dados sempre que for
+    necessário. Dados de vinculação a projetos, serão confirmados pelos líderes
+    dos projetos e/ou orientadores. Alguns desses dados, não poderão ser
+    alterados depois da confirmação.</p>
+
+  </div>
+
+  <div ng-if="app.user.status() == 'completo'">
+    <md-divider></md-divider>
+    <p>
+      Nome: {{app.user.nome}}
+      <span class="md-caption"><a target="_blank" href={{app.user.lattes_url()}}>(ver Lattes)</a></span>
+      <br>
+      Data de nascimento: {{app.user.data_nascimento}}
+      <br>
+      CPF: {{app.user.cpf}}
+      <br>
+      Vínculo: {{app.user.vinculo_ufcg}}
+    </p>
+  </div>
+
+</md-card>
