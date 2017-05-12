@@ -2,7 +2,7 @@
 
     angular
         .module('todolistApp')
-        .config(routerConfig);
+        .config(['$stateProvider', '$urlRouterProvider', routerConfig]);
     
     function routerConfig($stateProvider, $urlRouterProvider) {        
         
@@ -18,15 +18,15 @@
                 component: 'taskCard'
             })
             .state('list-details', {
-                url: '/list/details/{id:int}',
+                url: '/list/{listId:int}',
                 component: 'listDetails'
             })
             .state('list-form', {
-                url: '/list/new',
+                url: '/list',
                 component: 'listForm'
             })
             .state('task-form', {
-                url: '/task/new',
+                url: '/list/{listId:int}/task/',
                 component: 'taskForm'
             })
     }

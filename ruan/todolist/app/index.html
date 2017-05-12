@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Angular Material stylesheet -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body ng-app="todolistApp" ng-cloak>
         <md-content class="md-padding">
@@ -14,7 +15,7 @@
                 nav-bar-aria-label="navigation links">
                 <md-nav-item md-nav-sref="lists" name="lists" ui-sref-active="active">Lists</md-nav-item>
                 <md-nav-item md-nav-sref="list-form" name="list-form" ui-sref-active="active">List Form</md-nav-item>
-                <md-nav-item md-nav-sref="task-form" name="task-form" ui-sref-active="active">Task Form</md-nav-item>
+                <md-nav-item md-nav-sref="task-form({listId: 007})" name="task-form" ui-sref-active="active">Task Form</md-nav-item>
             </md-nav-bar>
             
             <div layout="column">
@@ -35,9 +36,10 @@
         <!-- Ui-Router-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0/angular-ui-router.min.js"></script>
 
-        <!--App Config -->
+        <!--App Library -->
         <script src="app.module.js"></script>
         <script src="app.route.js"></script>
+        <script src="app.config.js"></script>
         
         <!-- Components -->
         <script src="components/lists/lists.component.js"></script>
@@ -45,11 +47,9 @@
         <script src="components/list-form/list-form.component.js"></script>
         <script src="components/task-form/task-form.component.js"></script>
         <script src="components/task-card/task-card.component.js"></script>
-        
 
         <!-- Services -->
         <script src="services/lists.service.js"></script>
-        <script src="services/list-details.service.js"></script>
         <script src="services/tasks.service.js"></script>
 
     </body>

@@ -6,13 +6,12 @@
 
     function TaskService($http) {
         var service = this;
-        var tasks;
 
         service.getAll = function getAll() {
             return $http.get('/api/tasks');
         };
 
-        service.save = function save(task, listId) {
+        service.save = function save(listId, task) {
             var url = '/api/list/' + listId + '/task';
 
             $http.post(url, task)

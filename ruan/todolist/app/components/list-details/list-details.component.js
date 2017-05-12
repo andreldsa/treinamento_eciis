@@ -17,7 +17,7 @@
         };
 
         var getList = function getList(){
-            ListService.getOne($stateParams.id)
+            ListService.getOne($stateParams.listId)
                 .then(function(response) {
                     vm.list = response.data;
                 })          
