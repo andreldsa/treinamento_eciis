@@ -7,9 +7,9 @@ class Task(ndb.Model):
     description = ndb.StringProperty(required=True)
 
 
-class User(ndb.Model):
-    tasks = ndb.KeyProperty(repeated=True)
+class Usuario(ndb.Model):
+    tasks = ndb.KeyProperty(kind='Task', repeated=True)
     email = ndb.StringProperty(required=True)
-    name = ndb.StringProperty()
+
 
 

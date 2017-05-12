@@ -1,27 +1,20 @@
 /**
  * Created by raoni on 10/05/17.
  */
-
-var design;
-
 (function(){
-    angular.module('todoList').controller('designCtrl', function ($mdSidenav, $state){
-        design = this;
+    angular.module('todoList').controller('designCtrl', function ($state){
+        var ctrl = this;
 
-        design.toggle = function toggle() {
-            $mdSidenav('leftNav').toggle();
-        };
+        ctrl.pages = [{name: 'Visualizar Tarefas', state: 'view_tasks'},
+                      {name: 'Postar', state: 'post_tasks'},
+                      {name: 'Início', state: 'home'}];
 
-        design.settings = [
-            { name: 'Início', stateTo: 'home', icon: 'home', enabled: true },
-            { name: 'Nova Instituição', stateTo: 'institution', icon: 'account_balance', enabled: true },
-            { name: 'Novo Usuário', stateTo: 'user.new', icon: 'person_add', enabled: true },
-        ];
-
-        design.goTo = function goTo(state) {
+        ctrl.goTo = function goTo(state) {
             $state.go(state);
-            design.toggle();
+
         };
+
+
 
 
     });

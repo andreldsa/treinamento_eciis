@@ -1,0 +1,16 @@
+<div ng-init="vm.loadTasks()">
+    <md-list flex>
+
+        <md-divider ></md-divider>
+        <md-subheader class="md-no-sticky">Tarefas</md-subheader>
+        <md-list-item class="md-2-line" ng-repeat="task in vm.tasks | orderBy:'name'">
+            <div class="md-list-item-text">
+             <h2>{{task.name}}</h2>
+             <h4>{{task.description}}</h4>
+            </div>
+        </md-list-item>
+
+    </md-list>
+</div>
+
+

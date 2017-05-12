@@ -9,13 +9,24 @@ var vm;
     angular.module('todoList').controller('taskController', function (requestService) {
         vm = this;
         vm.tasks = [];
-        vm.tasks_to_put = [{}];
+
         vm.loadTasks = function(){
-            vm.tasks = vm.requestService.fetchTasks();
+            requestService.fetchTasks().then(function (response) {
+                vm.tasks = response.data;
+            });
         };
-        vm.putTasks = function(){
-            requestService.putTasks(vm.tasks_to_put);
+
+        vm.putTask = function(data){
+            requestService.putTask(data).then(function (response) {
+                delete vm.tasks_to_put;
+
+            });
         };
+
+        vm.get = function(what, task){
+            return what.task;
+        }
+
 
     });
 
