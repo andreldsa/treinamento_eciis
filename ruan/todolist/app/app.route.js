@@ -18,7 +18,7 @@
                 component: 'taskCard'
             })
             .state('list-details', {
-                url: '/list/details',
+                url: '/list/details/{id:int}',
                 component: 'listDetails'
             })
             .state('list-form', {

@@ -4,16 +4,16 @@
         .module('todolistApp')
         .component('listDetails', {
             templateUrl: 'components/list-details/list-details.html',
-            controller: ['ListDetailsService', ListDetailsController],
+            controller: ['ListDetailsService', '$stateParams', ListDetailsController],
             controllerAs: 'vm'
         });
 
-    function ListDetailsController(ListDetailsService) {
+    function ListDetailsController(ListDetailsService, $stateParams) {
         var vm = this;
-        vm.text = '';
+        vm.listId = $stateParams.id;
 
         vm.$onInit = function onInit(){
-            vm.text = "list details working";
+            console.log(vm.listId);
         };
     };
 

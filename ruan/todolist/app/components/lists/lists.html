@@ -1,5 +1,6 @@
 <md-list flex>
-    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ng-click="null">
+    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" 
+    ui-sref="list-details({id: list.id})">
         <div class="md-list-item-text" layout="column" >
             <h3>{{ list.title }}</h3>
             <p>{{ list.description }}</p>
