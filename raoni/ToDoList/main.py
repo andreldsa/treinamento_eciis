@@ -1,6 +1,6 @@
 import webapp2
 
-from model import Usuario
+from model import User
 from model import Task
 
 import json
@@ -12,16 +12,14 @@ from google.appengine.api import users
 class LoginHandler(webapp2.RequestHandler):
 
     def get(self):
-        guser = users.get_current_user()
-        if guser is None:
-            self.redirect(users.create_login_url('/'))
+        self.redirect(users.create_login_url('/'))
 
 
 class LogoutHandler(webapp2.RequestHandler):
 
     def get(self):
-        guser = users.get_current_user()
-        if guser:
+        user = users.get_current_user()
+        if user:
             self.redirect(users.create_logout_url(''))
 
 
@@ -29,21 +27,37 @@ class LogoutHandler(webapp2.RequestHandler):
 class Handler(webapp2.RequestHandler):
 
     def get(self):
-        query = Task.query()
-        tasks = [task.to_dict() for task in query]
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(tasks))
+        user_google = users.get_current_user()
+        if user_google is None:
+            self.response.set_status(401)
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write('{"msg": "erro de autenticacao"}')
+        else:
+            user_email = user_google.email()
+            user = User.get_or_insert(user_email, email=user_email)
+            user_tasks = [task.get().to_dict() for task in user.tasks]
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write(data2json(user_tasks).encode('utf-8'))
 
 
     def post(self):
-        data = json.loads(self.request.body)
-        self.response.write(data)
-        task = Task()
-        task.name = data['name']
-        task.description = data['description']
-        task.put()
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.set_status(201)
+        user_google = users.get_current_user()
+        if user_google is None:
+            self.response.set_status(401)
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write('{"msg": "erro de autenticacao"}')
+        else:
+            user_email = user_google.email()
+            user = User.get_or_insert(user_email, email=user_email)
+            data = json.loads(self.request.body)
+            task = Task()
+            task.name = data['name']
+            task.description = data['description']
+            task_key = task.put()
+            user.tasks.append(task_key)
+            user.put()
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.set_status(201)
 
 
 app = webapp2.WSGIApplication([

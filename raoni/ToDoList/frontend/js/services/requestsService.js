@@ -8,12 +8,17 @@ angular.module('todoList').service('requestService', function($http){
     var service = this;
 
     service.fetchTasks = function () {
-        return $http.get('http://localhost:8080/api/tasks');
+        return $http.get('/api/tasks');
     };
 
+    service.login = function (){
+       window.location.replace('/api/login');
+    };
+
+
     service.putTask = function (data) {
-            return $http.post('http://localhost:8080/api/tasks', data, {headers:{'Content-Type':'application/json'}});
-    }
+            return $http.post('/api/tasks', data);
+    };
 
 })
 
