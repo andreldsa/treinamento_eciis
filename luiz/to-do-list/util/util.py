@@ -1,6 +1,10 @@
 import json
+import logging
 from google.appengine.api import users
 
+class AuthorizationExeption(Exception):
+      def __init__(self, msg=None):
+            super(AuthorizationExeption, self).__init__(msg or 'User is offline')
 
 def date_handler(obj):
   if hasattr(obj, 'isoformat'):
@@ -21,20 +25,16 @@ def data2json(data):
 def json2data(jsonStr):
   return json.loads(jsonStr)
 
+def _assert(condition):
+    if condition:
+        return
+    raise AuthorizationExeption()
+
 def login_required(func):
   def params(self, *args):
     user = users.get_current_user()
     
-    if user is None:
-      greeting = {
-        "message" : 'User is offline'
-      }
-    
-      self.response.set_status("401")
-      self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-      self.response.write(data2json(greeting))
-      return
-
+    _assert(user != None)
     return func(self, user, *args)
 
   return params

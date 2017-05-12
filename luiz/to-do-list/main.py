@@ -7,7 +7,16 @@ sys.path.append("util")
 from models import *
 from util import *
 
-class TaskHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler):
+    def handle_exception(self, exception, debug):
+        if isinstance(exception, AuthorizationExeption):
+            print exception.message
+            webapp2.abort(401, str(exception))
+
+        logging.error(str(exception))
+        self.response.write("oops! %s\n" % str(exception))
+
+class TaskHandler(BaseHandler):
 
     @login_required
     def get(self, user):
@@ -30,12 +39,12 @@ class TaskHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(task_key.get().to_dict()))
 
-class LoginHandler(webapp2.RequestHandler):
+class LoginHandler(BaseHandler):
     def get(self):
         login_url = login()
         self.redirect(login_url)
 
-class LogoutHandler(webapp2.RequestHandler):
+class LogoutHandler(BaseHandler):
     @login_required
     def get(self, user):
         logout_url = logout()

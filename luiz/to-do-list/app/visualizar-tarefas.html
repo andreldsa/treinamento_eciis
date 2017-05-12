@@ -1,24 +1,13 @@
-<md-content style="margin-left: 40%; margin-top: 10%" md-theme="docs-dark" layout-gt-sm="row" layout-padding>
-        
-    <div>
-        <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>        
-            <md-card-actions layout="row" layout-align="end center">
-                <md-button class="md-raised md-primary" ng-click="vm.buscarTodas()">Ver Tarefas</md-button>
-            </md-card-actions>
-
-            <md-list flex>
-    
-                <md-divider ></md-divider>
-                <md-subheader class="md-no-sticky">Lista de Tarefas</md-subheader>
-                <md-list-item class="md-2-line" ng-repeat="tarefa in vm.tarefas | orderBy:'nome_tarefa'">
-                    <div class="md-list-item-text">
-                        <h3>{{tarefa.name_task}}</h3>
-                        <p>Luiz Fernando</p>
-                    </div>
-                </md-list-item>
-   
-      </md-list>
-
-        </md-card>
-    </div>
+<md-content layout="row" layout-align="center" layout-wrap>
+    <md-card ng-repeat="tarefa in vm.tarefas | orderBy:'name_task'" flex="100" flex-md="30" flex-gt-md="20">
+        <md-list>
+            <md-subheader class="md-no-sticky">Tarefa</md-subheader>
+            <md-list-item class="md-2-line">
+                <div class="md-list-item-text">
+                    <h3>{{tarefa.name_task}}</h3>
+                    <p>{{tarefa.date}}</p>
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-card>
 </md-content>

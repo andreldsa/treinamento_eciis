@@ -18,7 +18,7 @@
     <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row">
 
       <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
-        <md-button class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft()">
+        <md-button class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft();">
           <md-icon>menu</md-icon>
         </md-button>
 
@@ -30,17 +30,17 @@
           </md-button>
           <md-menu-content width="2">
             <md-menu-item>
-              <md-button ng-click="vm.login()"> sign in </md-button>
+              <a href="/login"><md-button> sign in </md-button></a>
             </md-menu-item>
             <md-menu-item>
-              <md-button ng-click="vm.logout()"> sign out </md-button>
+              <a href="/logout"><md-button> sign out </md-button></a>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
     </md-toolbar>
 
-    <div layout="column" style="height: 500px;">
+    <div layout="column">
 
       <div ui-view></div>
 
@@ -90,7 +90,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
 
   <script src="/js/app.js"></script>
-  <script src="/js/service/todoService.js"></script>
+  <script src="/js/service/taskService.js"></script>
   <script src="/js/controllers/tarefasController.js"></script>
   <script src="/js/controllers/listaTarefasCtrl.js"></script>
   <script src="/js/controllers/sideNavCtrl.js"></script>
