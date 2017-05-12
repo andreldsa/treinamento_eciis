@@ -9,66 +9,27 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/app.css">
 </head>
 
-<body ng-app="tarefasApp" ng-cloak>
+<body ng-app="tarefasApp" ng-cloak ng-controller="appCtrl as app">
 
-  <div ng-controller="sideNavCtrl as vm">
+  <div ui-view="header"></div>
 
-    <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row" md-colors="{background: 'indigo'}">
+  <md-content ng-if="app.user" flex>
+    <div ui-view="contents"></div>
+  </md-content>
 
-      <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
-        <md-button class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft();">
-          <md-icon>menu</md-icon>
-        </md-button>
-
-        <h2 flex md-truncate></h2>
-
-        <md-menu md-offset="0 -7">
-          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
-            <md-icon>account_circle</md-icon>
-          </md-button>
-          <md-menu-content width="2">
-            <md-menu-item>
-              <a href="/login"><md-button> sign in </md-button></a>
-            </md-menu-item>
-            <md-menu-item>
-              <a href="/logout"><md-button> sign out </md-button></a>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-      </div>
-    </md-toolbar>
-
-    <div layout="column">
-      <section layout="row" flex>
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop md-whiteframe="4">
-          <md-toolbar class="md-theme-indigo">
-            <h1 class="md-toolbar-tools">Opções de navegação</h1>
-          </md-toolbar>
-          <md-content layout-margin>
-            <md-button ng-click="vm.changeView('adicionar-tarefa')" class="md-accent">
-              Adicionar Tarefa
-            </md-button>
-            <div></div>
-            <md-button ng-click="vm.changeView('tarefas')" class="md-accent">
-              Ver tarefas
-            </md-button>
-            <div></div>
-            <md-button ng-click="vm.toggleLeft()" class="md-accent">
-              Fechar janela
-            </md-button>
-          </md-content>
-        </md-sidenav>
-      </section>
-    </div>
-
-    <div ui-view></div>
-
+  <div ng-if="!app.user">
+    <md-card flex md-whiteframe="2" layout-margin style="padding: 8px;">
+      <p>Para prosseguir, você precisa fazer <a href="/login">login</a>.</p>
+      <md-divider></md-divider>
+      <p class="md-caption">
+        Se você não tem login, deve pedir a seu gerente de projeto ou orientador, para que ele lhe registre neste sistema.
+      </p>
   </div>
-
-
-
+  </md-card>
+  </div>
 
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
@@ -78,13 +39,14 @@
 
   <!-- Angular Material Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0/angular-ui-router.js"></script>
 
   <script src="/js/app.js"></script>
   <script src="/js/service/taskService.js"></script>
   <script src="/js/controllers/tarefasController.js"></script>
   <script src="/js/controllers/listaTarefasCtrl.js"></script>
   <script src="/js/controllers/sideNavCtrl.js"></script>
+  <script src="/js/controllers/appCtrl.js"></script>
 
 </body>
 

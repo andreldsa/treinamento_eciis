@@ -10,21 +10,20 @@ from util import *
 class BaseHandler(webapp2.RequestHandler):
     def handle_exception(self, exception, debug):
         if isinstance(exception, AuthorizationExeption):
-            print exception.message
-            webapp2.abort(401, str(exception))
-
-        logging.error(str(exception))
-        self.response.write("oops! %s\n" % str(exception))
+            self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
+            self.response.set_status(401)
+        else:
+            logging.error(str(exception))
+            self.response.write("oops! %s\n" % str(exception))
 
 class TaskHandler(BaseHandler):
-
     @login_required
     def get(self, user):
         userData = User.get_by_email(user.email().lower())
         data = userData.get_tasks()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(data))
+        self.response.write(data2json(data).encode('utf-8'))
 
     @login_required
     def post(self, user):
@@ -37,7 +36,20 @@ class TaskHandler(BaseHandler):
 
         self.response.set_status("201")
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(task_key.get().to_dict()))
+        self.response.write(data2json(task_key.get().to_dict()).encode('utf-8'))
+
+class UserHandler(BaseHandler):
+    @login_required
+    def get(self, user):
+        user = current_user();
+        user_data = {
+            "email": user.email,
+            "logout_url": "http://%s/logout" % self.request.host,
+            "gravatar_url": user.gravatar_url
+        }
+
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(user_data).encode('utf-8'))
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -51,6 +63,7 @@ class LogoutHandler(BaseHandler):
         self.redirect(logout_url)
 
 app = webapp2.WSGIApplication([
+    ("/api", UserHandler),
     ("/api/todo", TaskHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),

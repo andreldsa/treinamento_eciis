@@ -1,6 +1,8 @@
 import json
 import logging
+
 from google.appengine.api import users
+from models import User
 
 class AuthorizationExeption(Exception):
       def __init__(self, msg=None):
@@ -44,5 +46,11 @@ def login():
   return login_url
 
 def logout():
-  logout_url = users.create_logout_url('/login')
+  logout_url = users.create_logout_url('/')
   return logout_url
+
+def current_user():
+  user_email = users.get_current_user().email().lower()
+  user = User.get_by_email(user_email)
+
+  return user
