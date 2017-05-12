@@ -4,17 +4,25 @@
         .module('todolistApp')
         .component('listDetails', {
             templateUrl: 'components/list-details/list-details.html',
-            controller: ['ListDetailsService', '$stateParams', ListDetailsController],
+            controller: ['ListService', '$stateParams', ListDetailsController],
             controllerAs: 'vm'
         });
 
-    function ListDetailsController(ListDetailsService, $stateParams) {
+    function ListDetailsController(ListService, $stateParams) {
         var vm = this;
-        vm.listId = $stateParams.id;
+        vm.list;
 
         vm.$onInit = function onInit(){
-            console.log(vm.listId);
+            getList();
         };
+
+        var getList = function getList(){
+            ListService.getOne($stateParams.id)
+                .then(function(response) {
+                    vm.list = response.data;
+                })          
+        }
+
     };
 
 })();

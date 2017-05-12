@@ -10,14 +10,17 @@
 
     function ListsController(ListService) {
         var vm = this;
-        vm.lists = [];
+        vm.lists;
 
         vm.$onInit = function onInit(){
             getLists();
         };
 
         function getLists() {
-          vm.lists = ListService.getAll();
+          ListService.getAll()
+            .then(function(response) {
+                vm.lists = response.data;
+            })
         }
     };
 

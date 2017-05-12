@@ -5,26 +5,20 @@
         .service('ListService', ['$http', ListService]);
 
     function ListService($http) {
-        var url = 'http://localhost:8080/api/';
-        var lists = [];
+        var service = this;
         
-
-        this.getAll = function getAll() {
-            var getUrl = url + 'lists';
-
-            $http.get(getUrl).then(function success(response) {
-                lists = response.data;
-            }, function errorCallback(response) {
-                console.log(response);
-            });
-
-            return lists;
+        service.getAll = function getAll() {
+            return  $http.get('/api/lists');
         };
 
-        this.save = function save(newList) {
-            var postUrl = url + 'list';
 
-            $http.post(postUrl, newList)
+        service.getOne = function getOne(id) {
+            return $http.get('/api/list/'+ id);
+        }
+
+
+        service.save = function save(newList) {
+            $http.post('/api/list', newList)
                 .then(function success(response) {
                     console.log(response);
                 }, function errorCallback(response) {
