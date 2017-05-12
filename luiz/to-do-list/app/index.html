@@ -15,7 +15,7 @@
 
   <div ng-controller="sideNavCtrl as vm">
 
-    <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row">
+    <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row" md-colors="{background: 'indigo'}">
 
       <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
         <md-button class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft();">
@@ -41,38 +41,29 @@
     </md-toolbar>
 
     <div layout="column">
-
-      <div ui-view></div>
-
       <section layout="row" flex>
-
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop md-whiteframe="4">
-
           <md-toolbar class="md-theme-indigo">
             <h1 class="md-toolbar-tools">Opções de navegação</h1>
           </md-toolbar>
-
           <md-content layout-margin>
             <md-button ng-click="vm.changeView('adicionar-tarefa')" class="md-accent">
               Adicionar Tarefa
             </md-button>
-
             <div></div>
-
             <md-button ng-click="vm.changeView('tarefas')" class="md-accent">
               Ver tarefas
             </md-button>
-
             <div></div>
-
             <md-button ng-click="vm.toggleLeft()" class="md-accent">
               Fechar janela
             </md-button>
           </md-content>
-
         </md-sidenav>
       </section>
     </div>
+
+    <div ui-view></div>
 
   </div>
 
