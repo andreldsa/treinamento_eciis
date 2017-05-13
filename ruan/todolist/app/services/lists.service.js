@@ -12,8 +12,13 @@
         };
 
 
-        service.getOne = function getOne(id) {
-            return $http.get('/api/list/'+ id);
+        service.getOne = function getOne(listId) {
+            return $http.get('/api/list/'+ listId);
+        }
+
+
+        service.deleteOne = function deleteOne(listId) {
+            console.log("deleted: " + listId);
         }
 
 

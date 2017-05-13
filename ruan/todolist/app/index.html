@@ -10,13 +10,7 @@
     </head>
     <body ng-app="todolistApp" ng-cloak>
         <md-content class="md-padding">
-            <md-nav-bar
-                md-selected-nav-item="currentNavItem"
-                nav-bar-aria-label="navigation links">
-                <md-nav-item md-nav-sref="lists" name="lists" ui-sref-active="active">Lists</md-nav-item>
-                <md-nav-item md-nav-sref="list-form" name="list-form" ui-sref-active="active">List Form</md-nav-item>
-                <md-nav-item md-nav-sref="task-form({listId: 007})" name="task-form" ui-sref-active="active">Task Form</md-nav-item>
-            </md-nav-bar>
+            <header></header>
             
             <div layout="column">
                 <ui-view ></ui-view>
@@ -46,7 +40,7 @@
         <script src="components/list-details/list-details.component.js"></script>
         <script src="components/list-form/list-form.component.js"></script>
         <script src="components/task-form/task-form.component.js"></script>
-        <script src="components/task-card/task-card.component.js"></script>
+        <script src="components/header/header.component.js"></script>
 
         <!-- Services -->
         <script src="services/lists.service.js"></script>

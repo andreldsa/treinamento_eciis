@@ -5,7 +5,7 @@
             <form name="taskForm">
                 <md-input-container class="md-block">
                     <label>Title</label>
-                    <input ng-model="vm.task.title" name="taskTitle" required>
+                    <input ng-model="vm.task.title" name="taskTitle" md-maxlength="50" required>
                     <div ng-messages="taskForm.taskTitle.$error">
                         <div ng-message="required">This is required.</div>
                     </div>

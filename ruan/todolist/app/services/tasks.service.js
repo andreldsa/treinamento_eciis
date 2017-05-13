@@ -11,6 +11,22 @@
             return $http.get('/api/tasks');
         };
 
+
+        service.getOne = function getOne(taskId) {i
+            return $http.get('/api/task/' + taskId);
+        };
+
+
+        service.getAllFromList = function getAllFromList(listId) {
+            return $http.get('/api/list/' + listId + '/tasks');
+        };
+
+
+         service.deleteOne = function deleteOne(taskId) {
+            console.log("deleted: " + taskId);
+        }
+
+
         service.save = function save(listId, task) {
             var url = '/api/list/' + listId + '/task';
 
