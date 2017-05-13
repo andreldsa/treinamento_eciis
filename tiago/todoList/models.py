@@ -1,10 +1,9 @@
 from google.appengine.ext import ndb
 
-class User(ndb.Model):
-	pass
-	# NOT IMPLEMENTED YET
+class Usuario(ndb.Model):
+	tarefas = ndb.KeyProperty(kind='Tarefa', repeated=True)
 
 class Tarefa(ndb.Model):
-	name = ndb.StringProperty()
+	nome = ndb.StringProperty()
 	descricao = ndb.StringProperty()
-	data = ndb.StringProperty()	
+	prazo = ndb.StringProperty()	

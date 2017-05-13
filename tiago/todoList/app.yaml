@@ -2,12 +2,15 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
-default_expiration: "2s"
+default_expiration: "6s"
 
 handlers:
 - url: /
   static_files: app/index.html
   upload: app/index.html
+
+- url: /(login|logout)
+  script: main.app
 
 - url: /api.*
   script: main.app

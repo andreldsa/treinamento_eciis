@@ -1,37 +1,79 @@
 import webapp2
 import json
 import datetime
+import logging
 from google.appengine.api import users
-
+from google.appengine.api import memcache
 from models import *
 from utils import *
+
+def _assert(condition, status_code, msg):
+    if condition:
+        return
+
+    logging.info("assertion failed: %s" % msg)
+    webapp2.abort(status_code, msg)
 
 class BaseHandler(webapp2.RequestHandler):
     pass
 
 class LoginHandler(BaseHandler):
     def get(self):
-        user = users.get_current_user()
-        if user:
-            nickname = user.nickname()
-            logout_url = users.create_logout_url('/')
-            self.redirect(logout_url)
-            
-        else:
-            login_url = users.create_login_url('/')
-            self.redirect(login_url)
+        uri = self.request.get('uri', '/')
+        self.redirect(users.create_login_url(uri))
 
-# Not complete
 class LogoutHandler(BaseHandler):
     def get(self):
+        self.redirect(users.create_logout_url('/'))
+
+def login_required(method):
+    def check_login(self, *args):
         user = users.get_current_user()
-        if user:
-            logout_url = users.create_logout_url('/')
-            self.redirect(logout_url)
+        if user is None:
+            self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
+            self.response.set_status(401)
+            return
 
+        method(self, user, *args)
 
+    return check_login
+
+class MainHandler(BaseHandler):
+    @login_required
+    def get(self, user):
+        usuario = Usuario.get_or_insert(user.email())            
+        user_data = {
+            "email": user.email(),
+            "usuario": usuario.to_dict(),
+            "logout_url": "http://%s/logout" % self.request.host
+        }
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(user_data).encode('utf-8'))
+
+class UsuarioHandler(BaseHandler):
+    @login_required
+    def put(self, user):
+        email = user.email()
+        usuario = Usuario.get(email)
+        _assert(perfil, 400, "perfil not found")
+        data = json.loads(self.request.body)
+        usuario.update(data)
+        usuario.put()
+
+class TarefaHandler(BaseHandler):
+    @login_required
+    def get(self, user):
+        email = user.email()
+        self.response.write(data2json())
+
+    @login_required
+    def put(self, user):
+        email = user.email()
 
 app = webapp2.WSGIApplication([
-    ('/api/login', LoginHandler),
-    ('/api/logout', LogoutHandler),
+    ('/login', LoginHandler),
+    ('/logout', LogoutHandler),
+    ('/api', MainHandler),
+    ('/api/usuario/(.*)', UsuarioHandler),
+    ('/api/tarefas', TarefaHandler),
 ], debug=True)
