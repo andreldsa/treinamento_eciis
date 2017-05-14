@@ -5,7 +5,7 @@
       <div class="md-list-item-text" layout="column">
         <h3>Tarefa: {{tarefa.nome}}</h3>
         <h4>Descrição: {{tarefa.descricao}}</h4>
-        <h4>Deadline: {{tarefa.date | date}}</h4>
+        <h4>Prazo: {{tarefa.prazo | date}}</h4>
       </div>
       <md-button class="md-secondary" ng-click="vm.del_tarefa($index, $event)">
         <md-icon>delete</md-icon>

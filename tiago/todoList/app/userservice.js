@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('app');
-    
+
     app.service('UserService', function UserService($http, $q) {
         var service = this;
         var _user;
@@ -16,18 +16,21 @@
             .then(function (response) {
                 // ok
                 if (typeof response.data.usuario != 'undefined') {
-                    _user = new Usuario(response.data.usuario);
+                    _user = new Usuario();
                 } else {
                     _user = {}
                 }
+                _user.operation = '';
+                _user.tarefas = response.data.tarefas;
                 _user.email = response.data.email;
             }, function (err) {
                 // err
             });
         }
 
-        service.save = function() {
+        service.save = function(status) {
             _user._state = 'saving';
+            _user.operation = status;
             var promise = $http({
                 method: 'PUT',
                 url: '/api/usuario/' + _user.email,

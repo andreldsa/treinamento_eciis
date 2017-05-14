@@ -6,7 +6,11 @@ var vm;
 	app.controller('TarefasCtrl', function TarefasCtrl(UserService, $mdDialog) {
 		vm = this;
 		vm.save_user = UserService.save;
-        vm.tarefa = {};
+        vm.tarefa = {
+        	nome: '',
+        	descricao: '',
+        	prazo: ''
+        };
         Object.defineProperties(vm, {
             user: {
                 get: function () { return UserService.user; },
@@ -16,17 +20,22 @@ var vm;
 
         vm.del_tarefa = function(index, ev) {
           vm.showConfirm(ev, 'A tarefa ' + vm.user.tarefas[index].nome + ' será finalizada', index);
-          vm.user._state = 'changed';
+          vm.save_user(index);
         };
 
         vm.add_tarefa = function(ev) {
           vm.user.add_tarefa(vm.tarefa);
           vm.showAlert(ev,'A tarefa ' + vm.tarefa.nome + ' foi salva com sucesso');
+          vm.save_user('add');
           vm.clear();
         };
 
         vm.clear = function clear() {
-          vm.tarefa = {};
+          vm.tarefa = {
+          	nome: '',
+        	descricao: '',
+        	prazo: ''
+          };
         };
 
         vm.showAlert = function showAlert(ev, message) {
@@ -53,7 +62,6 @@ var vm;
 
           $mdDialog.show(confirm).then(function() {
             vm.showAlert(ev, 'Tarefa finalizada com sucesso');
-            vm.user._state = 'changed';
             vm.user.del_tarefa(index);
           });
         };

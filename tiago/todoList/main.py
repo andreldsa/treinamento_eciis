@@ -41,39 +41,29 @@ def login_required(method):
 class MainHandler(BaseHandler):
     @login_required
     def get(self, user):
-        usuario = Usuario.get_or_insert(user.email())            
+        usuario = Usuario.get_or_insert(user.email(), id=user.email())
+        tarefas = usuario.get_tarefas()
+        usuario.put()
         user_data = {
             "email": user.email(),
             "usuario": usuario.to_dict(),
+            "tarefas": tarefas,
             "logout_url": "http://%s/logout" % self.request.host
         }
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(user_data).encode('utf-8'))
 
 class UsuarioHandler(BaseHandler):
-    @login_required
-    def put(self, user):
-        email = user.email()
-        usuario = Usuario.get(email)
-        _assert(perfil, 400, "perfil not found")
+    def put(self, email):
+        usuario = Usuario.get_by_id(email)
+        _assert(usuario, 400, "usuario not found")
         data = json.loads(self.request.body)
         usuario.update(data)
         usuario.put()
-
-class TarefaHandler(BaseHandler):
-    @login_required
-    def get(self, user):
-        email = user.email()
-        self.response.write(data2json())
-
-    @login_required
-    def put(self, user):
-        email = user.email()
 
 app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/api', MainHandler),
     ('/api/usuario/(.*)', UsuarioHandler),
-    ('/api/tarefas', TarefaHandler),
 ], debug=True)
