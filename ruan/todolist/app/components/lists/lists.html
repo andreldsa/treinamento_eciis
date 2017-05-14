@@ -1,7 +1,29 @@
-<md-list flex>
+<!--<md-list flex>
     <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ui-sref="list-details({listId: list.id})">
         <div class="md-list-item-text" layout="column" >
             <h3>{{ list.title }}</h3>
             <p>{{ list.description }}</p>
         </div>
 </md-list-item>
+-->
+
+
+<md-card ng-repeat="list in vm.lists" ui-sref="list-details({listId: list.id})" ng-click="null">
+    <md-card-content layout="row" layout-align="space-between">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{ list.title }}</span>
+                <span class="md-subhead">{{ list.description }}</span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-actions layout="column">
+        <md-button class="md-icon-button" aria-label="Favorite">
+            <md-icon md-font-icon="md">favorite</md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Share">
+            <md-icon md-font-icon="md">delete</md-icon>
+        </md-button>
+        </md-card-actions>
+    </md-card-content>
+</md-card>

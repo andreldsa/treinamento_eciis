@@ -43,6 +43,7 @@
 
         vm.changeDone = function changeDone(task) {
             task.done = !task.done;
+            // put
         }
 
 
@@ -53,6 +54,7 @@
 
         vm.deleteTask = function deleteTask(task) {
             console.log('delte');
+            
         }
 
 

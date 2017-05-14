@@ -18,6 +18,7 @@
             resetForm();
         }
 
+
         function resetForm() {
             vm.task = {
                 "title": "",
@@ -26,13 +27,15 @@
             };
         };
 
+
         function goBack() {
             $state.go('list-details',{listId: listId});
         }
         
+        
         vm.submit = function submit() {
             TaskService.save(listId, vm.task);
-            $timeout(goBack(),5);
+            $timeout(goBack(),100);
         };
         
     };

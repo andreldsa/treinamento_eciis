@@ -12,6 +12,9 @@ handlers:
 - url: /api.*
   script: main.app
 
+- url: /(login|logout)
+  script: main.app
+
 - url: (.*)
   static_files: app\1
   upload: app/(.*)

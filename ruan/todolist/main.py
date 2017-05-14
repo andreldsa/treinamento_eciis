@@ -3,20 +3,58 @@ import webapp2
 from models import *
 from utils import *
 
+from google.appengine.api import users
+
 
 class BaseHandler(webapp2.RequestHandler):
     pass
 
 
+class LoginHandler(BaseHandler):
+    def get(self):
+        uri = self.request.get('uri', '/')
+        self.redirect(users.create_login_url(uri))
+
+
+class LogoutHandler(BaseHandler):
+    def get(self):
+        self.redirect(users.create_logout_url('/'))
+
+
+def login_required(method):
+    def check_login(self, *args):
+        user = users.get_current_user()
+
+        if user is None:
+            self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
+            self.response.set_status(401)
+            return
+        
+        method(self, user, *args)
+    
+    return check_login
+
+
+class MainHandler(BaseHandler):
+    @login_required
+    def get(self, google_user):
+        email = google_user.email().lower()
+        user = User.get_or_insert(email)
+        if not user.email:
+            user.email = email
+            user.put()
+
+        user_data = {
+            "email": email,
+            "user": data2dict(user),
+            "logout_url": "http://%s/logout" % self.request.host
+        }
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(user_data).encode('utf-8'))
+
+
 
 class UserHandler(webapp2.RequestHandler):
-
-    def get(self, userId):
-        user = User.get_by_id(int(userId))
-        user = data2dict(user)
-        self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(user))
-
     
     def post(self):
         data = json.loads(self.request.body)
@@ -26,7 +64,7 @@ class UserHandler(webapp2.RequestHandler):
         newUser.put()
         newUser = data2dict(newUser)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(newUser))
+        self.response.write(data2json(newUser).encode('utf-8'))
         
 
 
@@ -36,7 +74,7 @@ class ListHandler(BaseHandler):
         _list = List.get_by_id(int(listId))    
         _list = data2dict(_list)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(_list))
+        self.response.write(data2json(_list).encode('utf-8'))
     
 
     # Create a list
@@ -48,7 +86,7 @@ class ListHandler(BaseHandler):
         newList.put()
         newList = data2dict(newList)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
-        self.response.write(data2json(newList))
+        self.response.write(data2json(newList).encode('utf-8'))
         self.response.set_status(201)
 
 
@@ -59,7 +97,7 @@ class ListCollectionHandler(BaseHandler):
         query = List.query()
         lists = [data2dict(_list) for _list in query]
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(lists))
+        self.response.write(data2json(lists).encode('utf-8'))
 
 
 
@@ -69,7 +107,7 @@ class TaskHandler(BaseHandler):
         task = Task.get_by_id(int(taskId))
         task = data2dict(task)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
-        self.response.write(data2json(task))
+        self.response.write(data2json(task).encode('utf-8'))
 
 
 
@@ -79,7 +117,7 @@ class TaskCollectionHandler(BaseHandler):
         query = Task.query()
         tasks = [data2dict(task) for task in query]
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(tasks))
+        self.response.write(data2json(tasks).encode('utf-8'))
 
 
 
@@ -91,7 +129,7 @@ class ListTasksHandler(BaseHandler):
         # Convert a task to a dictionary and add to a list if not none
         tasks = [data2dict(t) for t in tasks if t]
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(tasks))
+        self.response.write(data2json(tasks).encode('utf-8'))
     
     
     # Add a new task to a list
@@ -115,13 +153,16 @@ class ListTasksHandler(BaseHandler):
 
         newTask = data2dict(newTask)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
-        self.response.write(data2json(newTask))        
+        self.response.write(data2json(newTask).encode('utf-8'))        
         self.response.set_status(201)
     
             
 
 
 app = webapp2.WSGIApplication([
+    ('/login', LoginHandler),     
+    ('/logout', LogoutHandler),     
+    ('/api', MainHandler),     
     ('/api/list', ListHandler),     
     ('/api/list/(\d+)', ListHandler), 
     ('/api/list/(\d+)/task', ListTasksHandler), 
