@@ -44,7 +44,7 @@ class UserHandler(BaseHandler):
         user = current_user();
         user_data = {
             "email": user.email,
-            "logout_url": "http://%s/logout" % self.request.host,
+            "logout_url": "https://%s/logout" % self.request.host,
             "gravatar_url": user.gravatar_url
         }
 

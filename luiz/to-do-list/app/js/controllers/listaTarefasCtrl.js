@@ -8,6 +8,7 @@
 
         vm.buscarTodas = function() {
             taskService.buscarTodas().then(function(response) {
+                taskService.enableProgress = false;
                 vm.tarefas = response.data;
 
             }, function(response){
@@ -16,6 +17,12 @@
                 }
             });
         };
+
+        vm.load = function() {
+            taskService.enableProgress = true;
+        };
+
+        vm.load();
         vm.buscarTodas();
     });
 })();

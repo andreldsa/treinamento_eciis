@@ -4,10 +4,15 @@
         var model = this;
         var TODO_URI = '/api/todo';
         var _user;
+        var _enableProgress = false;
         Object.defineProperties(model, {
             user: {
                 get: function() {return _user},
                 set: function(data) {_user = data}
+            },
+            enableProgress: {
+                get: function() {return _enableProgress},
+                set: function(data) {_enableProgress = data}
             }
         });
 
