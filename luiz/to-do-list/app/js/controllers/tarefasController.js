@@ -17,11 +17,5 @@
                 }
             });
         };
-
-        vm.load = function() {
-            taskService.enableProgress = false;
-        };
-
-        vm.load();
     });
 })();
