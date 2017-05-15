@@ -1,53 +1,51 @@
-<div>
-  <md-toolbar class="md-accent" layout-wrap layout-align="center" layout="row" md-colors="{background: 'indigo'}">
+<md-toolbar class="md-primary" layout-wrap layout-align="center" layout="row" md-colors="{background: 'indigo'}">
 
-    <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
-      <md-button ng-if="vm.user" class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft();">
-        <md-icon>menu</md-icon>
+  <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
+    <md-button ng-if="vm.user" class="md-icon-button" aria-label="Settings" ng-click="vm.toggleLeft();">
+      <md-icon>menu</md-icon>
+    </md-button>
+
+    <h2 flex md-truncate></h2>
+
+    <md-menu md-offset="0 -7">
+      <md-button ng-click="$mdMenu.open($event)" class="md-fab md-primary md-hue-3" aria-label="User menu">
+        <img ng-if="app.user" class="avatar" ng-src="{{vm.user.gravatar_url}}" alt="">
+        <md-icon ng-if="!vm.user" md-font-icon="md" aria-label="">person</md-icon>
       </md-button>
-
-      <h2 flex md-truncate></h2>
-
-      <md-menu md-offset="0 -7">
-        <md-button ng-click="$mdMenu.open($event)" class="md-fab md-primary md-hue-3" aria-label="User menu">
-          <img ng-if="app.user" class="avatar" ng-src="{{vm.user.gravatar_url}}" alt="">
-          <md-icon ng-if="!vm.user" md-font-icon="md" aria-label="">person</md-icon>
-        </md-button>
-        <md-menu-content width="2">
-          <md-menu-item ng-if="vm.user" style="padding: 10px">
-            {{vm.user.email}}
-          </md-menu-item>
-          <md-menu-item ng-if="!vm.user">
-              <md-button href="/login"> Login </md-button>
-          </md-menu-item>
-          <md-menu-item ng-if="vm.user">
-              <md-button href="/logout"> Logout </md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
-    </div>
-  </md-toolbar>
-
-  <div ng-if="vm.user" layout="column">
-    <section layout="row" flex>
-      <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop md-whiteframe="4">
-        <md-toolbar class="md-theme-indigo">
-          <h1 class="md-toolbar-tools">Opções de navegação</h1>
-        </md-toolbar>
-        <md-content layout-margin>
-          <md-button ng-click="vm.changeView('app.adicionar-tarefa')" class="md-accent">
-            Adicionar Tarefa
-          </md-button>
-          <div></div>
-          <md-button ng-click="vm.changeView('app.tarefas')" class="md-accent">
-            Ver tarefas
-          </md-button>
-          <div></div>
-          <md-button ng-click="vm.toggleLeft()" class="md-accent">
-            Fechar janela
-          </md-button>
-        </md-content>
-      </md-sidenav>
-    </section>
+      <md-menu-content width="2">
+        <md-menu-item ng-if="vm.user" style="padding: 10px">
+          {{vm.user.email}}
+        </md-menu-item>
+        <md-menu-item ng-if="!vm.user">
+          <md-button href="/login"> Login </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="vm.user">
+          <md-button href="/logout"> Logout </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </div>
+</md-toolbar>
+
+<div ng-if="vm.user" layout="column">
+  <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop md-whiteframe="4">
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Opções de navegação</h1>
+      </md-toolbar>
+      <md-content layout-margin>
+        <md-button ng-click="vm.changeView('app.adicionar-tarefa')" class="md-accent">
+          Adicionar Tarefa
+        </md-button>
+        <div></div>
+        <md-button ng-click="vm.changeView('app.tarefas')" class="md-accent">
+          Ver tarefas
+        </md-button>
+        <div></div>
+        <md-button ng-click="vm.toggleLeft()" class="md-accent">
+          Fechar janela
+        </md-button>
+      </md-content>
+    </md-sidenav>
+  </section>
 </div>

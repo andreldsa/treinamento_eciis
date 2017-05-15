@@ -12,12 +12,15 @@
   <link rel="stylesheet" href="/assets/app.css">
 </head>
 
-<body ng-app="tarefasApp" ng-cloak ng-controller="appCtrl as app">
+<body ng-app="tarefasApp" ng-cloak ng-controller="appCtrl as app" layout="column" layout-fill>
 
   <div ui-view="header"></div>
 
   <md-content ng-if="app.user" flex>
     <div ui-view="contents"></div>
+    <div ng-if="app.enableProgress" layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20%">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
   </md-content>
 
   <div ng-if="!app.user">
@@ -28,10 +31,6 @@
         Se você não tem login, deve pedir a seu gerente de projeto ou orientador, para que ele lhe registre neste sistema.
       </p>
     </md-card>
-  </div>
-  
-  <div ng-if="app.enableProgress" layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20%">
-    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
   </div>
 
   <!-- Angular Material requires Angular.js Libraries -->
