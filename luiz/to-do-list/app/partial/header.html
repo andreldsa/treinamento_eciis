@@ -18,14 +18,10 @@
             {{vm.user.email}}
           </md-menu-item>
           <md-menu-item ng-if="!vm.user">
-            <a href="/login">
-              <md-button> sign in </md-button>
-            </a>
+              <md-button href="/login"> Login </md-button>
           </md-menu-item>
           <md-menu-item ng-if="vm.user">
-            <a href="/logout">
-              <md-button> sign out </md-button>
-            </a>
+              <md-button href="/logout"> Logout </md-button>
           </md-menu-item>
         </md-menu-content>
       </md-menu>

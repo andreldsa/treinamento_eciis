@@ -11,7 +11,7 @@ var vm;
                 abstract: true,
                 views: {
                     'header': {
-                        templateUrl: 'header.html',
+                        templateUrl: 'partial/header.html',
                         controller: 'sideNavCtrl as vm'
                     }
                 }
@@ -20,7 +20,7 @@ var vm;
                 url: '/',
                 views: {
                     'contents@': {
-                        templateUrl: 'adicionar-tarefa.html',
+                        templateUrl: 'partial/adicionar-tarefa.html',
                         controller: 'tarefasController as vm'
                     }
                 }
@@ -29,7 +29,7 @@ var vm;
                 url: '/todas-tarefas',
                 views: {
                     'contents@': {
-                        templateUrl: 'visualizar-tarefas.html',
+                        templateUrl: 'partial/visualizar-tarefas.html',
                         controller: 'litaTarefasCtrl as vm'
                     }
                 }
