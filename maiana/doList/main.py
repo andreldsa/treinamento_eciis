@@ -69,7 +69,7 @@ class ListWebapp(webapp2.RequestHandler):
 		
 		task = Task(id=activity['name']) #definindo o id como nome.
 		task.name = activity['name']
-		task.comment = activity['comment']
+		task.comment = activity.get('comment')
 		
 		task.put()
 		list.tasks.append(task.name)

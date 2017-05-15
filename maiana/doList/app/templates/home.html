@@ -3,7 +3,7 @@
         <div flex-xs layout="column">
             <md-card md-theme-watch>
                 <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ng-click="null">
+                    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ng-click="vm.goTasks(list.name)">
                     <div class="md-list-item-text" layout="column">
                         <h3>{{ list.name }}</h3>
                     </div>

@@ -34,7 +34,10 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
                     }
                 }
         }).state('app.task', {
-                url: "/api/task?id",
+                url: "/api/task",
+                params:{
+                    'id' : ''
+                },
                 'views': {
                     'contents@': {
                         templateUrl: "templates/tasks.html",
@@ -95,6 +98,10 @@ app.controller('HomeController', function HomeController(DoListService, $state){
     vm.stateGo = function stateGo(state){
         $state.go(state);
     };
+
+     vm.goTasks = function goTasks(idList){
+         $state.go('app.task', { 'id': idList });  
+    }
         
 });
 
@@ -103,30 +110,32 @@ app.controller('TaskController', function TaskController(DoListService, $state, 
     vm.tasks = {};
     vm.list= $stateParams.id;
 
-    DoListService.getTask('/api/%s/list' %list).then(
+    DoListService.getTask(vm.list).then(
             function sucess(response){
                 vm.tasks = response.data;
-
-                console.log(list)
 
             }, function error(response){
                 if(response.status == 401) {
                     vm.stateGo('app.login');
                 }
             }
-        );        
+        );      
 });
 
 app.controller('RgTaskController', function RegisterController(DoListService, $state){    
     var vm = this;
     vm.activity = {};
-    vm.list = {};
+    vm.list = {
+        'name' : ""
+    };
 
     vm.register = function register(){
-        DoListService.rgTask(vm.list, vm.activity).then(
+        DoListService.rgTask(vm.list.name, vm.activity).then(
             function sucess(response){
                 vm.activity = {};
-                vm.list = {}
+                vm.list = {
+                    'name' : ""
+                };
 
                 return response.data;
         }, function error(response){
@@ -194,14 +203,13 @@ app.service('DoListService', function DoListService($http, $state){
     };
 
     sv.getTask = function getTask(idList){
-        return $http.get('/api/%s/list' %idList);
+        return $http.get('/api/'+idList+'/list');
     };
 
     sv.rgTask = function rgTask(idList, activity){
-        console.log(idList);
         return $http.post('/api/'+idList+'/list', activity);
     };
-
+    
     // service initialization
     sv.load();
 });
