@@ -18,7 +18,9 @@
             });
         };
 
-        vm.buscarTodas = function() {
+        var load = function() {
+            taskService.enableProgress = true;
+            
             taskService.buscarTodas().then(function(response) {
                 taskService.enableProgress = false;
                 vm.tasks= response.data;
@@ -30,11 +32,6 @@
             });
         };
 
-        vm.load = function() {
-            taskService.enableProgress = true;
-        };
-
-        vm.load();
-        vm.buscarTodas();
+        load();
     });
 })();
