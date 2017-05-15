@@ -20,6 +20,11 @@
                 })
                 .state('home', {
                     url: '/'
+                })
+                .state('delete_tasks', {
+                    url: '/delete/tasks',
+                    templateUrl: 'templates/deletetasks.html',
+                    controller: 'taskController as vm'
                 });
 
         });

@@ -14,26 +14,30 @@ var vm;
             requestService.fetchTasks().then(function (response) {
                 vm.tasks = response.data;
             }, function(err){
-
                 if( err.status == 401 ){
                    requestService.login();
-
                 };
             });
         };
 
         vm.putTask = function(data){
             requestService.putTask(data).then(function (response) {
-                console.log(response)
                 vm.tasks_to_put = {};
             }, function(err){
-                console.log('passou aki');
-                console.log(err);
+                if( err.status == 401 ){
+                    requestService.login();
+                };
             });
         };
 
-
-
+        vm.deleteTasks = function(name){
+            requestService.deleteTasks(name).then(function(response) {
+                vm.tasks_to_delete = {};
+            }, function (err) {
+                if( err.status == 401 ){
+                    requestService.login();
+                };
+            });
+        };
     });
-
 })();

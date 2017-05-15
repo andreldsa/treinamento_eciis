@@ -12,14 +12,15 @@ angular.module('todoList').service('requestService', function($http){
     };
 
     service.login = function (){
-       window.location.replace('/api/login');
+        window.location.replace('/api/login');
     };
-
 
     service.putTask = function (data) {
-            return $http.post('/api/tasks', data);
+        return $http.post('/api/tasks', data);
+
     };
 
-})
-
-})();
+    service.deleteTasks = function(name) {
+        return $http.delete('/api/delete/' + name);
+    };
+})})();
