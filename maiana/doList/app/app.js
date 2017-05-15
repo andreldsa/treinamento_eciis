@@ -65,6 +65,13 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
 app.controller('IndexController', function IndexController(DoListService, $state){
     var vm = this;
     
+    Object.defineProperties(vm, {
+            user: {
+                get: function () { return DoListService.user; },
+                set: function (data) { DoListService.user = data; }
+            }
+        })
+    
     vm.stateGo = function stateGo(state){
         $state.go(state);
     }
@@ -160,6 +167,23 @@ app.controller('RgListController', function RegisterController(DoListService, $s
 app.service('DoListService', function DoListService($http, $state){
 
     var sv = this;
+    var _user;
+
+    Object.defineProperties(sv, {
+            user: {
+                get: function () { return _user; },
+                set: function (data) { _user = data; }
+            }
+        })
+    
+     sv.load = function() {
+            $http.get('/api/user')
+            .then(function sucess(response) {
+                 _user = true;
+            }, function error(err) {
+                _user = false;
+            });
+        }
 
     sv.getList = function getList(){
       return $http.get('/api');
@@ -177,5 +201,8 @@ app.service('DoListService', function DoListService($http, $state){
         console.log(idList);
         return $http.post('/api/'+idList+'/list', activity);
     };
+
+    // service initialization
+    sv.load();
 });
 })()

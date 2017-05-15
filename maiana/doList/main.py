@@ -77,11 +77,17 @@ class ListWebapp(webapp2.RequestHandler):
 		
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(task.to_dict()))
-      
+
+class UserWebapp(webapp2.RequestHandler):
+    
+	@is_logged
+	def get(self):
+    		return True
 
 app = webapp2.WSGIApplication([
 	('/login', LoginWebapp),
 	('/logout', LogoutWebapp),
+	('/api/user', UserWebapp),
 	('/api', TaskListWebapp),
 	('/api/(\w+)/list', ListWebapp)
 ], debug=True)

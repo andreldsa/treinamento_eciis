@@ -13,3 +13,9 @@ class TaskList(ndb.Model):
 class User(ndb.Model):
     name = ndb.StringProperty()
     email = ndb.StringProperty()
+    lists = ndb.StringProperty(repeated=True)
+
+    def get_by_email(self, email):
+        query = User.query(User.email == email.lower())
+        user = query.get()
+        return user

@@ -10,12 +10,12 @@
                         <md-icon>more_vert</md-icon>
                     </md-button>
                     <md-menu-content width="2">
-                        <md-menu-item> 
+                        <md-menu-item ng-show="vm.user"> 
                             <a href="/logout">
                             <md-button> <span md-menu-align-target>Logout</span></md-button>
                             </a>
                         </md-menu-item>
-                        <md-menu-item> 
+                        <md-menu-item ng-hide="vm.user"> 
                             <a href="/login">
                             <md-button> <span md-menu-align-target>Login</span></md-button>
                             </a>
@@ -24,7 +24,7 @@
                 </md-menu>
             </div>
         </md-toolbar>
-        <div class="md-padding">
+        <div class="md-padding" ng-if="vm.user">
             <md-nav-bar nav-bar-aria-label="navigation links">
                 <md-nav-item md-nav-click="vm.stateGo('app.home')">
                     Listas de Atividade
