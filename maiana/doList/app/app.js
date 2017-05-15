@@ -10,26 +10,60 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdI
     $urlRouterProvider.otherwise('/api');
 
     $stateProvider
-        .state("login", {
+        .state('app', {
+                'abstract': true,
+                'views': {
+                    'header': {
+                        templateUrl: "templates/header.html",
+                        controller: "IndexController",
+                    }
+                }                
+        }).state('app.login', {
                 url: "/login",
-                templateUrl: "templates/login.html",
-        }).state("home", {
+                'views': {
+                    'contents@': {
+                        templateUrl: "templates/login.html",
+                    }
+                }
+        }).state('app.home', {
                 url: "/api",
-                templateUrl: "templates/home.html",
-                controller: "HomeController",
+                'views': {
+                    'contents@': {
+                        templateUrl: "templates/home.html",
+                        controller: "HomeController",
+                    }
+                }
+        }).state('app.task', {
+                url: "/api/task?id",
+                'views': {
+                    'contents@': {
+                        templateUrl: "templates/tasks.html",
+                        controller: "TaskController",
+                    }
+                }
         })
-        .state("register", {
-                url: "/register",
-                templateUrl: "templates/register.html",
-                controller: "RegisterController",
+        .state('app.rgtask', {
+                url: "/rgtask",
+                'views': {
+                    'contents@': {
+                        templateUrl: "templates/register_task.html",
+                        controller: "RgTaskController",
+                    }
+                }
+        }).state('app.rglist', {
+                url: "/rglist",
+                'views': {
+                    'contents@': {
+                        templateUrl: "templates/register_list.html",
+                        controller: "RgListController",
+                    }
+                }
         });
 
 });
 
 app.controller('IndexController', function IndexController(DoListService, $state){
     var vm = this;
-    vm.tasks = {};
-    vm.logged_in = DoListService.logged_in;
     
     vm.stateGo = function stateGo(state){
         $state.go(state);
@@ -39,37 +73,80 @@ app.controller('IndexController', function IndexController(DoListService, $state
 
 app.controller('HomeController', function HomeController(DoListService, $state){
     var vm = this;
-    vm.tasks = {}
+    vm.lists = {}
 
     DoListService.getList().then(
             function sucess(response){
-                vm.tasks = response.data;
+                vm.lists = response.data;
             }, function error(response){
                 if(response.status == 401) {
-                    vm.stateGo('login');
+                    vm.stateGo('app.login');
                 }
             }
         );
     
     vm.stateGo = function stateGo(state){
         $state.go(state);
-    }
+    };
         
 });
 
-app.controller('RegisterController', function RegisterController(DoListService, $state){    
+app.controller('TaskController', function TaskController(DoListService, $state, $stateParams){
     var vm = this;
-    vm.activity = {}
+    vm.tasks = {};
+    vm.list= $stateParams.id;
+
+    DoListService.getTask('/api/%s/list' %list).then(
+            function sucess(response){
+                vm.tasks = response.data;
+
+                console.log(list)
+
+            }, function error(response){
+                if(response.status == 401) {
+                    vm.stateGo('app.login');
+                }
+            }
+        );        
+});
+
+app.controller('RgTaskController', function RegisterController(DoListService, $state){    
+    var vm = this;
+    vm.activity = {};
+    vm.list = {};
 
     vm.register = function register(){
-        DoListService.register(vm.activity).then(
+        DoListService.rgTask(vm.list, vm.activity).then(
             function sucess(response){
                 vm.activity = {};
-                vm.stateGo('home');
+                vm.list = {}
+
                 return response.data;
         }, function error(response){
              if(response.status == 401) {
-                   vm.stateGo('login');
+                   vm.stateGo('app.login');
+                }
+        });
+    }; 
+
+    vm.stateGo = function stateGo(state){
+        $state.go(state);
+    }
+    
+});
+
+app.controller('RgListController', function RegisterController(DoListService, $state){    
+    var vm = this;
+    vm.list = {}
+
+    vm.register = function register(){
+        DoListService.rgList(vm.activity).then(
+            function sucess(response){
+                vm.activity = {};
+                return response.data;
+        }, function error(response){
+             if(response.status == 401) {
+                   vm.stateGo('app.login');
                 }
         });
     }; 
@@ -88,9 +165,17 @@ app.service('DoListService', function DoListService($http, $state){
       return $http.get('/api');
     }
 
-    sv.register = function register(activity){
+    sv.rgList = function rgList(activity){
         return $http.post('/api', activity);
+    };
 
+    sv.getTask = function getTask(idList){
+        return $http.get('/api/%s/list' %idList);
+    };
+
+    sv.rgTask = function rgTask(idList, activity){
+        console.log(idList);
+        return $http.post('/api/'+idList+'/list', activity);
     };
 });
 })()

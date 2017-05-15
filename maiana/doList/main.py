@@ -1,14 +1,9 @@
 from google.appengine.ext import ndb
 from utils import *
+from models import *
 
 import webapp2
 import json
-
-class Task(ndb.Model):
-	name = ndb.StringProperty(required=True)
-	date_created = ndb.DateTimeProperty(auto_now_add=True)
-	status = ndb.BooleanProperty(default=False)
-	comment = ndb.TextProperty()  
 
 class LoginWebapp(webapp2.RequestHandler):
     
@@ -28,40 +23,65 @@ class LogoutWebapp(webapp2.RequestHandler):
 		if user: 			
 			logout_url = users.create_logout_url('/')
 			self.redirect(logout_url)
-	
-class ListWebapp(webapp2.RequestHandler):
+
+class TaskListWebapp(webapp2.RequestHandler):
+    
 	@is_logged	
 	def get(self):
 
-		all_task = Task.query()
-		response = [task.to_dict() for task in all_task]
+		all_lists = TaskList.query()
+		response = [list.to_dict() for list in all_lists]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(response))
 		
 	@is_logged	
 	def post(self):
     	
+		data = json.loads(self.request.body)
+		str_id = data['name'].lower()
+
+		list = TaskList(id=str_id) #definindo o id como nome.
+		list.name = data['name']
+		
+		list.put()
+		
+		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+		self.response.write(data2json(list.to_dict()))
+      
+class ListWebapp(webapp2.RequestHandler):
+
+	@is_logged	
+	def get(self, str_id_list):
+    		
+		str_id = str_id_list.lower()
+		list = TaskList.get_by_id(str_id)
+
+		response = [Task.get_by_id(task).to_dict() for task in list.tasks]
+		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+		self.response.write(data2json(response))
+		
+	@is_logged	
+	def post(self, str_id_list):
+    	
+		str_id = str_id_list.lower()
+		list = TaskList.get_by_id(str_id)
 		activity = json.loads(self.request.body)
+		
 		task = Task(id=activity['name']) #definindo o id como nome.
 		task.name = activity['name']
 		task.comment = activity['comment']
 		
 		task.put()
+		list.tasks.append(task.name)
+		list.put()
 		
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(task.to_dict()))
       
-     
-	def patch(self):
-		
-		name_request = self.request.get('nome')		
-		task = Task.get_by_id(name_request)
-		task.status = True
-		
-		task.put()
 
 app = webapp2.WSGIApplication([
 	('/login', LoginWebapp),
 	('/logout', LogoutWebapp),
-	('/api', ListWebapp)
+	('/api', TaskListWebapp),
+	('/api/(\w+)/list', ListWebapp)
 ], debug=True)

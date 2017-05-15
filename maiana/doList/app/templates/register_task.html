@@ -1,4 +1,4 @@
-<div ng-controller="RegisterController as vm" layout="column">
+<div ng-controller="RgTaskController as vm" layout="column">
     <form name="ActivityForm">
         <div layout="column">
           <md-input-container class="md-block">
@@ -13,6 +13,10 @@
           <md-input-container class="md-block">
             <label>Comentário</label>
             <input ng-model="vm.activity.comment">
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Lista</label>
+            <input ng-model="vm.list">
           </md-input-container>
         </div>
         <md-button class="md-accent" ng-click="vm.register()">Register</md-button>
