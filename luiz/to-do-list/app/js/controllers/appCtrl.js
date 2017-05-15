@@ -13,6 +13,5 @@
                 set: function(data) {taskService.enableProgress = data}
             }
         });
-        vm.teste = true;
     });
 })();

@@ -30,7 +30,7 @@ var vm;
                 views: {
                     'contents@': {
                         templateUrl: 'partial/visualizar-tarefas.html',
-                        controller: 'litaTarefasCtrl as vm'
+                        controller: 'tarefasController as vm'
                     }
                 }
             });
