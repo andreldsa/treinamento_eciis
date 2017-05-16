@@ -10,7 +10,6 @@ import util
 
 
 class BaseHandler(webapp2.RequestHandler):
-    """
     def handle_exception(self, exception, debug):
         if isinstance(exception, util.AuthorizationExeption):
             self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
@@ -18,7 +17,6 @@ class BaseHandler(webapp2.RequestHandler):
         else:
             logging.error(str(exception))
             self.response.write("oops! %s\n" % str(exception))
-    """
 
 
 class TaskHandler(BaseHandler):
