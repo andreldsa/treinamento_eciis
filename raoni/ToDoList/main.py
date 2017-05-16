@@ -64,15 +64,20 @@ class DeleteHandler(webapp2.RequestHandler):
         user = User.get_by_id(user_email)
         user_tasks = [task.get() for task in user.tasks]
         task_name = name.split('/')[0]
+        finded = False
         for i in xrange(len(user_tasks)):
             if user_tasks[i].name == task_name:
                 user.tasks[i].delete()
                 user.tasks.pop(i)
                 user.put()
+                finded = True
                 self.response.headers['Content-Type'] = 'application/json'
                 self.response.set_status(201)
                 break
 
+        if not finded:
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.set_status(204)
 
 app = webapp2.WSGIApplication([
     ('/api/tasks', Handler),

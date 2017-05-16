@@ -33,6 +33,9 @@ var vm;
         vm.deleteTasks = function(name){
             requestService.deleteTasks(name).then(function(response) {
                 vm.tasks_to_delete = {};
+                if(response.status === 204){
+                    alert('Essa tarefa não existe')
+                }
             }, function (err) {
                 if( err.status == 401 ){
                     requestService.login();

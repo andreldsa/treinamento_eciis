@@ -26,14 +26,5 @@
                     templateUrl: 'templates/deletetasks.html',
                     controller: 'taskController as vm'
                 });
-
         });
-})();
-
-
-
-
-
-
-
-
+})();s
