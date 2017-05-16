@@ -36,9 +36,12 @@ def login_required(func):
     user = users.get_current_user()
     
     _assert(user != None)
-    return func(self, user, *args)
+    return func(self, *args)
 
   return params
+
+def current_user_email():
+      return users.get_current_user().email().lower();
 
 def login():
   login_url = users.create_login_url('/')

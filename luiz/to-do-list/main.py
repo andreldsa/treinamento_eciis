@@ -21,19 +21,21 @@ class BaseHandler(webapp2.RequestHandler):
 
 class TaskHandler(BaseHandler):
     @util.login_required
-    def get(self, user):
-        userData = models.User.get_by_email(user.email().lower())
+    def get(self):
+        user_email = util.current_user_email()
+        userData = models.User.get_by_email(user_email)
         data = userData.get_tasks()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(util.data2json(data).encode('utf-8'))
 
     @util.login_required
-    def post(self, user):
+    def post(self):
         data = util.json2data(self.request.body)
         task_key = models.Task.createTask(data['name_task'])
 
-        userData = models.User.get_by_email(user.email().lower())
+        user_email = util.current_user_email()
+        userData = models.User.get_by_email(user_email)
         userData.tasks.append(task_key)
         userData.put()
 
@@ -44,8 +46,8 @@ class TaskHandler(BaseHandler):
 
 class UserHandler(BaseHandler):
     @util.login_required
-    def get(self, user_google):
-        user_email = user_google.email().lower()
+    def get(self):
+        user_email = util.current_user_email()
         user = models.User.get_or_insert_by_email(user_email)
         user_data = {
             "email": user.email,
@@ -65,7 +67,7 @@ class LoginHandler(BaseHandler):
 
 class LogoutHandler(BaseHandler):
     @util.login_required
-    def get(self, user):
+    def get(self):
         logout_url = util.logout()
         self.redirect(logout_url)
 
