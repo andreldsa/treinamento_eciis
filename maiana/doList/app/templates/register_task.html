@@ -14,12 +14,13 @@
             <label>Comentário</label>
             <input ng-model="vm.activity.comment">
           </md-input-container>
-          <md-input-container class="md-block">
-            <label>Lista</label>
-            <input ng-model="vm.list.name">
+          <md-input-container>
+            <md-select ng-model="vm.list">
+              <md-option value="{{list}}" ng-repeat="list in vm.user.lists | orderBy : 'list'">{{list}}</md-option>
+            </md-select>
           </md-input-container>
+          <md-button class="md-accent" ng-click="vm.register()">Register</md-button>
         </div>
-        <md-button class="md-accent" ng-click="vm.register()">Register</md-button>
     </form>
 
 </div>

@@ -26,13 +26,11 @@ def data2json(data):
 
 def is_logged(method):
     
-    def authentication(self, *args):
-          
+    def authentication(self, *args):      
         user = users.get_current_user()
         if user:
             user_email = user.email().lower()
             method(self, user_email, *args)
-
         else:   
             self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
             self.response.set_status(401)

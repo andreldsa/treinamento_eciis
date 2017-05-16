@@ -26,15 +26,21 @@
         </md-toolbar>
         <div class="md-padding" ng-if="vm.user">
             <md-nav-bar nav-bar-aria-label="navigation links">
-                <md-nav-item md-nav-click="vm.stateGo('app.home')">
+                <a ui-sref="app.home">
+                    <md-nav-item md-nav-click="null">
                     Listas de Atividade
-                </md-nav-item>
-                <md-nav-item md-nav-click="vm.stateGo('app.rglist')">
-                    Cadastrar Lista
-                </md-nav-item>
-                <md-nav-item md-nav-click="vm.stateGo('app.rgtask')">
-                    Cadastrar Atividade
-                </md-nav-item>       
+                    </md-nav-item>
+                </a>
+                <a ui-sref="app.rglist">
+                    <md-nav-item md-nav-click="null">
+                        Cadastrar Lista
+                    </md-nav-item>
+                </a>
+                <a ui-sref="app.rgtask">
+                    <md-nav-item md-nav-click="null">
+                        Cadastrar Atividade
+                    </md-nav-item>
+                </a>       
             </md-nav-bar>
             <div class="ext-content" ui-view>
             </div>

@@ -27,8 +27,7 @@ class TaskListWebapp(webapp2.RequestHandler):
     
 	@is_logged	
 	def get(self, user_email):
-
-		user = User.get_by_email(user_email)
+		user = User.get_by_email(user_email).get()
 		all_lists = user.lists
 				
 		response = [TaskList.get_by_id(list).to_dict() for list in all_lists]
@@ -37,8 +36,7 @@ class TaskListWebapp(webapp2.RequestHandler):
 		
 	@is_logged	
 	def post(self, user_email):
-    	
-		user = User.get_by_email(user_email)
+		user = User.get_by_email(user_email).get()
 		data = json.loads(self.request.body)
 		str_id = data['name'].lower().encode('utf-8')
 
@@ -54,8 +52,7 @@ class TaskListWebapp(webapp2.RequestHandler):
 class ListWebapp(webapp2.RequestHandler):
 
 	@is_logged	
-	def get(self, user, str_id_list):
-    		
+	def get(self, user, str_id_list): 		
 		str_id = str_id_list.lower()
 		list = TaskList.get_by_id(str_id)
 
@@ -65,7 +62,6 @@ class ListWebapp(webapp2.RequestHandler):
 		
 	@is_logged	
 	def post(self, user, str_id_list):
-    	
 		str_id = str_id_list.lower()
 		list = TaskList.get_by_id(str_id)
 		activity = json.loads(self.request.body)
@@ -84,8 +80,17 @@ class ListWebapp(webapp2.RequestHandler):
 class UserWebapp(webapp2.RequestHandler):
 	@is_logged
 	def get(self, user_email):
-		user = User.get_by_email(user_email)	
-		return user
+		user = User.get_by_email(user_email)
+
+		if(user is None):
+			user = User.insert(user_email)
+		else:
+			user = user.get()
+		
+		perfil = user.to_dict()
+		print perfil
+		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+		self.response.write(data2json(perfil))
 
 app = webapp2.WSGIApplication([
 	('/login', LoginWebapp),

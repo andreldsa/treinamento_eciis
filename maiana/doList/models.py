@@ -16,17 +16,15 @@ class User(ndb.Model):
 
     @staticmethod
     def get_by_email(user_email):
-        
-        user = User.get_or_insert(user_email)
+        user = User.query(User.email == user_email)
+        return user
+
+    @staticmethod
+    def insert(user_email):
         user.email = user_email
         user.put()
         return user
-    
-    def add_list(self, list):
         
+    def add_list(self, list):        
         str(list)
         self.lists.append(list)
-        if(list == "apaga"):
-            self.lists = []
-
-        print self.lists
