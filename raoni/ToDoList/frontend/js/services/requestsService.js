@@ -20,7 +20,7 @@ angular.module('todoList').service('requestService', function($http){
 
     };
 
-    service.deleteTasks = function(name) {
-        return $http.delete('/api/delete/' + name);
+    service.deleteTasks = function(id) {
+        return $http.delete('/api/delete/' + id);
     };
 })})();

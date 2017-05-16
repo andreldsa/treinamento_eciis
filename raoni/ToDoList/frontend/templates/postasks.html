@@ -3,15 +3,15 @@
     <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
         <md-input-container>
             <label>Nome da Tarefa</label>
-            <input ng-model="vm.tasks_to_put.name">
+            <input ng-model="vm.task_name">
         </md-input-container>
         <md-input-container>
             <label>Descrição da Tarefa</label>
-            <input ng-model="vm.tasks_to_put.description">
+            <input ng-model="vm.task_description">
         </md-input-container>
 
         <md-card-actions layout="row" layout-align="end center">
-            <md-button class="md-raised md-primary" ng-click="vm.putTask(vm.tasks_to_put)">Salvar</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.createTask(vm.task_name, vm.task_description)">Salvar</md-button>
         </md-card-actions>
     </md-card>
 

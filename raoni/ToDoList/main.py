@@ -38,7 +38,13 @@ class Handler(webapp2.RequestHandler):
     def get(self, user_google):
         user_email = user_google.email()
         user = User.get_or_insert(user_email, email=user_email)
-        user_tasks = [task.get().to_dict() for task in user.tasks]
+        user_tasks = []
+        for task in user.tasks:
+            task_id = task.id()
+            task_append = task.get().to_dict()
+            task_append['id'] = task_id
+            user_tasks.append(task_append)
+
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(user_tasks).encode('utf-8'))
 
@@ -47,7 +53,7 @@ class Handler(webapp2.RequestHandler):
         user_email = user_google.email()
         user = User.get_or_insert(user_email, email=user_email)
         data = json.loads(self.request.body)
-        task = Task(id = data['name'])
+        task = Task()
         task.name = data['name']
         task.description = data['description']
         task_key = task.put()
@@ -59,15 +65,14 @@ class Handler(webapp2.RequestHandler):
 
 class DeleteHandler(webapp2.RequestHandler):
     @login_required
-    def delete(self, user_google, name):
+    def delete(self, user_google, id):
         user_email = user_google.email()
         user = User.get_by_id(user_email)
-        user_tasks = [task.get() for task in user.tasks]
-        task_name = name.split('/')[0]
         finded = False
-        for i in xrange(len(user_tasks)):
-            if user_tasks[i].name == task_name:
-                user.tasks[i].delete()
+        for i in xrange(len(user.tasks)):
+            if user.tasks[i].id() == int(id):
+                task = user.tasks[i]
+                task.delete()
                 user.tasks.pop(i)
                 user.put()
                 finded = True
@@ -81,7 +86,7 @@ class DeleteHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/api/tasks', Handler),
-    ('/api/delete/(.*)', DeleteHandler),
+    ('/api/delete/(\d+)', DeleteHandler),
     ('/api/login', LoginHandler),
     ('/api/logout', LogoutHandler)
 
