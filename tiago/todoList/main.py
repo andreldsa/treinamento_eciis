@@ -60,6 +60,11 @@ class UsuarioHandler(BaseHandler):
         data = json.loads(self.request.body)
         usuario.update(data)
         usuario.put()
+        tarefas_data = {
+            "tarefas": usuario.get_tarefas()
+        }
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(tarefas_data).encode('utf-8')) 
 
 app = webapp2.WSGIApplication([
     ('/login', LoginHandler),

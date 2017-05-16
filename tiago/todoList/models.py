@@ -13,20 +13,21 @@ class Usuario(ndb.Model):
 			self.keys_tarefas.append(key.id())
 
 		else:
-			tarefa = self.keys_tarefas[(data.get('operation'))]
-			self.keys_tarefas.pop(data.get('operation'))
-			ndb.Key(Tarefa, tarefa).delete()
+			tarefaID = data.get('operation')
+			self.keys_tarefas.remove(tarefaID)
+			ndb.Key(Tarefa, tarefaID).delete()
 
 	def get_tarefas(self):
 		tarefas = []
 
 		if len(self.keys_tarefas) > 0:
-			for tarefa in self.keys_tarefas:
-				tarefa = Tarefa.get_by_id(tarefa)
+			for tarefaID in self.keys_tarefas:
+				tarefa = Tarefa.get_by_id(tarefaID)
 				tarefas.append({
 					'nome': tarefa.nome, 
 					'descricao': tarefa.descricao, 
-					'prazo': tarefa.prazo
+					'prazo': tarefa.prazo,
+					'id' : tarefaID
 				})
 
 		return tarefas

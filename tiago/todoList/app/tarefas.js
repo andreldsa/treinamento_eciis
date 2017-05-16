@@ -4,11 +4,12 @@
 	app.controller('TarefasCtrl', function TarefasCtrl(UserService, $mdDialog) {
 		var vm = this;
 		vm.save_user = UserService.save;
-        vm.tarefa = {
-        	nome: '',
-        	descricao: '',
-        	prazo: ''
-        };
+    vm.update = UserService.update;
+    vm.tarefa = {
+      nome: '',
+      descricao: '',
+      prazo: '',
+    };
 
         Object.defineProperties(vm, {
             user: {
@@ -29,7 +30,7 @@
        	  $mdDialog.show(confirm).then(function() {
        	    vm.showAlert(ev, 'Tarefa finalizada com sucesso');
        	    vm.user.del_tarefa(index);
-       	    vm.save_user(index);
+       	    vm.save_user(vm.user.tarefas[index].id);
        	  });
        	};
 
@@ -42,9 +43,9 @@
 
         vm.clear = function clear() {
           vm.tarefa = {
-          	nome: '',
-        	descricao: '',
-        	prazo: ''
+            nome: '',
+            descricao: '',
+            prazo: ''
           };
         };
 

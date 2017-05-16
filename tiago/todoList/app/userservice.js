@@ -37,6 +37,7 @@
                 url: '/api/usuario/' + _user.email,
                 data: JSON.stringify(_user)
             }).then(function (response) {
+                _user.tarefas = response.data.tarefas;
                 _user._state = 'saved';
             }, function (err) {
                 alert('Não foi possível salvar os dados!');
