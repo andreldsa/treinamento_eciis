@@ -5,3 +5,6 @@ python:
 install: "pip install -U pytest"
 # command to run tests
 script: pytest
+
+notifications:
+    slack: e-ciis:5ttYSzVNz0z5XwYRaWBHExyW
