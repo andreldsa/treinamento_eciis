@@ -30,7 +30,8 @@ def is_logged(method):
           
         user = users.get_current_user()
         if user:
-            method(self, *args)
+            user_email = user.email().lower()
+            method(self, user_email, *args)
 
         else:   
             self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)

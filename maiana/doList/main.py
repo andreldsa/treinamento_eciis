@@ -11,7 +11,6 @@ class LoginWebapp(webapp2.RequestHandler):
 		user = users.get_current_user()
 
 		if user is None: 
-
 			login_url = users.create_login_url('/')
 			self.redirect(login_url)
 
@@ -27,31 +26,34 @@ class LogoutWebapp(webapp2.RequestHandler):
 class TaskListWebapp(webapp2.RequestHandler):
     
 	@is_logged	
-	def get(self):
+	def get(self, user_email):
 
-		all_lists = TaskList.query()
+		user = User.get_by_email(user_email)
+		all_lists = user.lists		
 		response = [list.to_dict() for list in all_lists]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(response))
 		
 	@is_logged	
-	def post(self):
+	def post(self, user_email):
     	
+		user = User.get_by_email(user_email)
 		data = json.loads(self.request.body)
-		str_id = data['name'].lower()
+		str_id = data['name'].lower().encode('ascii')
 
 		list = TaskList(id=str_id) #definindo o id como nome.
-		list.name = data['name']
-		
+		list.name = data['name']	
 		list.put()
 		
+		user.add_list(str_id)	
+		user.put()
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(list.to_dict()))
       
 class ListWebapp(webapp2.RequestHandler):
 
 	@is_logged	
-	def get(self, str_id_list):
+	def get(self, user, str_id_list):
     		
 		str_id = str_id_list.lower()
 		list = TaskList.get_by_id(str_id)
@@ -61,7 +63,7 @@ class ListWebapp(webapp2.RequestHandler):
 		self.response.write(data2json(response))
 		
 	@is_logged	
-	def post(self, str_id_list):
+	def post(self, user, str_id_list):
     	
 		str_id = str_id_list.lower()
 		list = TaskList.get_by_id(str_id)
@@ -79,10 +81,10 @@ class ListWebapp(webapp2.RequestHandler):
 		self.response.write(data2json(task.to_dict()))
 
 class UserWebapp(webapp2.RequestHandler):
-    
 	@is_logged
-	def get(self):
-    		return True
+	def get(self, user_email):
+		user = User.get_by_email(user_email)	
+		return user
 
 app = webapp2.WSGIApplication([
 	('/login', LoginWebapp),
