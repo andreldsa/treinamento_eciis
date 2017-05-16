@@ -29,8 +29,9 @@ class TaskListWebapp(webapp2.RequestHandler):
 	def get(self, user_email):
 
 		user = User.get_by_email(user_email)
-		all_lists = user.lists		
-		response = [list.to_dict() for list in all_lists]
+		all_lists = user.lists
+				
+		response = [TaskList.get_by_id(list).to_dict() for list in all_lists]
 		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
 		self.response.write(data2json(response))
 		
@@ -39,7 +40,7 @@ class TaskListWebapp(webapp2.RequestHandler):
     	
 		user = User.get_by_email(user_email)
 		data = json.loads(self.request.body)
-		str_id = data['name'].lower().encode('ascii')
+		str_id = data['name'].lower().encode('utf-8')
 
 		list = TaskList(id=str_id) #definindo o id como nome.
 		list.name = data['name']	

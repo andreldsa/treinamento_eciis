@@ -24,8 +24,9 @@ class User(ndb.Model):
     
     def add_list(self, list):
         
+        str(list)
         self.lists.append(list)
         if(list == "apaga"):
             self.lists = []
-        
+
         print self.lists
