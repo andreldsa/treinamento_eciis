@@ -11,7 +11,7 @@
     function ListDetailsController(ListService, TaskService, $stateParams) {
         var vm = this;
         vm.list;
-        vm.tasks;
+        vm.tasks = [];
         var listId = $stateParams.listId;
 
 

@@ -3,45 +3,25 @@ import webapp2
 from models import *
 from utils import *
 
-from google.appengine.api import users
-
-
-def login_required(method):
-    def check_login(self, *args):
-        google_user = users.get_current_user()
-
-        if google_user is None:
-            self.response.write('{"msg":"requires authentication", "login_url":"http://%s/login"}' % self.request.host)
-            self.response.set_status(401)
-            return
-        
-        user = User.get_or_insert(google_user.email().lower())
-        method(self, user, *args)
-    
-    return check_login
-
-
-# verify if the user has this list 
-def verifyListId(user, listId):
-     if listId not in user.lists:
-        self.response.write('{"msg":"The user %s does not have this list"}' %user.email)
-        self.response.set_status(401)
-        return
-
-
-# verify if the user has this task 
-def verifyTaskId(user, listId, taskId):
-    verifyListId(user, listId)
-    _list = List.get_by_id(listId)
-    if taskId not in _list.tasks:
-        self.response.write('{"msg":"The user %s does not have this task"}' %user.email)
-        self.response.set_status(401)
-        return
-
-
 
 class BaseHandler(webapp2.RequestHandler):
-    pass
+    
+    # verify if the user has this list 
+    def verifyListId(self, user, listId):
+        lists_ids = [int(key.id()) for key in user.lists]
+        if listId not in lists_ids:
+            self.response.write(('{"msg":"The user %s does not have this list"}' %user.email).encode('utf-8'))
+            self.response.set_status(401)
+
+
+    # verify if the user has this task 
+    def verifyTaskId(self, user, listId, taskId):
+        verifyListId(user, listId)
+        _list = List.get_by_id(listId)
+        tasks_ids = [int(key.id()) for key in _list.tasks]        
+        if taskId not in tasks_ids:
+            self.response.write('{"msg":"The user %s does not have this task"}' %user.email)
+            self.response.set_status(401)
 
 
 
@@ -79,7 +59,7 @@ class ListHandler(BaseHandler):
     # Get a List by id
     @login_required
     def get(self, user, listId):
-        verifyListId(user, listId)
+        #BaseHandler.verifyListId(self, user, listId)
         _list = List.get_by_id(int(listId))    
         _list = data2dict(_list)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
@@ -97,6 +77,7 @@ class ListHandler(BaseHandler):
         list_key = newList.put()
         # add the list to the user
         user.lists.append(list_key)
+        user.put()
         newList = data2dict(newList)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
         self.response.write(data2json(newList).encode('utf-8'))
@@ -122,7 +103,7 @@ class TaskCollectionHandler(BaseHandler):
     # Get all tasks from a list 
     @login_required
     def get(self, user, listId):
-        verifyListId(user, listId)
+        #BaseHandler.verifyListId(self, user, listId)
         _list = List.get_by_id(int(listId))
         # get all tasks from this list
         tasks = ndb.get_multi(_list.tasks)
@@ -137,17 +118,17 @@ class ListTasksHandler(BaseHandler):
     # Get a task from a list by id 
     @login_required
     def get(self, listId, taskId):
-        verifyTaskId(user, listId, taskId)
+        #BaseHandler.verifyTaskId(self, user, listId, taskId)
         task = Task.get_by_id(int(taskId))
         task = data2dict(task)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
         self.response.write(data2json(task).encode('utf-8'))
     
-    
+  
     # Add a new task to a list
     @login_required
     def post(self, user, listId):
-        verifyListId(user, listId)
+        #BaseHandler.verifyListId(self, user, listId)
         # get task data
         data = json.loads(self.request.body)
         _list = List.get_by_id(int(listId))
@@ -168,8 +149,6 @@ class ListTasksHandler(BaseHandler):
 
     #TODO create delete method
     
-            
-
 
 app = webapp2.WSGIApplication([
     ('/login', LoginHandler),     
