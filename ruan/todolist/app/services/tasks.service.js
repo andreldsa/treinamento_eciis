@@ -7,28 +7,23 @@
     function TaskService($http) {
         var service = this;
 
-        service.getAll = function getAll() {
-            return $http.get('/api/tasks');
+        service.getTasksFromList = function getTasksFromList(listId) {
+            return $http.get('/api/lists/'+ listId +'/tasks');
         };
 
 
-        service.getOne = function getOne(taskId) {i
-            return $http.get('/api/task/' + taskId);
+        service.getTask = function getTask(listId, taskId) {
+            return $http.get('/api/lists/' + listId + '/tasks/' + taskId);
         };
 
 
-        service.getAllFromList = function getAllFromList(listId) {
-            return $http.get('/api/list/' + listId + '/tasks');
-        };
-
-
-         service.deleteOne = function deleteOne(taskId) {
+         service.deleteTask = function deleteTask(taskId) {
             console.log("deleted: " + taskId);
         }
 
 
         service.save = function save(listId, task) {
-            var url = '/api/list/' + listId + '/task';
+            var url = '/api/lists/' + listId + '/task';
 
             $http.post(url, task)
                 .then(function success(response) {

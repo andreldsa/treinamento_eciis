@@ -11,7 +11,6 @@
     function TaskFormController(TaskService, $stateParams, $state, $timeout) {
         var vm = this;
         vm.priorities = ['high','medium','low'];
-
         var listId = $stateParams.listId;
 
         vm.$onInit = function onInit() {

@@ -10,19 +10,19 @@
 
     function ListDetailsController(ListService, TaskService, $stateParams) {
         var vm = this;
-        vm.list = [];
-        vm.tasks = [];
+        vm.list;
+        vm.tasks;
         var listId = $stateParams.listId;
 
 
         vm.$onInit = function onInit(){
             getList();
-            getTask();
+            getTasks();
         };
 
 
         var getList = function getList(){
-            ListService.getOne(listId)
+            ListService.getList(listId)
                 .then(function(response) {
                     vm.list = response.data;
                 })          
@@ -34,8 +34,8 @@
         }
 
 
-        var getTask = function getTasks() {
-            TaskService.getAllFromList(listId)
+        var getTasks = function getTasks() {
+            TaskService.getTasksFromList(listId)
                     .then(function(response) {
                         vm.tasks = response.data;
                     })

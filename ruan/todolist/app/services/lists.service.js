@@ -7,17 +7,18 @@
     function ListService($http) {
         var service = this;
         
-        service.getAll = function getAll() {
+
+        service.getLists = function getLists() {
             return  $http.get('/api/lists');
         };
 
 
-        service.getOne = function getOne(listId) {
-            return $http.get('/api/list/'+ listId);
+        service.getList = function getList(listId) {
+            return $http.get('/api/lists/'+ listId);
         }
 
 
-        service.deleteOne = function deleteOne(listId) {
+        service.deleteList = function deleteList(listId) {
             console.log("deleted: " + listId);
         }
 

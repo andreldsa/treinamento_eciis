@@ -62,7 +62,7 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         if not user.email:
-            user.email = email
+            user.email = user.key.id()
             user.put()
 
         user_data = {
@@ -103,6 +103,8 @@ class ListHandler(BaseHandler):
         self.response.set_status(201)
 
 
+    #TODO  create delete method
+
 
 class ListCollectionHandler(BaseHandler):
     # Get all user's lists
@@ -125,7 +127,7 @@ class TaskCollectionHandler(BaseHandler):
         # get all tasks from this list
         tasks = ndb.get_multi(_list.tasks)
         # Convert a task to a dictionary and add to a list if not none
-        tasks = [data2dict(task) for task in tasks if task not None]
+        tasks = [data2dict(task) for task in tasks if task is not None]
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(tasks).encode('utf-8'))
 
@@ -162,6 +164,9 @@ class ListTasksHandler(BaseHandler):
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
         self.response.write(data2json(newTask).encode('utf-8'))        
         self.response.set_status(201)
+
+
+    #TODO create delete method
     
             
 
@@ -173,6 +178,7 @@ app = webapp2.WSGIApplication([
     ('/api/list', ListHandler),     
     ('/api/lists', ListCollectionHandler), 
     ('/api/lists/(\d+)', ListHandler), 
+    ('/api/lists/(\d+)/task', ListTasksHandler),
     ('/api/lists/(\d+)/tasks', TaskCollectionHandler), 
     ('/api/lists/(\d+)/tasks/(\d+)', ListTasksHandler)
 ], debug=True)
