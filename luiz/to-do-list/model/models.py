@@ -20,7 +20,6 @@ class Task(ndb.Model):
         tasks = [todo.to_dict() for todo in query]
         return tasks
 
-
 class User(ndb.Model):
     email = ndb.StringProperty()
     tasks = ndb.KeyProperty(kind='Task', repeated=True)
