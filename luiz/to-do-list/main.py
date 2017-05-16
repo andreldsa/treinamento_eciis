@@ -8,6 +8,13 @@ sys.path.append("util")
 import models
 import util
 
+from util import login_required
+
+def json_response(func):
+    def params(self, *args):
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        return func(self, *args)
+    return params
 
 class BaseHandler(webapp2.RequestHandler):
     def handle_exception(self, exception, debug):
@@ -20,16 +27,17 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 class TaskHandler(BaseHandler):
-    @util.login_required
+    @login_required
+    @json_response
     def get(self):
         user_email = util.current_user_email()
         userData = models.User.get_by_email(user_email)
         data = userData.get_tasks()
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(util.data2json(data).encode('utf-8'))
 
-    @util.login_required
+    @login_required
+    @json_response
     def post(self):
         data = util.json2data(self.request.body)
         task_key = models.Task.createTask(data['name_task'])
@@ -40,22 +48,16 @@ class TaskHandler(BaseHandler):
         userData.put()
 
         self.response.set_status("201")
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(util.data2json(task_key.get().to_dict()).encode('utf-8'))
 
 
 class UserHandler(BaseHandler):
-    @util.login_required
+    @login_required
+    @json_response
     def get(self):
         user_email = util.current_user_email()
-        user = models.User.get_or_insert_by_email(user_email)
-        user_data = {
-            "email": user.email,
-            "logout_url": "https://%s/logout" % self.request.host,
-            "gravatar_url": user.gravatar_url
-        }
+        user_data = models.User.make_user(user_email)
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(util.data2json(user_data).encode('utf-8'))
 
 
@@ -66,7 +68,7 @@ class LoginHandler(BaseHandler):
 
 
 class LogoutHandler(BaseHandler):
-    @util.login_required
+    @login_required
     def get(self):
         logout_url = util.logout()
         self.redirect(logout_url)

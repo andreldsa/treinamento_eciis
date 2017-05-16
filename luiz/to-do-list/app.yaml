@@ -9,10 +9,7 @@ handlers:
   static_files: app/index.html
   upload: app/index.html
 
-- url: /login
-  script: main.app
-
-- url: /logout
+- url: /(login|logout)
   script: main.app
 
 - url: /api.*
