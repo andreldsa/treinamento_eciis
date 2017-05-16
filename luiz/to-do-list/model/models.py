@@ -1,13 +1,6 @@
 #Luiz Fernando da Silva
-import md5
-
 from google.appengine.ext import ndb
-
-def gravatar_url(email):
-    email_lower = email.lower().strip()
-    hash_md5 = md5.md5(email_lower)
-    return "http://www.gravatar.com/avatar/%s.jpg" % hash_md5.hexdigest()
-
+from util import gravatar_url
 
 class Task(ndb.Model):
     name_task = ndb.StringProperty(required=True)
@@ -32,11 +25,15 @@ class User(ndb.Model):
     gravatar_url = ndb.StringProperty()
 
     @staticmethod
-    def get_by_email(email):
+    def get_or_insert_by_email(email):
         user = User.get_or_insert(email)
-        user.email = email
         user.gravatar_url = gravatar_url(email)
         user.put()
+        return user
+
+    @staticmethod
+    def get_by_email(email):
+        user = ndb.Key('User','luiz.silva@ccc.ufcg.edu.br').get()
         return user
 
     def get_tasks(self):

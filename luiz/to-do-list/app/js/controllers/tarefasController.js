@@ -5,6 +5,7 @@
         vm = this;
         vm.createdTasks = [];
         vm.tasks = [];
+        vm.enableProgress;
 
         vm.salvar = function(tarefa) {
             taskService.salvar(tarefa).then(function(response) {
@@ -12,23 +13,17 @@
                 vm.createdTasks.push(response.data);
 
             }, function(response) {
-                if (response.status == 401) {
-                    taskService.alertMessage();
-                }
             });
         };
 
         var load = function() {
-            taskService.enableProgress = true;
+            vm.enableProgress = true;
             
             taskService.buscarTodas().then(function(response) {
-                taskService.enableProgress = false;
+                vm.enableProgress = false;
                 vm.tasks= response.data;
 
             }, function(response) {
-                if (response.status == 401) {
-                    taskService.alertMessage();
-                }
             });
         };
 

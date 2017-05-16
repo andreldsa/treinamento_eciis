@@ -8,10 +8,6 @@
                 get: function() {return taskService.user;},
                 set: function(data) {taskService.user = data}
             },
-            enableProgress: {
-                get: function() {return taskService.enableProgress},
-                set: function(data) {taskService.enableProgress = data}
-            }
         });
     });
 })();

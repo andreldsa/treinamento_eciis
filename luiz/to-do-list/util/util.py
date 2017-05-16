@@ -1,8 +1,7 @@
 import json
-import logging
+import md5
 
 from google.appengine.api import users
-from models import User
 
 class AuthorizationExeption(Exception):
       def __init__(self, msg=None):
@@ -49,8 +48,7 @@ def logout():
   logout_url = users.create_logout_url('/')
   return logout_url
 
-def current_user():
-  user_email = users.get_current_user().email().lower()
-  user = User.get_by_email(user_email)
-
-  return user
+def gravatar_url(email):
+    email_lower = email.lower().strip()
+    hash_md5 = md5.md5(email_lower)
+    return "http://www.gravatar.com/avatar/%s.jpg" % hash_md5.hexdigest()
