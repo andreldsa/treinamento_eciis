@@ -17,6 +17,12 @@ class Usuario(ndb.Model):
 			self.keys_tarefas.remove(tarefaID)
 			ndb.Key(Tarefa, tarefaID).delete()
 
+		self.put()
+		tarefas_update = {
+			"tarefas": self.get_tarefas()
+		}
+		return tarefas_update
+
 	def get_tarefas(self):
 		tarefas = []
 
@@ -31,6 +37,15 @@ class Usuario(ndb.Model):
 				})
 
 		return tarefas
+
+	def get_data(self):
+		data = {
+			"email": self.key.id(),
+			"usuario": self.to_dict(),
+			"tarefas": self.get_tarefas()
+		}
+
+		return data
 
 class Tarefa(ndb.Model):
 	nome = ndb.StringProperty()
