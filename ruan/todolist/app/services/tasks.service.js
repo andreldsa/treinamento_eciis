@@ -22,13 +22,13 @@
         }
 
 
-        service.save = function save(listId, task) {
+        service.save = function save(listId, task, callback) {
             var url = '/api/lists/' + listId + '/task';
 
             $http.post(url, task)
                 .then(function success(response) {
-                    console.log(response)
-                }, function errorCallback(response) {
+                    callback(response)
+                }, function error(response) {
                     console.log(response)
                 });
         }

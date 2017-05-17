@@ -28,13 +28,14 @@
 
 
         function goBack() {
-            $state.go('list-details',{listId: listId});
+            $state.go('list-details',{listId: listId}, {reload:true});
         }
         
         
         vm.submit = function submit() {
-            TaskService.save(listId, vm.task);
-            $timeout(goBack(),100);
+            TaskService.save(listId, vm.task, function(info){
+                goBack();
+            });            
         };
         
     };

@@ -1,7 +1,12 @@
-<md-nav-bar md-selected-nav-item="currentNavItem"
+<md-nav-bar md-selected-nav-item="vm.currentNavItem"
     nav-bar-aria-label="navigation links">
-    <md-nav-item md-nav-sref="lists" name="lists" ui-sref-active="active">Lists</md-nav-item>
-    <md-nav-item md-nav-sref="list-form" name="list-form" ui-sref-active="active">New List</md-nav-item>
+    <md-nav-item md-nav-sref="home" name="home" ui-sref-active="active">Home</md-nav-item>
+    <md-nav-item md-nav-sref="lists" name="lists" ui-sref-active="active" 
+        ng-show="vm.userData">Lists</md-nav-item>
+    <md-nav-item md-nav-sref="list-form" name="list-form" ui-sref-active="active" 
+        ng-show="vm.userData">New List</md-nav-item>
+    <md-nav-item md-nav-href="{{vm.userData?'/logout':'/login'}}" name="{{vm.userData?'logout':'login'}}" 
+        ui-sref-active="active">{{vm.userData?'logout':'login'}}</md-nav-item>
 </md-nav-bar>
 
     

@@ -4,20 +4,29 @@
         .module('todolistApp')
         .component('header', {
             templateUrl: 'components/header/header.html',
-            controller: ['$state', HeaderController],
+            controller: ['$state', 'UserService', HeaderController],
             controllerAs: 'vm'
         });
 
-    function HeaderController($state) {
+    function HeaderController($state, UserService) {
         var vm = this;
+        vm.userData;
+        vm.currentNavItem = $state.current.name; // TODO
+
 
         vm.$onInit = function onInit(){
-            vm.state = $state.current;
+            getUserData();
         };
 
-        vm.$onChange = function() {
-            vm.state = $state.current;
+        function getUserData() {
+            UserService.getUserData()
+                .then(function(response){
+                    vm.userData = response.data;
+                    console.log(vm.userData);
+                })
         }
+
+
     };
 
 })();
