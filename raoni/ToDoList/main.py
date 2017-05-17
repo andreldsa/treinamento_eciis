@@ -1,10 +1,7 @@
 import webapp2
-
 from model import User
 from model import Task
-
 import json
-
 from utils import *
 from google.appengine.api import users
 
@@ -19,17 +16,18 @@ def login_required(method):
         method(self, user_google, *args)
     return check_login
 
-
 class LoginHandler(webapp2.RequestHandler):
+
     def get(self):
         self.redirect(users.create_login_url('/'))
 
 
 class LogoutHandler(webapp2.RequestHandler):
+
     def get(self):
         user = users.get_current_user()
         if user:
-            self.redirect(users.create_logout_url(''))
+            self.redirect(users.create_logout_url('/'))
 
 
 class Handler(webapp2.RequestHandler):
@@ -64,6 +62,7 @@ class Handler(webapp2.RequestHandler):
 
 
 class DeleteHandler(webapp2.RequestHandler):
+
     @login_required
     def delete(self, user_google, id):
         user_email = user_google.email()

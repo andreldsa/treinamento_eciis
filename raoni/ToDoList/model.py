@@ -10,6 +10,3 @@ class Task(ndb.Model):
 class User(ndb.Model):
     tasks = ndb.KeyProperty(kind='Task', repeated=True)
     email = ndb.StringProperty(required=True)
-
-
-

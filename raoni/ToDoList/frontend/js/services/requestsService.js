@@ -1,8 +1,3 @@
-/**
- * Created by raoni on 09/05/17.
- */
-
-
 (function(){
 angular.module('todoList').service('requestService', function($http){
     var service = this;
@@ -17,7 +12,6 @@ angular.module('todoList').service('requestService', function($http){
 
     service.putTask = function (data) {
         return $http.post('/api/tasks', data);
-
     };
 
     service.deleteTasks = function(id) {
