@@ -4,6 +4,7 @@ from model import Task
 import json
 from utils import *
 from google.appengine.api import users
+import datetime
 
 def login_required(method):
     def check_login(self, *args):
@@ -54,6 +55,8 @@ class Handler(webapp2.RequestHandler):
         task = Task()
         task.name = data['name']
         task.description = data['description']
+        deadline = data.get('deadline').split('/')
+        task.deadline = datetime.date(int(deadline[0]), int(deadline[1]), int(deadline[2]))
         task_key = task.put()
         user.tasks.append(task_key)
         user.put()

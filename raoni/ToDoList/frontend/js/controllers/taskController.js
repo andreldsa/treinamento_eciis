@@ -12,12 +12,14 @@ var vm;
         vm.tasks = [];
         vm.task_name = '';
         vm.task_description = '';
+        vm.task_deadline = '';
 
 
-        vm.createTask = function(name, description){
-          task = new Task({name: name, description: description});
+        vm.createTask = function(name, description, deadline){
+          task = new Task({name: name, description: description, deadline: deadline});
           vm.task_name = '';
           vm.task_description = '';
+          vm.task_deadline = '';
           vm.putTask(task);
         };
 

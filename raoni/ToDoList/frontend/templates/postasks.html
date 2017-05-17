@@ -9,9 +9,13 @@
             <label>Descrição da Tarefa</label>
             <input ng-model="vm.task_description">
         </md-input-container>
+        <md-input-container>
+            <label>Deadline da Tarefa</label>
+            <input ng-model="vm.task_deadline">
+        </md-input-container>
 
         <md-card-actions layout="row" layout-align="end center">
-            <md-button class="md-raised md-primary" ng-click="vm.createTask(vm.task_name, vm.task_description)">Salvar</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.createTask(vm.task_name, vm.task_description, vm.task_deadline)">Salvar</md-button>
         </md-card-actions>
     </md-card>
 </md-content>
