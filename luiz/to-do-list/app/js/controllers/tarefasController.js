@@ -18,11 +18,16 @@
 
         vm.deletar = function(task_id) {
             console.log(task_id);
-            //taskService.deletar(task_id).then(function(response) {
-                //success   
-            //}, function(response) {
-                //err
-            //});
+            vm.createdTasks.splice(-1,1);
+            taskService.deletar(task_id).then(function(response) {
+                //success
+                var index = vm.tasks.indexOf(response.data);
+                vm.tasks.splice(index,1);
+
+                index = vm.createdTasks.indexOf(response.data);
+                vm.createdTasks.splice(index,1);
+            }, function(response) {
+            });
         };
 
         var load = function() {

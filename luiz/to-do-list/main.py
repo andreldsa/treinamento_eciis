@@ -17,7 +17,6 @@ def json_response(func):
     return params
 
 class BaseHandler(webapp2.RequestHandler):
-    """
     @json_response
     def handle_exception(self, exception, debug):
         if isinstance(exception, util.AuthorizationExeption):
@@ -26,7 +25,6 @@ class BaseHandler(webapp2.RequestHandler):
         else:
             logging.error(str(exception))
             self.response.write("oops! %s\n" % str(exception))
-    """
 
 class TasksHandler(BaseHandler):
     @login_required
@@ -50,10 +48,11 @@ class TasksHandler(BaseHandler):
         self.response.write(util.data2json(task_created).encode('utf-8'))
 
 class TaskHandler(BaseHandler):
-    #@login_required
+    @login_required
     @json_response
     def delete(self, task_id):
-        task_deleted = models.User.del_task(int(task_id), "luiz.silva@ccc.ufcg.edu.br")
+        user_email = util.current_user_email()
+        task_deleted = models.User.del_task(int(task_id), user_email)
         self.response.write(util.data2json(task_deleted).encode('utf-8'))
 
 class UserHandler(BaseHandler):

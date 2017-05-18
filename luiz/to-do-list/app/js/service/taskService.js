@@ -3,6 +3,7 @@
     app.service('taskService', function($http){
         var model = this;
         var TODO_URI = '/api/todo';
+        var TASK_URI = '/api/task';
         var _user;
         Object.defineProperties(model, {
             user: {
@@ -20,7 +21,7 @@
         };
 
         model.deletar = function(tarefa_id) {
-            return $http.delete(TODO_URI + tarefa_id);
+            return $http.delete(TASK_URI + '/' + tarefa_id);
         };
 
         var load = function() {

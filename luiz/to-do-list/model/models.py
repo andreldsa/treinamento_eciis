@@ -16,7 +16,6 @@ class Task(ndb.Model):
     
     @staticmethod
     def format_task(task):
-        print task
         task_dict = task.to_dict()
         task_dict['id'] = task.key.integer_id()
         return task_dict
@@ -79,7 +78,7 @@ class User(ndb.Model):
     def del_task(task_id, user_id):
         task_key = ndb.Key('Task', task_id)
         user = User.get_by_id(user_id)
-        task_dict = Task.format_task(task.get())
+        task_dict = Task.format_task(task_key.get())
 
         task_key.delete()
         user.tasks.remove(task_key)
