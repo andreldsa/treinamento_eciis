@@ -6,16 +6,16 @@
     
     function routerConfig($stateProvider, $urlRouterProvider) {        
         
-        $urlRouterProvider.otherwise('/lists');        
+        $urlRouterProvider.otherwise('/home');        
         
         $stateProvider
+            .state('home', {
+                url: '/home',
+                component: 'home'
+            })
             .state('lists', {
                 url: '/lists',
                 component: 'lists'
-            })
-            .state('task-card', {
-                url: '/taskCard',
-                component: 'taskCard'
             })
             .state('list-details', {
                 url: '/list/{listId:int}',
