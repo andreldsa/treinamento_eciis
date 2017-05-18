@@ -34,6 +34,15 @@
             })
             .state('app.home', {
                 url: '/'
+            })
+            .state('app.view_task', {
+                url: '/view/task',
+                views: {
+                    'view_task@': {
+                        templateUrl: 'templates/task.html',
+                        controller: 'taskController as vm'
+                    }
+                }
             });
     });
 })();

@@ -30,7 +30,7 @@ class User(ndb.Model):
         user.put()
 
     @staticmethod
-    def loadTask(user_google):
+    def loadTasks(user_google):
         user_email = user_google.email().lower()
         user = User.get_or_insert(user_email, email=user_email)
         user_tasks = []
@@ -55,3 +55,14 @@ class User(ndb.Model):
                 finded = True
                 break
         return finded
+
+    @staticmethod
+    def loadTask(user_google, id):
+        user_email = user_google.email().lower()
+        user = User.get_or_insert(user_email, email=user_email)
+        for task in user.tasks:
+            if task.id() == int(id):
+                task_to_return = task.get().to_dict()
+                task_to_return['id'] = int(id)
+                return task_to_return
+        return None

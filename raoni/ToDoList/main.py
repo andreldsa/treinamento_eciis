@@ -31,11 +31,11 @@ class LogoutHandler(webapp2.RequestHandler):
             self.redirect(users.create_logout_url('/'))
 
 
-class Handler(webapp2.RequestHandler):
+class MultiDoHandler(webapp2.RequestHandler):
 
     @login_required
     def get(self, user_google):
-        user_tasks = User.loadTask(user_google)
+        user_tasks = User.loadTasks(user_google)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(user_tasks).encode('utf-8'))
 
@@ -47,7 +47,7 @@ class Handler(webapp2.RequestHandler):
         self.response.set_status(201)
 
 
-class DeleteHandler(webapp2.RequestHandler):
+class SingleDoHandler(webapp2.RequestHandler):
 
     @login_required
     def delete(self, user_google, id):
@@ -58,9 +58,21 @@ class DeleteHandler(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'application/json'
             self.response.set_status(204)
 
+    @login_required
+    def get(self, user_google, id):
+        if  User.loadTask(user_google, id) == None:
+            self.response.set_status(404)
+        else:
+            self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            self.response.write(data2json(User.loadTask(user_google, id)).encode('utf-8'))
+
+    @login_required
+    def post(self, user_google, id):
+        pass
+
 app = webapp2.WSGIApplication([
-    ('/api/tasks', Handler),
-    ('/api/delete/(\d+)', DeleteHandler),
+    ('/api/multido', MultiDoHandler),
+    ('/api/singledo/(\d+)', SingleDoHandler),
     ('/api/login', LoginHandler),
     ('/api/logout', LogoutHandler)
 

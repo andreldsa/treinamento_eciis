@@ -4,12 +4,13 @@ var vm;
         $mdIconProvider.fontSet('md', 'material-icons');
     });
 
-    angular.module('todoList').controller('taskController', function (requestService) {
+    angular.module('todoList').controller('taskController', function (requestService, $state) {
         vm = this;
         vm.tasks = [];
         vm.task_name = '';
         vm.task_description = '';
         vm.task_deadline = '';
+        vm.view_task = requestService.view_task;
 
         vm.createTask = function(name, description, deadline){
           task = new Task({name: name, description: description, deadline: deadline});
@@ -26,6 +27,13 @@ var vm;
                 if( err.status == 401 ){
                    requestService.login();
                 };
+            });
+        };
+
+        vm.viewTask = function(id) {
+            requestService.fetchTask(id).then(function(){
+                $state.go('app.view_task');
+            }, function(err){
             });
         };
 

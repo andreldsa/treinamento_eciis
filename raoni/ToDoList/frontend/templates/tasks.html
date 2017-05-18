@@ -5,10 +5,9 @@
         <md-list-item class="md-2-line" ng-repeat="task in vm.tasks | orderBy:'name'">
             <div class="md-list-item-text">
              <h2>{{task.name}}</h2>
-             <h4>{{task.description}}</h4>
-             <h4>{{task.deadline}}</h4>
             </div>
             <md-button class="md-raised md-primary" ng-click="vm.deleteTasks(task.id)">Deletar</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.viewTask(task.id)">Visualizar</md-button>
         </md-list-item>
     </md-list>
 </div>
