@@ -19,4 +19,3 @@ class Task(ndb.Model):
     priority = ndb.StringProperty(required=True, choices=set(['high','medium','low']))
     done = ndb.BooleanProperty(default=False)
     list = ndb.KeyProperty(kind='List', required=True)
-    
