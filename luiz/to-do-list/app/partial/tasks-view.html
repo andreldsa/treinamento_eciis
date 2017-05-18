@@ -7,6 +7,12 @@
                     <h3>{{task.name_task}}</h3>
                     <p>{{task.date | date}}</p>
                 </div>
+                <md-button class="md-secondary md-icon-button" ng-click="null" aria-label="call">
+                    <md-icon md-font-icon="md" aria-label="">edit</md-icon>
+                </md-button>
+                <md-button class="md-secondary md-icon-button" ng-click="ctrl.deletar(task.id)" aria-label="call">
+                    <md-icon md-font-icon="md" aria-label="">delete</md-icon>
+                </md-button>
             </md-list-item>
         </md-list>
     </md-card>

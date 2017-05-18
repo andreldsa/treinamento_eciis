@@ -19,6 +19,10 @@
             return $http.post(TODO_URI, tarefa);
         };
 
+        model.deletar = function(tarefa_id) {
+            return $http.delete(TODO_URI + tarefa_id);
+        };
+
         var load = function() {
             $http.get('/api').then(function(response){
                 _user = response.data;

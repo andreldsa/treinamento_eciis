@@ -16,6 +16,15 @@
             });
         };
 
+        vm.deletar = function(task_id) {
+            console.log(task_id);
+            //taskService.deletar(task_id).then(function(response) {
+                //success   
+            //}, function(response) {
+                //err
+            //});
+        };
+
         var load = function() {
             vm.enableProgress = true;
             
