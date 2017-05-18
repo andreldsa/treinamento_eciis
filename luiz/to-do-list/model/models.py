@@ -83,7 +83,7 @@ class User(ndb.Model):
         task_key.delete()
         #Checks whether the task exists in the list, 
         #otherwise it generates an exception
-        user.tasks.index(task_key)
-        user.tasks.remove(task_key)
+        task_index = user.tasks.index(task_key)
+        user.tasks.pop(task_index)
         user.put()
         return task_dict
