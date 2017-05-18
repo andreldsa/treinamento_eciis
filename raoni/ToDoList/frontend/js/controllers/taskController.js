@@ -1,6 +1,3 @@
-/**
- * Created by raoni on 08/05/17.
- */
 var vm;
 (function() {
     angular.module('todoList').config(function($mdIconProvider){

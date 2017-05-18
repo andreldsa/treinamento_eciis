@@ -1,6 +1,13 @@
 (function(){
 angular.module('todoList').service('requestService', function($http){
     var service = this;
+    var _user;
+    Object.defineProperties(service, {
+        user: {
+            get: function () { return _user; },
+            set: function (data) { _user = data; }
+        }
+    })
 
     service.fetchTasks = function () {
         return $http.get('/api/tasks');

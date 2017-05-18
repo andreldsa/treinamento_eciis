@@ -1,25 +1,39 @@
-/**
- * Created by raoni on 08/05/17.
- */
-(function(){
-    angular
-        .module('todoList', ['ngMaterial', 'ui.router'])
-        .config(function($urlRouterProvider, $stateProvider){
-            $urlRouterProvider.otherwise('/');
+(function () {
+    var toDo = angular.module('todoList', ['ngMaterial', 'ui.router']);
 
-            $stateProvider
-                .state('view_tasks', {
-                    url: '/view/tasks',
-                    templateUrl: 'templates/tasks.html',
-                    controller: 'taskController as vm'
-                })
-                .state('post_tasks', {
-                    url: '/post/tasks',
-                    templateUrl: 'templates/postasks.html',
-                    controller: 'taskController as vm'
-                })
-                .state('home', {
-                    url: '/'
-                });
-        });
+    toDo.config(function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise('/');
+
+        $stateProvider
+            .state('app', {
+                abstract: true,
+                views: {
+                    'header': {
+                        templateUrl: 'templates/header.html',
+                        controller: 'designCtrl as ctrl'
+                    }
+                }
+            })
+            .state('app.view_tasks', {
+                url: '/view/tasks',
+                views: {
+                    'view_tasks@': {
+                        templateUrl: 'templates/tasks.html',
+                        controller: 'taskController as vm'
+                    }
+                }
+            })
+            .state('app.post_tasks', {
+                url: '/post_tasks',
+                views: {
+                    'post_tasks@': {
+                        templateUrl: 'templates/postasks.html',
+                        controller: 'taskController as vm'
+                    }
+                }
+            })
+            .state('app.home', {
+                url: '/'
+            });
+    });
 })();
