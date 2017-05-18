@@ -17,8 +17,6 @@
         };
 
         vm.deletar = function(task_id) {
-            console.log(task_id);
-            vm.createdTasks.splice(-1,1);
             taskService.deletar(task_id).then(function(response) {
                 //success
                 var index = vm.tasks.indexOf(response.data);
