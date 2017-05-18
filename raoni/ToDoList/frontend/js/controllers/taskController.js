@@ -11,7 +11,6 @@ var vm;
         vm.task_description = '';
         vm.task_deadline = '';
 
-
         vm.createTask = function(name, description, deadline){
           task = new Task({name: name, description: description, deadline: deadline});
           vm.task_name = '';

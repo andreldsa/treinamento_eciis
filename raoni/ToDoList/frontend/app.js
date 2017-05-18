@@ -24,7 +24,7 @@
                 }
             })
             .state('app.post_tasks', {
-                url: '/post_tasks',
+                url: '/post/tasks',
                 views: {
                     'post_tasks@': {
                         templateUrl: 'templates/postasks.html',
