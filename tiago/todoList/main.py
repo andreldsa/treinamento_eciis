@@ -58,9 +58,20 @@ class UsuarioHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(tarefas_update).encode('utf-8')) 
 
+class DeadlineHandler(BaseHandler):
+    def get(self):
+        tarefas = Tarefa.query()
+        for tarefa in tarefas:
+            tarefa.verify_deadline()
+
+        usuarios = Usuario.query()
+        for usuario in usuarios:
+            usuario.send_email()
+
 app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/api', MainHandler),
     ('/api/usuario/(.*)', UsuarioHandler),
+    ('/api/deadline', DeadlineHandler),
 ], debug=True)

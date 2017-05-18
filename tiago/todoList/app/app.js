@@ -1,5 +1,4 @@
 "use strict";
-var vm;
 (function() {
   var app = angular.module('app', ['ngMaterial', 'ui.router']);
   
@@ -45,7 +44,7 @@ var vm;
   });
 
   app.controller('AppCtrl', function AppCtrl(UserService) {
-        vm = this;
+        var vm = this;
         vm.save_user = UserService.save;
         Object.defineProperties(vm, {
             user: {
