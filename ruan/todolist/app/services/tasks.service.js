@@ -22,7 +22,7 @@
         }
 
 
-        service.save = function save(listId, task, callback) {
+        service.save = function save(listId, task) {
             var url = '/api/lists/' + listId + '/task';
 
             var promise = $http.post(url, task)

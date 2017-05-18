@@ -45,13 +45,9 @@ class UserHandler(BaseHandler):
             user.email = user.key.id()
             user.put()
 
-        user_data = {
-            "email": user.email,
-            "user": user.to_dict(),
-            "logout_url": "http://%s/logout" % self.request.host
-        }
+        user = user.to_dict()
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(user_data).encode('utf-8'))
+        self.response.write(data2json(user).encode('utf-8'))
         
 
 

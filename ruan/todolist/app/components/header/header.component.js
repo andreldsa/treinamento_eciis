@@ -10,23 +10,13 @@
 
     function HeaderController($state, UserService) {
         var vm = this;
-        vm.userData;
-        vm.currentNavItem = $state.current.name; // TODO
+        vm.currentNavItem = $state.current.name;
 
-
-        vm.$onInit = function onInit(){
-            getUserData();
-        };
-
-
-        function getUserData() {
-            UserService.getUserData()
-                .then(function(response){
-                    vm.userData = response.data;
-                }, function error(response) {
-                    console.log(response);
-                })
-        };
+        Object.defineProperties(vm, {
+            user: {
+                get: function() { return UserService.user; }
+            }
+        })
     };
 
 })();

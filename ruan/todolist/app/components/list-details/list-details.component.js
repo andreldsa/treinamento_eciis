@@ -41,6 +41,7 @@
                     });
         };
 
+
         vm.changeDone = function changeDone(task) {
             task.done = !task.done;
             // put

@@ -10,18 +10,24 @@
 
     function ListsController(ListService) {
         var vm = this;
-        vm.lists;
 
-        vm.$onInit = function onInit(){
-            getLists();
-        };
+        Object.defineProperties(vm, {
+            lists: {
+                get: function() { return ListService.lists; }
+            }
+        })
 
-        function getLists() {
-          ListService.getLists()
-            .then(function(response) {
-                vm.lists = response.data;
-            });
-        };
+        // vm.$onInit = function onInit(){
+        //     getLists();
+        // };
+
+        // function getLists() {
+        //   ListService.getLists()
+        //     .then(function(response) {
+        //         vm.lists = response.data;
+        //     });
+        // };
+        
     };
 
 })();

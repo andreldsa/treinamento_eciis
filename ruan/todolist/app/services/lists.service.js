@@ -6,10 +6,21 @@
 
     function ListService($http) {
         var service = this;
-        
+        var _lists = [];
+
+        Object.defineProperties(service, {
+            lists: {
+                get: function() { return _lists; }
+            }
+        })        
 
         service.getLists = function getLists() {
-            return  $http.get('/api/lists');
+            $http.get('/api/lists')
+                .then(function(response) {
+                    _lists = response.data;
+                }, function(err) {
+                    console.error(err);
+                });
         };
 
 
@@ -25,11 +36,14 @@
 
         service.save = function save(newList) {
             $http.post('/api/list', newList)
-                .then(function success(response) {
+                .then(function(response) {
                     console.log(response);
-                }, function errorCallback(response) {
-                    console.log(response);
+                }, function(err) {
+                    console.error(err);
                 });
         }
+
+
+        service.getLists();
     }
 })();

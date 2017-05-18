@@ -47,3 +47,6 @@ def login_required(method):
         method(self, user, *args)
     
     return check_login
+
+
+# TODO create json_response decorator
