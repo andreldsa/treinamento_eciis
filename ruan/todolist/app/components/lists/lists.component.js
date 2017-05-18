@@ -20,8 +20,8 @@
           ListService.getLists()
             .then(function(response) {
                 vm.lists = response.data;
-            })
-        }
+            });
+        };
     };
 
 })();

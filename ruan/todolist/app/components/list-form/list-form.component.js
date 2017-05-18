@@ -15,6 +15,7 @@
             resetForm();
         };
 
+
         function resetForm() {
             vm.list = {
                 "title": "",
@@ -28,7 +29,5 @@
             ListService.save(vm.list);
             resetForm();
         };
-       
     };
-
 })();

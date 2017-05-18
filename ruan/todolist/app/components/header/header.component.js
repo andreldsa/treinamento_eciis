@@ -18,15 +18,15 @@
             getUserData();
         };
 
+
         function getUserData() {
             UserService.getUserData()
                 .then(function(response){
                     vm.userData = response.data;
-                    console.log(vm.userData);
+                }, function error(response) {
+                    console.log(response);
                 })
-        }
-
-
+        };
     };
 
 })();

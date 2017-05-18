@@ -20,10 +20,10 @@
             UserService.getUserData()
                 .then(function(response){
                     vm.userData = response.data;
-                })
-        }
-
-
+                }, function error(response) {
+                    console.log('Error:' + JSON.stringify(response));
+                });
+        };
     };
 
 })();

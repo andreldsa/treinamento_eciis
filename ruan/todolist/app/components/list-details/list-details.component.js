@@ -38,26 +38,22 @@
             TaskService.getTasksFromList(listId)
                     .then(function(response) {
                         vm.tasks = response.data;
-                    })
-        }
+                    });
+        };
 
         vm.changeDone = function changeDone(task) {
             task.done = !task.done;
             // put
-        }
+        };
 
 
         vm.editTask = function editTask(task) {
             console.log('edit');
-        }
+        };
 
 
         vm.deleteTask = function deleteTask(task) {
             console.log('delte');
-            
-        }
-
-
+        };
     };
-
 })();

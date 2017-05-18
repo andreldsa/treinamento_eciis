@@ -8,9 +8,7 @@
         var service = this;
 
         service.getUserData = function getUserData(listId) {
-            return $http.get('/api/users');
+            return $http.get('/api/users')
         };
-
-
     }
 })();

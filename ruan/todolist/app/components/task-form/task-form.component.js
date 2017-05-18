@@ -15,7 +15,7 @@
 
         vm.$onInit = function onInit() {
             resetForm();
-        }
+        };
 
 
         function resetForm() {
@@ -29,7 +29,7 @@
 
         function goBack() {
             $state.go('list-details',{listId: listId});
-        }
+        };
         
         
         vm.submit = function submit() {
