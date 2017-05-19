@@ -22,8 +22,10 @@ List.prototype.addTask = function(task) {
     this.tasks.push(task);
 }
 
-List.prototype.delTask = function(index) {
-    this.tasks.splice(index, 1);
+List.prototype.delTask = function(taskId) {
+    _.remove(this.tasks, function(task) {
+        return task == taskId;
+    });
 }
 
 

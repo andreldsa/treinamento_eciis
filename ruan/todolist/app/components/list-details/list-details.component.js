@@ -24,7 +24,8 @@
         var getList = function getList(){
             ListService.getList(listId)
                 .then(function(response) {
-                    vm.list = response.data;
+                    vm.list = new List(response.data);
+                    console.log(JSON.stringify(vm.list));
                 })          
         }
 
@@ -45,7 +46,7 @@
 
         vm.changeDone = function changeDone(task) {
             task.done = !task.done;
-            // put
+            console.log(task.done);
         };
 
 
@@ -54,8 +55,15 @@
         };
 
 
-        vm.deleteTask = function deleteTask(task) {
-            console.log('delete');
+        vm.deleteTask = function deleteTask(taskId) {
+            TaskService.deleteTask(vm.list.id, taskId)
+                .then(function(response) {
+                    _.remove(vm.tasks, function(task) {
+                        return task.id == response.data.id;
+                    });
+                }, function(err) {
+                    console.error(err);
+                });
         };
     };
 })();

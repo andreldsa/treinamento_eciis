@@ -55,7 +55,6 @@ class ListHandler(BaseHandler):
     # Get a List by id
     @login_required
     def get(self, user, listId):
-        #BaseHandler.verifyListId(self, user, listId)
         _list = List.get_by_id(int(listId))    
         _list = data2dict(_list)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'
@@ -99,7 +98,6 @@ class TaskCollectionHandler(BaseHandler):
     # Get all tasks from a list 
     @login_required
     def get(self, user, listId):
-        #BaseHandler.verifyListId(self, user, listId)
         _list = List.get_by_id(int(listId))
         # get all tasks from this list
         tasks = ndb.get_multi(_list.tasks)
@@ -110,11 +108,10 @@ class TaskCollectionHandler(BaseHandler):
 
 
 
-class ListTasksHandler(BaseHandler):
+class ListTaskHandler(BaseHandler):
     # Get a task from a list by id 
     @login_required
     def get(self, listId, taskId):
-        #BaseHandler.verifyTaskId(self, user, listId, taskId)
         task = Task.get_by_id(int(taskId))
         task = data2dict(task)
         self.response.headers['content-type'] = 'application/json; charset=utf-8'        
@@ -124,7 +121,6 @@ class ListTasksHandler(BaseHandler):
     # Add a new task to a list
     @login_required
     def post(self, user, listId):
-        #BaseHandler.verifyListId(self, user, listId)
         # get task data
         data = json.loads(self.request.body)
         _list = List.get_by_id(int(listId))
@@ -143,7 +139,14 @@ class ListTasksHandler(BaseHandler):
         self.response.set_status(201)
 
 
-    #TODO create delete method
+    @login_required
+    def delete(self, user, listId, taskId):
+        #TODO verify if user has this list and this task
+        task = Task.get_by_id(int(taskId))   
+        task.key.delete()
+        task = data2dict(task)
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'        
+        self.response.write(data2json(task).encode('utf-8'))  
     
 
 app = webapp2.WSGIApplication([
@@ -153,7 +156,7 @@ app = webapp2.WSGIApplication([
     ('/api/list', ListHandler),     
     ('/api/lists', ListCollectionHandler), 
     ('/api/lists/(\d+)', ListHandler), 
-    ('/api/lists/(\d+)/task', ListTasksHandler),
+    ('/api/lists/(\d+)/task', ListTaskHandler),
     ('/api/lists/(\d+)/tasks', TaskCollectionHandler), 
-    ('/api/lists/(\d+)/tasks/(\d+)', ListTasksHandler)
+    ('/api/lists/(\d+)/tasks/(\d+)', ListTaskHandler)
 ], debug=True)

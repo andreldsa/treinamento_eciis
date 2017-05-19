@@ -17,8 +17,8 @@
         };
 
 
-         service.deleteTask = function deleteTask(taskId) {
-            console.log("deleted: " + taskId);
+         service.deleteTask = function deleteTask(listId, taskId) {
+            return $http.delete('/api/lists/' + listId + '/tasks/' + taskId);
         }
 
 
