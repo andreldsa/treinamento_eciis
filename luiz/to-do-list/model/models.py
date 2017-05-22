@@ -12,7 +12,13 @@ class Task(ndb.Model):
         task = Task()
         task.name_task = name_task
         task.put()
-        return task.key
+        return task
+
+    @staticmethod
+    def format_task(task):
+        task_dict = task.to_dict()
+        task_dict['id'] = task.key.integer_id()
+        return task_dict
 
     @staticmethod
     def getAllTasks():
@@ -24,6 +30,17 @@ class User(ndb.Model):
     email = ndb.StringProperty()
     tasks = ndb.KeyProperty(kind='Task', repeated=True)
     gravatar_url = ndb.StringProperty()
+
+    @staticmethod
+    def add_task(name_task, user_email):
+        task = Task.createTask(name_task)
+        userData = User.get_by_email(user_email)
+        task_dict = Task.format_task(task)
+
+        userData.tasks.append(task.key)
+        userData.put()
+        return task_dict
+
 
     @staticmethod
     def get_or_insert_by_email(email):
@@ -39,7 +56,11 @@ class User(ndb.Model):
         return user
 
     def get_tasks(self):
-        return [task_key.get().to_dict() for task_key in self.tasks]
+        tasks = []
+        for task_key in self.tasks:
+            task_dict = Task.format_task(task_key.get())
+            tasks.append(task_dict)
+        return tasks
 
     @staticmethod
     def make_user(email):
@@ -51,3 +72,18 @@ class User(ndb.Model):
         }
 
         return user_data
+
+    @staticmethod
+    @ndb.transactional(xg=True)
+    def del_task(task_id, user_id):
+        task_key = ndb.Key('Task', task_id)
+        user = User.get_by_id(user_id)
+        task_dict = Task.format_task(task_key.get())
+
+        task_key.delete()
+        #Checks whether the task exists in the list,
+        #otherwise it generates an exception
+        task_index = user.tasks.index(task_key)
+        user.tasks.pop(task_index)
+        user.put()
+        return task_dict

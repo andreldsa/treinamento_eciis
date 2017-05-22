@@ -5,6 +5,7 @@
             templateUrl: "partial/tasks-view.html",
             restrict: "E",
             scope: {
+                ctrl: "=",
                 tasks: "="
             }
         };
