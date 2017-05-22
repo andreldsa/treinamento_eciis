@@ -102,7 +102,7 @@ class Operation(object):
         self.__subclass = sub_class
 
     def aply_patch(self, path, obj, entity_class, value=None):
-        """Applie operation to received path."""
+        """Apply operation to received path."""
         path_list = path[1:].split('/')
         final_path = path_list.pop(-1)
         obj = Operation.go_through_path(self, obj, path_list)
