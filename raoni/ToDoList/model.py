@@ -1,10 +1,15 @@
 from google.appengine.ext import ndb
 import datetime
+import time
 
 class Task(ndb.Model):
     name = ndb.StringProperty(required=True)
-    deadline = ndb.DateProperty()
+    deadline = ndb.DateProperty(required = True)
     description = ndb.StringProperty(required=True)
+    state = ndb.StringProperty(choices=set([
+        'in progress',
+        'out of date'
+    ]), default='in progress')
 
     @staticmethod
     def createTask(data):
@@ -13,8 +18,31 @@ class Task(ndb.Model):
         task.description = data['description']
         deadline = data.get('deadline').split('/')
         task.deadline = datetime.date(int(deadline[0]), int(deadline[1]), int(deadline[2]))
+        Task.setState(task)
         task_key = task.put()
         return task_key
+
+    @staticmethod
+    def setState(task):
+        current_date = time.strftime("%x")
+        task_date = str(task.deadline)
+        if int(task_date[2:4]) > int(current_date[6:8]):
+            task.state = 'in progress'
+        elif int(task_date[2:4]) < int(current_date[6:8]):
+            task.state = 'out of date'
+        elif int(task_date[2:4]) == int(current_date[6:8]):
+            if int(task_date[5:7]) > int(current_date[0:2]):
+                task.state = 'in progress'
+            elif int(task_date[5:7]) < int(current_date[0:2]):
+                task.state = 'out of date'
+            elif int(task_date[5:7]) == int(current_date[0:2]):
+                if int(task_date[8:10]) > int(current_date[3:5]):
+                    task.state = 'in progress'
+                elif int(task_date[8:10]) < int(current_date[3:5]):
+                    task.state = 'out of date'
+                else:
+                    task.state = 'in progress'
+        task.put()
 
 
 class User(ndb.Model):
@@ -62,7 +90,9 @@ class User(ndb.Model):
         user = User.get_or_insert(user_email, email=user_email)
         for task in user.tasks:
             if task.id() == int(id):
-                task_to_return = task.get().to_dict()
+                task_to_return = task.get()
+                Task.setState(task_to_return)
+                task_to_return = task_to_return.to_dict()
                 task_to_return['id'] = int(id)
                 return task_to_return
         return None

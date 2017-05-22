@@ -18,7 +18,7 @@ angular.module('todoList').service('requestService', function($http){
     service.fetchTask = function(id){
         service.view_task = {};
         var promise = $http.get('/api/singledo/' + id).then(function(response){
-            task = new Task({name: response.data['name'], description: response.data['description'], deadline: response.data['deadline']});
+            task = new Task({name: response.data['name'], description: response.data['description'], deadline: response.data['deadline'], state: response.data['state']});
             service.view_task = task;
         });
         return promise

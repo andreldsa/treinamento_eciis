@@ -33,7 +33,12 @@
                 }
             })
             .state('app.home', {
-                url: '/'
+                url: '/',
+                views: {
+                    'home@':{
+                        templateUrl:'templates/home.html'
+                    }
+                }
             })
             .state('app.view_task', {
                 url: '/view/task',

@@ -26,6 +26,10 @@ var vm;
             $state.go('app.edit_task');
         };
 
+        vm.goTo = function(state){
+            $state.go(state)
+        }
+
         vm.changeTask = function(task){
           requestService.changeTask(task).then(function(){
               vm.edit_task = {};
