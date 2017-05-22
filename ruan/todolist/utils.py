@@ -49,4 +49,9 @@ def login_required(method):
     return check_login
 
 
-# TODO create json_response decorator
+def json_response(method):
+    def set_header(self, *args):
+        self.response.headers['content-type'] = 'application/json; charset=utf-8'
+        method(self, *args)
+    
+    return set_header

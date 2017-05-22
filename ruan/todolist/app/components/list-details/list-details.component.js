@@ -25,7 +25,6 @@
             ListService.getList(listId)
                 .then(function(response) {
                     vm.list = new List(response.data);
-                    console.log(JSON.stringify(vm.list));
                 })          
         }
 
@@ -37,9 +36,9 @@
 
         var getTasks = function getTasks() {
             TaskService.getTasksFromList(listId)
-                    .then(function(response) {
-                        vm.tasks = response.data;
-                    });
+                .then(function(response) {
+                    vm.tasks = response.data;
+                });
         };
 
 

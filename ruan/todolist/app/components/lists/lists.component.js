@@ -15,7 +15,12 @@
             lists: {
                 get: function() { return ListService.lists; }
             }
-        })        
+        })     
+
+
+        vm.deleteList = function deleteList(listId) {
+            ListService.deleteList(listId);
+        }   
     };
 
 })();

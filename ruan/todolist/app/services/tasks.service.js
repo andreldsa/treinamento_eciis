@@ -4,6 +4,7 @@
         .module('todolistApp')
         .service('TaskService', ['$http', TaskService]);
 
+
     function TaskService($http) {
         var service = this;
 
@@ -24,12 +25,11 @@
 
         service.save = function save(listId, task) {
             var url = '/api/lists/' + listId + '/task';
-
             var promise = $http.post(url, task)
-                            .then(function success(response) {
-                                console.log(response)                                
-                            }, function error(response) {
-                                console.log(response)
+                            .then(function(response) {
+                                console.log(response);                            
+                            }, function(err) {
+                                console.error(err);
                             });
 
             return promise;

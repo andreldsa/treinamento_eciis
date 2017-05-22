@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     angular
         .module('todolistApp')
@@ -10,47 +10,51 @@
 
         Object.defineProperties(service, {
             lists: {
-                get: function() { return _lists; }
+                get: function () {
+                    return _lists;
+                }
             }
-        })        
+        })
 
 
         service.getLists = function getLists() {
             $http.get('/api/lists')
-                .then(function(response) {
-                   dataCollection = response.data;
-                   _lists = _.map(dataCollection, createList);
-                }, function(err) {
+                .then(function (response) {
+                    dataCollection = response.data;
+                    _lists = _.map(dataCollection, function (data) {
+                        return new List(data);
+                    });
+                }, function (err) {
                     console.error(err);
                 });
         };
 
 
-        function createList(data) {
-            return new List(data);
-        }
-        
-
         service.getList = function getList(listId) {
-            return $http.get('/api/lists/'+ listId);
+            return $http.get('/api/lists/' + listId);
         }
 
 
         service.deleteList = function deleteList(listId) {
-            console.log("deleted: " + listId);
+            $http.delete('/api/lists/' + listId)
+                .then(function (response) {
+                    _.remove(service.lists, function (list) {
+                        return list.id == listId;
+                    });
+                });
         }
 
 
         service.save = function save(newList) {
             $http.post('/api/list', newList)
-                .then(function(response) {
+                .then(function (response) {
                     service.lists.push(response.data);
-                }, function(err) {
+                }, function (err) {
                     console.error(err);
                 });
         }
 
 
-        service.getLists();  
+        service.getLists();
     }
 })();
