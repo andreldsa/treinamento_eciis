@@ -15,7 +15,7 @@ def _assert(condition, msg):
         raise PatchException(msg)
 
 
-def createEntity(entity_class, properties_values):
+def create_entity(entity_class, properties_values):
     """Create new entity of class specified."""
     entity = entity_class()
 
@@ -29,7 +29,7 @@ def verify_entity(func):
     def params(self, value, entity_class, *args):
         """Receive params of function."""
         if isinstance(value, dict):
-            value = createEntity(entity_class, value)
+            value = create_entity(entity_class, value)
         return func(self, value, entity_class, *args)
     return params
 
@@ -110,7 +110,7 @@ class Operation(object):
                 int(final_path),
             )
         else:
-            self.__subclass.operation_in_atribute(
+            self.__subclass.operation_in_attribute(
                 self,
                 value,
                 entity_class,
@@ -123,20 +123,20 @@ class Operation(object):
         if len(path_list) == 0:
             return obj
 
-        atribute_path = path_list.pop(0)
+        attribute_path = path_list.pop(0)
         _assert(
-            not hasattr(obj, atribute_path),
-            "Atribute %s not found" % atribute_path
+            not hasattr(obj, attribute_path),
+            "Attribute %s not found" % attribute_path
         )
-        atribute = getattr(obj, atribute_path)
+        attribute = getattr(obj, attribute_path)
 
-        return Operation.go_through_path(self, atribute, path_list)
+        return Operation.go_through_path(self, attribute, path_list)
 
-    def operation_in_list(self, value, entity_class, atribute_list, index):
+    def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation in list."""
         raise PatchException("Operation not implemented")
 
-    def operation_in_atribute(self, value, entity_class, obj, atribute):
+    def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation in attribute."""
         raise PatchException("Operation not implemented")
 
@@ -149,14 +149,14 @@ class Add(Operation):
         Operation.__init__(self, Add)
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, atribute_list, index):
+    def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation add in list."""
-        atribute_list.insert(index, value)
+        attribute_list.insert(index, value)
 
     @verify_entity
-    def operation_in_atribute(self, value, entity_class, obj, atribute):
+    def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation add in list."""
-        obj.__setattr__(atribute, value)
+        obj.__setattr__(attribute, value)
 
 
 class Remove(Operation):
@@ -166,14 +166,17 @@ class Remove(Operation):
         """Constructor of class Remove."""
         Operation.__init__(self, Remove)
 
-    def operation_in_list(self, value, entity_class, atribute_list, index):
+    def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation remove in list."""
-        atribute_list.pop(index)
+        attribute_list.pop(index)
 
-    def operation_in_atribute(self, value, entity_class, obj, atribute):
+    def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation remove in list."""
-        _assert(not hasattr(obj, atribute), "Atribute %s not found" % atribute)
-        obj.__delattr__(atribute)
+        _assert(
+            not hasattr(obj, attribute),
+            "Attribute %s not found" % attribute
+        )
+        obj.__delattr__(attribute)
 
 
 class Replace(Operation):
@@ -184,17 +187,20 @@ class Replace(Operation):
         Operation.__init__(self, Replace)
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, atribute_list, index):
+    def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation replace in list."""
         # TODO vetificar problema de remocao do ultimo indice
-        atribute_list.insert(index, value)
-        atribute_list.pop(index)
+        attribute_list.insert(index, value)
+        attribute_list.pop(index)
 
     @verify_entity
-    def operation_in_atribute(self, value, entity_class, obj, atribute):
+    def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation replace in list."""
-        _assert(not hasattr(obj, atribute), "Atribute %s not found" % atribute)
-        obj.__setattr__(atribute, value)
+        _assert(
+            not hasattr(obj, attribute),
+            "Attribute %s not found" % attribute
+        )
+        obj.__setattr__(attribute, value)
 
 
 class Test(Operation):
@@ -205,14 +211,14 @@ class Test(Operation):
         Operation.__init__(self, Test)
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, atribute_list, index):
+    def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation test in list."""
-        _assert(atribute_list[index] != value, "Test fail, object %s "
+        _assert(attribute_list[index] != value, "Test fail, object %s "
                 "does not correspond to what was passed %s"
-                % (atribute_list[index], value))
+                % (attribute_list[index], value))
 
     @verify_entity
-    def operation_in_atribute(self, value, entity_class, obj, atribute):
+    def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation test in list."""
-        _assert(getattr(obj, atribute) != value, "Test fail, object "
-                "%s does not correspond to what was passed %s" % (getattr(obj, atribute), value))
+        _assert(getattr(obj, attribute) != value, "Test fail, object "
+                "%s does not correspond to what was passed %s" % (getattr(obj, attribute), value))
