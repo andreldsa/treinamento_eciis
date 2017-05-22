@@ -66,3 +66,30 @@ class User(ndb.Model):
                 task_to_return['id'] = int(id)
                 return task_to_return
         return None
+
+    @staticmethod
+    def editTask(user_google, id, data):
+        user = User.get_by_id(user_google.email().lower())
+        task_to_edit = None
+        for task in user.tasks:
+            if task.id() == int(id):
+                task_to_edit = task.get()
+        if task_to_edit:
+            field = data['field']
+            value = data['value']
+            User.setField(task_to_edit, field, value).put()
+            user.put()
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def setField(task, field, value):
+        if field == 'name':
+            task.name = value
+        elif field == 'deadline':
+            deadline = value.split('/')
+            task.deadline = datetime.date(int(deadline[0]), int(deadline[1]), int(deadline[2]))
+        elif field == 'description':
+            task.description = value
+        return task

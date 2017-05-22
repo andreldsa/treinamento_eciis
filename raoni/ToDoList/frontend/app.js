@@ -43,6 +43,15 @@
                         controller: 'taskController as vm'
                     }
                 }
+            })
+            .state('app.edit_task', {
+                url: '/edit/task',
+                views: {
+                    'edit_task@': {
+                        templateUrl: 'templates/editasks.html',
+                        controller: 'taskController as vm'
+                    }
+                }
             });
     });
 })();

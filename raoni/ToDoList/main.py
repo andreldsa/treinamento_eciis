@@ -68,7 +68,12 @@ class SingleDoHandler(webapp2.RequestHandler):
 
     @login_required
     def post(self, user_google, id):
-        pass
+        data = json.loads(self.request.body)
+        if User.editTask(user_google, id, data):
+            self.response.set_status(201)
+        else:
+            self.response.set_status(404)
+
 
 app = webapp2.WSGIApplication([
     ('/api/multido', MultiDoHandler),

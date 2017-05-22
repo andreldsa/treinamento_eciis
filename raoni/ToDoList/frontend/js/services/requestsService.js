@@ -3,6 +3,7 @@ angular.module('todoList').service('requestService', function($http){
     var service = this;
     var _user;
     service.view_task = {};
+    service.current_id = 0;
     Object.defineProperties(service, {
         user: {
             get: function () { return _user; },
@@ -21,7 +22,11 @@ angular.module('todoList').service('requestService', function($http){
             service.view_task = task;
         });
         return promise
-    }
+    };
+
+    service.changeTask = function(task){
+        return $http.post('/api/singledo/' + service.current_id, task);
+    };
 
     service.login = function (){
         window.location.replace('/api/login');

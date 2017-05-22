@@ -11,6 +11,7 @@ var vm;
         vm.task_description = '';
         vm.task_deadline = '';
         vm.view_task = requestService.view_task;
+        vm.current_id = requestService.current_id;
 
         vm.createTask = function(name, description, deadline){
           task = new Task({name: name, description: description, deadline: deadline});
@@ -18,6 +19,22 @@ var vm;
           vm.task_description = '';
           vm.task_deadline = '';
           vm.putTask(task);
+        };
+
+        vm.ediTask = function(id){
+            requestService.current_id = id;
+            $state.go('app.edit_task');
+        };
+
+        vm.changeTask = function(task){
+          requestService.changeTask(task).then(function(){
+              vm.edit_task = {};
+          }, function( err ){
+              if(err.status == 204){
+                  alert('Tarefa não encontrada');
+                  vm.edit_task = {};
+              }
+          });
         };
 
         vm.loadTasks = function(){
