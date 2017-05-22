@@ -74,7 +74,7 @@ class User(ndb.Model):
         return user_data
 
     @staticmethod
-    @ndb.transactional(retries=2, xg=True)
+    @ndb.transactional(xg=True)
     def del_task(task_id, user_id):
         task_key = ndb.Key('Task', task_id)
         user = User.get_by_id(user_id)
