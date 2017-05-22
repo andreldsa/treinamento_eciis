@@ -11,6 +11,11 @@ class PatchException(Exception):
 
 
 def _assert(condition, msg):
+    """
+    Verify if condition is true.
+
+    Oterwise generetes an exception with message passed.
+    """
     if condition:
         raise PatchException(msg)
 
@@ -19,13 +24,17 @@ def create_entity(entity_class, properties_values):
     """Create new entity of class specified."""
     entity = entity_class()
 
-    for propertie in properties_values:
-        setattr(entity, propertie, properties_values[propertie])
+    for property in properties_values:
+        setattr(entity, property, properties_values[property])
     return entity
 
 
 def verify_entity(func):
-    """Decorator for verify if value passed is dict."""
+    """Decorator for verify if value passed is dict.
+
+    If it is, create an object with the dict and pass it as a
+    parameter in place of the value.
+    """
     def params(self, value, entity_class, *args):
         """Receive params of function."""
         if isinstance(value, dict):
@@ -35,11 +44,11 @@ def verify_entity(func):
 
 
 class JsonPatch(object):
-    """Class of interpretation and application of jsonPatch."""
+    """Class to interpret and apply JSONPatch."""
 
     @staticmethod
     def load(json1, obj, entity_class):
-        """It loads jsonPatch and applies all operations contained therein."""
+        """It loads jsonPatch and apply all operations contained therein."""
         list_patchs = json.loads(json1, encoding="utf-8")
 
         for dict_patch in list_patchs:
@@ -97,11 +106,14 @@ class Operation(object):
         path_list = path[1:].split('/')
         final_path = path_list.pop(-1)
         obj = Operation.go_through_path(self, obj, path_list)
+        flag_index_top = "-"
+        index_top = "-1"
+        integer_signals = "-+"
 
-        if final_path == "-":
-            final_path = "-1"
+        if final_path == flag_index_top:
+            final_path = index_top
 
-        if final_path.lstrip("-+").isdigit():
+        if final_path.lstrip(integer_signals).isdigit():
             self.__subclass.operation_in_list(
                 self,
                 value,
@@ -221,4 +233,5 @@ class Test(Operation):
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation test in list."""
         _assert(getattr(obj, attribute) != value, "Test fail, object "
-                "%s does not correspond to what was passed %s" % (getattr(obj, attribute), value))
+                "%s does not correspond to what was passed %s"
+                % (getattr(obj, attribute), value))
