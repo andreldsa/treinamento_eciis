@@ -13,7 +13,7 @@ class Task(ndb.Model):
         task.name_task = name_task
         task.put()
         return task
-    
+
     @staticmethod
     def format_task(task):
         task_dict = task.to_dict()
@@ -74,14 +74,14 @@ class User(ndb.Model):
         return user_data
 
     @staticmethod
-    @ndb.transactional(retries=0, xg=True)
+    @ndb.transactional(retries=2, xg=True)
     def del_task(task_id, user_id):
         task_key = ndb.Key('Task', task_id)
         user = User.get_by_id(user_id)
         task_dict = Task.format_task(task_key.get())
 
         task_key.delete()
-        #Checks whether the task exists in the list, 
+        #Checks whether the task exists in the list,
         #otherwise it generates an exception
         task_index = user.tasks.index(task_key)
         user.tasks.pop(task_index)

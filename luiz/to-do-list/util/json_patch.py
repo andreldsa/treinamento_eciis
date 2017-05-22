@@ -167,7 +167,7 @@ class Add(Operation):
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
-        """Execute Operation add in list."""
+        """Execute Operation add in attribute."""
         obj.__setattr__(attribute, value)
 
 
@@ -183,7 +183,7 @@ class Remove(Operation):
         attribute_list.pop(index)
 
     def operation_in_attribute(self, value, entity_class, obj, attribute):
-        """Execute Operation remove in list."""
+        """Execute Operation remove in attribute."""
         _assert(
             not hasattr(obj, attribute),
             "Attribute %s not found" % attribute
@@ -207,7 +207,7 @@ class Replace(Operation):
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
-        """Execute Operation replace in list."""
+        """Execute Operation replace in attribute."""
         _assert(
             not hasattr(obj, attribute),
             "Attribute %s not found" % attribute
@@ -231,7 +231,7 @@ class Test(Operation):
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
-        """Execute Operation test in list."""
+        """Execute Operation test in attribute."""
         _assert(getattr(obj, attribute) != value, "Test fail, object "
                 "%s does not correspond to what was passed %s"
                 % (getattr(obj, attribute), value))
