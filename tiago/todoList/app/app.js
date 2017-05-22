@@ -45,7 +45,6 @@
 
   app.controller('AppCtrl', function AppCtrl(UserService) {
         var vm = this;
-        vm.save_user = UserService.save;
         Object.defineProperties(vm, {
             user: {
                 get: function () { return UserService.user; },

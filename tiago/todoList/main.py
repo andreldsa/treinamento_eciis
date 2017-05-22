@@ -49,14 +49,14 @@ class MainHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(data2json(user_data).encode('utf-8'))
 
-class UsuarioHandler(BaseHandler):
+class UpdateHandler(BaseHandler):
     def put(self, email):
         usuario = Usuario.get_by_id(email)
         _assert(usuario, 400, "usuario not found")
         data = json.loads(self.request.body)
-        tarefas_update = usuario.update(data)
+        update = usuario.update(data)
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write(data2json(tarefas_update).encode('utf-8')) 
+        self.response.write(data2json(update).encode('utf-8')) 
 
 class DeadlineHandler(BaseHandler):
     def get(self):
@@ -72,6 +72,6 @@ app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/api', MainHandler),
-    ('/api/usuario/(.*)', UsuarioHandler),
+    ('/api/update/(.*)', UpdateHandler),
     ('/api/deadline', DeadlineHandler),
 ], debug=True)

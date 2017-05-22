@@ -3,7 +3,8 @@
 	
 	app.controller('TarefasCtrl', function TarefasCtrl(UserService, $mdDialog) {
 		var vm = this;
-		vm.save_user = UserService.save;
+		vm.save = UserService.save;
+    vm.delete = UserService.delete;
     vm.tarefa = {
       nome: '',
       descricao: '',
@@ -19,6 +20,7 @@
 
    	vm.del_tarefa = function del_tarefa(tarefa, ev) {
    	  var confirm = $mdDialog.confirm()
+          .clickOutsideToClose(true)
    	      .title('Deseja finalizar tarefa?')
    	      .textContent('A tarefa ' + '"' + tarefa.nome + '"' + ' será finalizada')
    	      .ariaLabel('Lucky day')
@@ -27,15 +29,13 @@
    	      .cancel('Cancelar');
 
    	  $mdDialog.show(confirm).then(function() {
-   	    vm.showAlert(ev, 'Tarefa finalizada com sucesso');
-        vm.user.del_tarefa(tarefa);
-        vm.save_user(tarefa.id);
+        vm.save('del', tarefa);
+        vm.showAlert(ev, 'Tarefa finalizada com sucesso');
    	  });
    	};
 
     vm.add_tarefa = function(ev) {
-      vm.user.add_tarefa(vm.tarefa);
-      vm.save_user('add');
+      vm.save('add', vm.tarefa);
       vm.showAlert(ev,'A tarefa ' + '"' + vm.tarefa.nome + '"' + ' foi salva com sucesso');
       vm.clear();
     };

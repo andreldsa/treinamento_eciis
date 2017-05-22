@@ -6,28 +6,33 @@ class Usuario(ndb.Model):
 	keys_tarefas = ndb.IntegerProperty(repeated=True)
 
 	def update(self, data):
+		update = {}
 		if data.get('operation') == 'add':
-			self.add_tarefa(data)
+			tarefa = self.add_tarefa(data)
+			update = {
+				'nome': tarefa.nome,
+				'descricao': tarefa.descricao,
+				'prazo': tarefa.prazo,
+				'id': tarefa.key.id()
+			}
 
 		else:
 			self.del_tarefa(data)
-
+			
 		self.put()
-		tarefas_update = {
-			"tarefas": self.get_tarefas()
-		}
-		return tarefas_update
+		return update
 
 	def add_tarefa(self, data):
 		tarefa = Tarefa()
-		tarefa.nome = data.get('tarefas')[-1]['nome']
-		tarefa.descricao = data.get('tarefas')[-1]['descricao']
-		tarefa.prazo = data.get('tarefas')[-1]['prazo']
+		tarefa.nome = data.get('nome')
+		tarefa.descricao = data.get('descricao')
+		tarefa.prazo = data.get('prazo')
 		key = tarefa.put()
 		self.keys_tarefas.append(key.id())
+		return tarefa
 
 	def del_tarefa(self, data):
-		tarefaID = data.get('operation')
+		tarefaID = data.get('id')
 		self.keys_tarefas.remove(tarefaID)
 		ndb.Key(Tarefa, tarefaID).delete()
 

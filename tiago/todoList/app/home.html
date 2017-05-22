@@ -1,5 +1,8 @@
 <md-content flex md-whiteframe="4" layout-margin style="padding: 4px;">
   <h1>Tarefas</h1>
+  <!---p ng-if="vm.user.tarefas.length == 0">
+      Você não tem nenhuma tarefa. Clique no menu superior direito e cadastre uma tarefa.
+  </p-->
   <md-list>
     <md-list-item class="md-2-line md-long-text" ng-repeat="tarefa in vm.user.tarefas | orderBy:'prazo'" ng-click="vm.del_tarefa(tarefa, $event)">
       <div class="md-list-item-text">
@@ -7,6 +10,7 @@
         <p><b>Descrição:</b> {{tarefa.descricao}}</p>
         <p><b>Prazo:</b> {{tarefa.prazo | date}}</p>
       </div>
+      <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
   </md-list>
 </md-content>
