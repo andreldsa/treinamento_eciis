@@ -45,7 +45,7 @@
 
         vm.changeDone = function changeDone(task) {
             task.done = !task.done;
-            console.log(task.done);
+            TaskService.updateTask(listId, task.id, task);
         };
 
 

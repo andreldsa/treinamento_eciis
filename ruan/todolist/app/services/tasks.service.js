@@ -23,6 +23,11 @@
         }
 
 
+        service.updateTask = function updateTask(listId, taskId, task) {
+            return $http.put('/api/lists/' + listId + '/tasks/' + taskId, task);
+        }
+
+
         service.save = function save(listId, task) {
             var url = '/api/lists/' + listId + '/task';
             var promise = $http.post(url, task)

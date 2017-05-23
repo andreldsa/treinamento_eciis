@@ -45,8 +45,7 @@ class List(ndb.Model):
         new_list = List()
         new_list.title = data.get('title')
         new_list.description = data.get('description')
-        new_list.put()
-        return new_list.key
+        return new_list.put()
 
 
 class Task(ndb.Model):
@@ -56,6 +55,12 @@ class Task(ndb.Model):
         required=True, choices=set(['high', 'medium', 'low']))
     done = ndb.BooleanProperty(default=False)
     list = ndb.KeyProperty(kind='List', required=True)
+
+    def update(self, data):
+        for prop in ['title', 'description', 'priority', 'done']:
+            setattr(self, prop, data[prop])
+
+        self.put()
 
     @staticmethod
     def create(data, list_key):

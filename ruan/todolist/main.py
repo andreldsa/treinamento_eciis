@@ -117,6 +117,16 @@ class ListTaskHandler(BaseHandler):
         task = data2dict(task)
         self.response.write(data2json(task).encode('utf-8'))
 
+    # update an existent task
+    @login_required
+    @json_response
+    def put(self, user, listId, taskId):
+        data = json.loads(self.request.body)
+        task = Task.get_by_id(int(taskId))
+        task.update(data)
+        task = data2dict(task)
+        self.response.write(data2json(task).encode('utf-8'))
+
     # Add a new task to a list
     @login_required
     @json_response
