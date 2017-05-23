@@ -28,7 +28,7 @@ var vm;
 
         vm.goTo = function(state){
             $state.go(state)
-        }
+        };
 
         vm.changeTask = function(task){
           requestService.changeTask(task).then(function(){

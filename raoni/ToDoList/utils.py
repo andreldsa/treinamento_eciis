@@ -17,4 +17,3 @@ def data2json(data):
         separators=(',', ': '),
         ensure_ascii=False
     )
-        

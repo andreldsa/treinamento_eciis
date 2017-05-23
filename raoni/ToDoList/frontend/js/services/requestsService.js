@@ -9,7 +9,7 @@ angular.module('todoList').service('requestService', function($http){
             get: function () { return _user; },
             set: function (data) { _user = data; }
         }
-    })
+    });
 
     service.fetchTasks = function () {
         return $http.get('/api/multido');
@@ -18,7 +18,8 @@ angular.module('todoList').service('requestService', function($http){
     service.fetchTask = function(id){
         service.view_task = {};
         var promise = $http.get('/api/singledo/' + id).then(function(response){
-            task = new Task({name: response.data['name'], description: response.data['description'], deadline: response.data['deadline'], state: response.data['state']});
+            task = new Task({name: response.data['name'], description: response.data['description'],
+                             deadline: response.data['deadline'], state: response.data['state']});
             service.view_task = task;
         });
         return promise
