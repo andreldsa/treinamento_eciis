@@ -1,0 +1,39 @@
+
+
+<md-card flex md-whiteframe="2" layout="column">
+    <md-content layout-gt-md="column" layout-padding>
+            <form name="taskForm">
+                <md-input-container class="md-block">
+                    <label>Title</label>
+                    <input ng-model="vm.task.title" name="taskTitle" md-maxlength="50" required>
+                    <div ng-messages="taskForm.taskTitle.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block">
+                    <label>Description</label>
+                    <textarea ng-model="vm.task.description" rows="2" 
+                        md-maxlength="150" md-select-on-focus>
+                    </textarea>
+                </md-input-container>
+
+                <md-input-container class="md-block">
+                    <p>Priority</p>
+                    <md-radio-group ng-model="vm.task.priority" layout="row">
+                        <md-radio-button ng-repeat="priority in vm.priorities" 
+                            name="{{priority}}" value="{{priority}}" class="">
+                            {{ priority | uppercase }}
+                        </md-radio-button>
+                    </md-radio-group>
+                </md-input-container>         
+
+                <md-input-container class="md-block">
+                    <md-button class="md-raised" ng-disabled="taskForm.$invalid" 
+                        ng-click="vm.submit()">
+                        Save
+                    </md-button>
+                </md-input-container>
+            </form>
+    </md-content>
+</md-card>

@@ -1,1 +1,25 @@
-<h2>{{ vm.text }}</h2>
+<md-card ng-repeat="list in vm.lists" ng-click="null">
+    <md-card-content layout="row" layout-align="space-between">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{ list.title }}</span>
+                <span class="md-subhead">{{ list.description }}</span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-actions layout="column">
+            <md-button class="md-accent md-icon-button" aria-label="View List"
+                ui-sref="list-details({listId: list.id})">
+                <md-icon md-font-icon="md">view_list</md-icon>
+            </md-button>
+            <md-button class="md-accent md-icon-button" aria-label="Edit"
+                ui-sref="list-edit({listId: list.id})">
+                <md-icon md-font-icon="md">mode_edit</md-icon>
+            </md-button>
+            <md-button class="md-accent md-icon-button" aria-label="Delete"
+                ng-click="vm.deleteList(list.id)">
+                <md-icon md-font-icon="md">delete</md-icon>
+            </md-button>
+        </md-card-actions>
+    </md-card-content>
+</md-card>

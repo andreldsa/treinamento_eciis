@@ -1,0 +1,62 @@
+
+<div flex-xs>
+    <md-content flex md-whiteframe="2" layout-padding>
+        <md-card>
+            <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{vm.list.title}}</span>
+                <span class="md-subhead">{{vm.list.description}}</span>
+            </md-card-title-text>
+            </md-card-title>
+
+            <md-divider></md-divider>
+            
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-fab md-accent md-mini" aria-label="Add Task"
+                    ui-sref="task-form({listId: vm.list.id})">
+                <md-icon md-font-icon="md">add</md-icon>
+                </md-button>
+            </md-card-actions>
+
+            <div ng-if="vm.noTasks()" layout="row" layout-align="center center">
+                <div>There is nothing to do... </div>
+            </div>
+
+            <md-card-content>
+                <md-card ng-repeat="task in vm.tasks">
+                    <md-card-title>
+                        <md-card-title-text layout="row">
+                            <span class="md-headline">{{task.title}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+            
+                    <md-divider></md-divider>
+                    
+                    <md-card-content>
+                        <p> {{task.description}} </p>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-chips >
+                            <md-chip>{{task.priority | uppercase}}</md-chip>
+                        </md-chips>
+                        <div>
+                        <md-button class="md-accent md-icon-button" aria-label="Done"
+                            ng-click="vm.changeDone(task)">
+                            <md-icon md-font-icon="md">{{task.done?'check_circle':'done'}}</md-icon>
+                        </md-button>
+                        <md-button class="md-accent md-icon-button" aria-label="Edit"
+                            ng-click="vm.editTask(task)">
+                            <md-icon md-font-icon="md">mode_edit</md-icon>
+                        </md-button>
+                        <md-button class="md-accent md-icon-button" aria-label="Delete"
+                            ng-click="vm.deleteTask(task.id)">                        
+                            <md-icon md-font-icon="md">delete</md-icon>
+                        </md-button>
+                        </div>
+                    </md-card-actions>
+                </md-card>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>
+

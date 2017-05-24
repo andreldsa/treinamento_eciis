@@ -2,32 +2,37 @@
 
     angular
         .module('todolistApp')
-        .config(routerConfig);
+        .config(['$stateProvider', '$urlRouterProvider', routerConfig]);
     
     function routerConfig($stateProvider, $urlRouterProvider) {        
         
-        $urlRouterProvider.otherwise('/lists');        
+        $urlRouterProvider.otherwise('/home');        
         
         $stateProvider
-            .state('about', {
-                url: '/about',
-                templateUrl: 'components/about/about.html',
-                controller: 'AboutController',
-                controllerAs: 'vm'
+            .state('home', {
+                url: '/home',
+                component: 'home'
             })
             .state('lists', {
                 url: '/lists',
-                templateUrl: 'components/lists/lists.html',
-                controller: 'ListsController',
-                controllerAs: 'vm'
+                component: 'lists'
             })
-            .state('tasks', {
-                url: '/tasks',
-                templateUrl: 'components/tasks/tasks.html',
-                controller: 'TasksController',
-                controllerAs: 'vm'
+            .state('list-details', {
+                url: '/list/{listId:int}',
+                component: 'listDetails'
             })
-
+            .state('list-form', {
+                url: '/list',
+                component: 'listForm'
+            })
+            .state('list-edit', {
+                url: '/list/{listId:int}',
+                component: 'listForm'
+            })
+            .state('task-form', {
+                url: '/list/{listId:int}/task/',
+                component: 'taskForm'
+            })
     }
 
 })();
