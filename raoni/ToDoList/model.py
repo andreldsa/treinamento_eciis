@@ -1,10 +1,14 @@
+"""Models."""
 from google.appengine.ext import ndb
 import datetime
 import time
 
+
 class Task(ndb.Model):
+    """Task model."""
+
     name = ndb.StringProperty(required=True)
-    deadline = ndb.DateProperty(required = True)
+    deadline = ndb.DateProperty(required=True)
     description = ndb.StringProperty(required=True)
     state = ndb.StringProperty(choices=set([
         'in progress',
@@ -13,17 +17,20 @@ class Task(ndb.Model):
 
     @staticmethod
     def createTask(data):
+        """Create Tasks."""
         task = Task()
         task.name = data['name']
         task.description = data['description']
         deadline = data.get('deadline').split('/')
-        task.deadline = datetime.date(int(deadline[0]), int(deadline[1]), int(deadline[2]))
+        task.deadline = datetime.date(
+            int(deadline[0]), int(deadline[1]), int(deadline[2]))
         Task.setState(task)
         task_key = task.put()
         return task_key
 
     @staticmethod
     def setState(task):
+        """Set the task's state once called."""
         current_date = time.strftime("%x")
         task_date = str(task.deadline)
         if int(task_date[2:4]) > int(current_date[6:8]):
@@ -46,11 +53,14 @@ class Task(ndb.Model):
 
 
 class User(ndb.Model):
+    """User model."""
+
     tasks = ndb.KeyProperty(kind='Task', repeated=True)
     email = ndb.StringProperty(required=True)
 
     @staticmethod
     def createTask(user_google, data):
+        """Receive a call from main and call Task.createTask."""
         task_key = Task.createTask(data)
         user_email = user_google.email().lower()
         user = User.get_or_insert(user_email, email=user_email)
@@ -59,6 +69,7 @@ class User(ndb.Model):
 
     @staticmethod
     def loadTasks(user_google):
+        """Load the user's tasks."""
         user_email = user_google.email().lower()
         user = User.get_or_insert(user_email, email=user_email)
         user_tasks = []
@@ -71,6 +82,7 @@ class User(ndb.Model):
 
     @staticmethod
     def deleteTask(user_google, id):
+        """Delete a task with the id."""
         user_email = user_google.email().lower()
         user = User.get_by_id(user_email)
         finded = False
@@ -86,6 +98,7 @@ class User(ndb.Model):
 
     @staticmethod
     def loadTask(user_google, id):
+        """Load just one task."""
         user_email = user_google.email().lower()
         user = User.get_or_insert(user_email, email=user_email)
         for task in user.tasks:
@@ -99,6 +112,7 @@ class User(ndb.Model):
 
     @staticmethod
     def editTask(user_google, id, data):
+        """Edit a task according with the data and id."""
         user = User.get_by_id(user_google.email().lower())
         task_to_edit = None
         for task in user.tasks:
@@ -115,11 +129,13 @@ class User(ndb.Model):
 
     @staticmethod
     def setField(task, field, value):
+        """Change a field."""
         if field == 'name':
             task.name = value
         elif field == 'deadline':
             deadline = value.split('/')
-            task.deadline = datetime.date(int(deadline[0]), int(deadline[1]), int(deadline[2]))
+            task.deadline = datetime.date(
+                int(deadline[0]), int(deadline[1]), int(deadline[2]))
         elif field == 'description':
             task.description = value
         return task

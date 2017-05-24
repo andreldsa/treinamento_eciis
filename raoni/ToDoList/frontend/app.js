@@ -1,7 +1,7 @@
-(function () {
+(function() {
     var toDo = angular.module('todoList', ['ngMaterial', 'ui.router']);
 
-    toDo.config(function ($stateProvider, $urlRouterProvider) {
+    toDo.config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
@@ -35,8 +35,8 @@
             .state('app.home', {
                 url: '/',
                 views: {
-                    'home@':{
-                        templateUrl:'templates/home.html'
+                    'home@': {
+                        templateUrl: 'templates/home.html'
                     }
                 }
             })
