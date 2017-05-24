@@ -1,7 +1,10 @@
+"""Utils."""
+
 import json
-import webapp2
+
 
 def date_handler(obj):
+    """Date handler."""
     if hasattr(obj, 'isoformat'):
         return obj.isoformat()
     elif hasattr(obj, 'email'):
@@ -9,12 +12,14 @@ def date_handler(obj):
     elif hasattr(obj, 'kind') and hasattr(obj, 'urlsafe'):
         return obj.urlsafe()
     else:
-        raise TypeError("Unserializable object %s of type %s" % (obj, type(obj)))
+        raise TypeError("Unserializable object %s of type %s" %
+                        (obj, type(obj)))
 
     return obj
 
 
 def data2json(data):
+    """Data to JSON."""
     return json.dumps(
         data,
         default=date_handler,

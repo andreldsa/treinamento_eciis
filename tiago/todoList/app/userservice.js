@@ -16,28 +16,28 @@
             $http.get('/api')
             .then(function (response) {
                 // ok
-                if (typeof response.data.usuario != 'undefined') {
-                    _user = new Usuario();
+                if (typeof response.data.user != 'undefined') {
+                    _user = new User();
                 } else {
                     _user = {}
                 }
-                _user.tarefas = response.data.tarefas;
+                _user.tasks = response.data.tasks;
                 _user.email = response.data.email;
             }, function (err) {
                 // err
             });
         };
 
-        service.save = function(operation, tarefa) {
+        service.save = function(operation, task) {
             _user._state = 'saving';
-            tarefa.operation = operation;
+            task.operation = operation;
             var promise = $http.put(
-                '/api/update/' + _user.email, JSON.stringify(tarefa)
+                '/api/update/' + _user.email, JSON.stringify(task)
             ).then(function (response) {
                 if(operation == 'add') {
-                    _user.add_tarefa(response.data);
+                    _user.add_task(response.data);
                 } else {
-                    _user.del_tarefa(tarefa.id);
+                    _user.del_task(task.id);
                 };
                 _user._state = 'saved';
             }, function (err) {

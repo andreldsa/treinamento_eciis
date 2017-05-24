@@ -28,16 +28,16 @@
         'views': {
             'contents@': {
                 templateUrl: 'home.html',
-                controller: 'TarefasCtrl as vm'
+                controller: 'TasksCtrl as vm'
             },
         }
     })
-    .state('app.cadtarefas', {
+    .state('app.tasksRegister', {
         'url': '/ct',
         'views': {
             'contents@': {
-                templateUrl: 'cadtarefas.html',
-                controller: 'TarefasCtrl as vm'
+                templateUrl: 'tasksRegister.html',
+                controller: 'TasksCtrl as vm'
             },
         }
     })
@@ -49,10 +49,7 @@
             user: {
                 get: function () { return UserService.user; },
                 set: function (data) { UserService.user = data; }
-            },
-            eh_perfil: {
-                get: function () { return vm.user instanceof Usuario; }
             }
-        })
+        });
     });
 })();

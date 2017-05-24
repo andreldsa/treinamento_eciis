@@ -1,97 +1,118 @@
+# -*- coding: utf-8 -*-
+"""Models."""
+
 from google.appengine.ext import ndb
 from google.appengine.api import mail
 import datetime
 
-class Usuario(ndb.Model):
-	keys_tarefas = ndb.IntegerProperty(repeated=True)
 
-	def update(self, data):
-		update = {}
-		if data.get('operation') == 'add':
-			tarefa = self.add_tarefa(data)
-			update = {
-				'nome': tarefa.nome,
-				'descricao': tarefa.descricao,
-				'prazo': tarefa.prazo,
-				'id': tarefa.key.id()
-			}
+class User(ndb.Model):
+    """Class User."""
 
-		else:
-			self.del_tarefa(data)
-			
-		self.put()
-		return update
+    keys_tasks = ndb.IntegerProperty(repeated=True)
 
-	def add_tarefa(self, data):
-		tarefa = Tarefa()
-		tarefa.nome = data.get('nome')
-		tarefa.descricao = data.get('descricao')
-		tarefa.prazo = data.get('prazo')
-		key = tarefa.put()
-		self.keys_tarefas.append(key.id())
-		return tarefa
+    def update(self, data):
+        """Update the tasks of user."""
+        update = {}
+        if data.get('operation') == 'add':
+            task = self.add_task(data)
+            update = {
+                'name': task.name,
+                'description': task.description,
+                'deadline': task.deadline,
+                'id': task.key.id()
+            }
 
-	def del_tarefa(self, data):
-		tarefaID = data.get('id')
-		self.keys_tarefas.remove(tarefaID)
-		ndb.Key(Tarefa, tarefaID).delete()
+        else:
+            self.del_task(data)
 
-	def get_tarefas(self):
-		tarefas = []
+        self.put()
+        return update
 
-		if len(self.keys_tarefas) > 0:
-			for tarefaID in self.keys_tarefas:
-				tarefa = Tarefa.get_by_id(tarefaID)
-				tarefas.append({
-					'nome': tarefa.nome, 
-					'descricao': tarefa.descricao, 
-					'prazo': tarefa.prazo,
-					'id' : tarefaID
-				})
+    def add_task(self, data):
+        """Add a task."""
+        task = Task()
+        task.name = data.get('name')
+        task.description = data.get('description')
+        task.deadline = data.get('deadline')
+        key = task.put()
+        self.keys_tasks.append(key.id())
+        return task
 
-		return tarefas
+    def del_task(self, data):
+        """Delete a task."""
+        taskID = data.get('id')
+        self.keys_tasks.remove(taskID)
+        ndb.Key(Task, taskID).delete()
 
-	def get_data(self):
-		data = {
-			"email": self.key.id(),
-			"usuario": self.to_dict(),
-			"tarefas": self.get_tarefas()
-		}
+    def get_tasks(self):
+        """Return all the tasks of user."""
+        tasks = []
 
-		return data
+        if len(self.keys_tasks) > 0:
+            for taskID in self.keys_tasks:
+                task = Task.get_by_id(taskID)
+                tasks.append({
+                    'name': task.name,
+                    'description': task.description,
+                    'deadline': task.deadline,
+                    'id': taskID
+                })
 
-	def send_email(self):
-		expirando = []
-		for tarefaID in self.keys_tarefas:
-			tarefa = Tarefa.get_by_id(tarefaID)
-			if tarefa.expirando:
-				expirando.append('Sem nome' if len(tarefa.nome) == 0 else tarefa.nome)
+        return tasks
 
-		if len(expirando) > 0:
-			num_tarefas = str(len(expirando))
-			tarefas = ', '.join(expirando)
-			message = 'A(s) seguinte(s) tarefa(s) esta(ao) expirando: %s' % tarefas
-			mail.send_mail(
-				sender='tiago.pereira@ccc.ufcg.edu.br',
-				to=self.key.id(),
-				subject='Voce tem ' + num_tarefas + ' tarefa(s) proxima(s) de expirar',
-				body=message
-				)
+    def get_data(self):
+        """Change the data of user to dictionary."""
+        data = {
+            "email": self.key.id(),
+            "user": self.to_dict(),
+            "tasks": self.get_tasks()
+        }
 
-class Tarefa(ndb.Model):
-	nome = ndb.StringProperty()
-	descricao = ndb.StringProperty()
-	prazo = ndb.StringProperty()
-	expirando = ndb.BooleanProperty()
+        return data
 
-	def verify_deadline(self):
-		current_time = datetime.datetime.now().date()
-		if self.prazo:
-			data = self.prazo.split('T')[0].split('-')
-			deadline = datetime.datetime(int(data[0]), int(data[1]), int(data[2]))
-			time_left = deadline.date() - current_time
-			self.expirando = time_left <= datetime.timedelta(2) and time_left >= datetime.timedelta(0)
-		else:
-			self.expirando = False
+    def send_email(self):
+        """Send email for user."""
+        expiring_tasks = []
+        for taskID in self.keys_tasks:
+            task = Task.get_by_id(taskID)
+            if task.expiring:
+                expiring_tasks.append('Sem nome' if len(
+                    task.name) == 0 else task.name)
 
-		self.put()
+        if len(expiring_tasks) > 0:
+            num_tasks = str(len(expiring_tasks))
+            tasks = ', '.join(expiring_tasks)
+            message = 'A(s) seguinte(s) tarefa(s) esta(ao) \
+            expirando: %s' % tasks
+            mail.send_mail(
+                sender='tiago.pereira@ccc.ufcg.edu.br',
+                to=self.key.id(),
+                subject='Voce tem ' + num_tasks +
+                ' tarefa(s) proxima(s) de expirar',
+                body=message
+            )
+
+
+class Task(ndb.Model):
+    """Class Task."""
+
+    name = ndb.StringProperty()
+    description = ndb.StringProperty()
+    deadline = ndb.StringProperty()
+    expiring = ndb.BooleanProperty()
+
+    def verify_deadline(self):
+        """Verify the deadline of task."""
+        current_time = datetime.datetime.now().date()
+        if self.prazo:
+            data = self.deadline.split('T')[0].split('-')
+            deadline = datetime.datetime(
+                int(data[0]), int(data[1]), int(data[2]))
+            time_left = deadline.date() - current_time
+            self.expiring = time_left <= datetime.timedelta(
+                2) and time_left >= datetime.timedelta(0)
+        else:
+            self.expiring = False
+
+        self.put()
