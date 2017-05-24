@@ -1,0 +1,48 @@
+<div>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-truncate style="position: absolute; left: 90px; right: 170px; top: 13px; bottom: 13px;">
+                    Do List</md-truncate>
+
+                <span flex></span>
+                <md-menu md-offset="0 -7">
+                    <md-button class="md-fab md-mini" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                        <md-icon>more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="2">
+                        <md-menu-item ng-show="vm.user"> 
+                            <a href="/logout">
+                            <md-button> <span md-menu-align-target>Logout</span></md-button>
+                            </a>
+                        </md-menu-item>
+                        <md-menu-item ng-hide="vm.user"> 
+                            <a href="/login">
+                            <md-button> <span md-menu-align-target>Login</span></md-button>
+                            </a>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </md-toolbar>
+        <div class="md-padding" ng-if="vm.user">
+            <md-nav-bar nav-bar-aria-label="navigation links">
+                <a ui-sref="app.home">
+                    <md-nav-item md-nav-click="null">
+                    Listas de Atividade
+                    </md-nav-item>
+                </a>
+                <a ui-sref="app.rglist">
+                    <md-nav-item md-nav-click="null">
+                        Cadastrar Lista
+                    </md-nav-item>
+                </a>
+                <a ui-sref="app.rgtask">
+                    <md-nav-item md-nav-click="null">
+                        Cadastrar Atividade
+                    </md-nav-item>
+                </a>       
+            </md-nav-bar>
+            <div class="ext-content" ui-view>
+            </div>
+        </div>
+</div>

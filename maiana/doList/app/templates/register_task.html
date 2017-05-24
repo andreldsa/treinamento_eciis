@@ -1,0 +1,27 @@
+<div layout="column">
+    <form name="ActivityForm">
+        <div layout="column">
+          <md-input-container class="md-block">
+            <label>Nome</label>
+            <input required name="name" ng-model="vm.activity.name">
+            <div ng-messages="ActivityForm.name.$error">
+            <div ng-message="required">This is required.</div>
+            </div>
+          </md-input-container>
+          
+
+          <md-input-container class="md-block">
+            <label>Comentário</label>
+            <input ng-model="vm.activity.comment">
+          </md-input-container>
+          <md-input-container>
+            <md-select ng-model="vm.list.id">
+              <md-option value="{{list}}" ng-repeat="list in vm.user.lists">
+              {{vm.user.lists_name[$index]}}</md-option>
+            </md-select>
+          </md-input-container>
+          <md-button class="md-accent" ng-click="vm.register()">Register</md-button>
+        </div>
+    </form>
+
+</div>
