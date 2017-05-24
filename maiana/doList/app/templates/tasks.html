@@ -1,18 +1,25 @@
-<div ng-controller="TaskController as vm">
+<div>
     <md-content>
         <div flex-xs layout="column">
             <md-card md-theme-watch>
                 <md-list flex>
                     <md-list-item class="md-3-line">
                     <div class="md-list-item-text" layout="column">
-                        <h3 align="center">{{ vm.list }}</h3>
+                        <h3 align="center">{{ vm.list.name }}</h3>
                     </div>
                     </md-list-item>
                     <md-list-item class="md-3-line" ng-repeat="task in vm.tasks" ng-click="null">
-                    <div class="md-list-item-text" layout="column">
-                        <h3>{{ task.name }}</h3>
-                        <p ng-if="task.comment">{{ task.comment }}</p>
-                    </div>
+                        <div class="md-list-item-text" layout="column">
+                            <p ng-if="task.status">Atividade concluida</p>
+                            <h3>{{ task.name }}</h3>
+                            <p ng-if="task.comment">{{ task.comment }}</p>
+                        </div>
+                        <md-button class="md-fab md-mini" class="md-icon-button" ng-click="vm.concluida(task)" ng-if="!task.status">
+                                <md-icon>done</md-icon>
+                        </md-button>
+                        <md-button class="md-fab md-mini" class="md-icon-button" ng-click="vm.removeTask(task.id)">
+                                <md-icon>delete</md-icon>
+                        </md-button>
                     </md-list-item>
                 </md-list>
             </md-card>

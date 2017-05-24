@@ -1,11 +1,17 @@
-<div ng-controller="HomeController as vm">
+<div>
     <md-content>
         <div flex-xs layout="column">
             <md-card md-theme-watch>
                 <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ng-click="vm.goTasks(list.name)">
+                    <md-list-item class="md-3-line" ng-repeat="list in vm.user.lists" 
+                    ng-click="vm.goTasks(list, vm.user.lists_name[$index])">
                     <div class="md-list-item-text" layout="column">
-                        <h3>{{ list.name }}</h3>
+                        <h3>{{ vm.user.lists_name[$index] }}</h3>
+                    </div>
+                    <div>
+                        <md-button class="md-fab md-mini" class="md-icon-button" ng-click="vm.removeList(list)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
                     </div>
                     </md-list-item>
                 </md-list>

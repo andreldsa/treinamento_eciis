@@ -1,4 +1,4 @@
-<div ng-controller="RgTaskController as vm" layout="column">
+<div layout="column">
     <form name="ActivityForm">
         <div layout="column">
           <md-input-container class="md-block">
@@ -15,8 +15,9 @@
             <input ng-model="vm.activity.comment">
           </md-input-container>
           <md-input-container>
-            <md-select ng-model="vm.list">
-              <md-option value="{{list}}" ng-repeat="list in vm.user.lists | orderBy : 'list'">{{list}}</md-option>
+            <md-select ng-model="vm.list.id">
+              <md-option value="{{list}}" ng-repeat="list in vm.user.lists">
+              {{vm.user.lists_name[$index]}}</md-option>
             </md-select>
           </md-input-container>
           <md-button class="md-accent" ng-click="vm.register()">Register</md-button>

@@ -1,101 +1,150 @@
-from google.appengine.ext import ndb
 from utils import *
 from models import *
 
 import webapp2
 import json
 
-class LoginWebapp(webapp2.RequestHandler):
-    
-	def get(self):
-		user = users.get_current_user()
 
-		if user is None: 
-			login_url = users.create_login_url('/')
-			self.redirect(login_url)
+class LoginWebapp(webapp2.RequestHandler):
+
+    def get(self):
+        user = users.get_current_user()
+
+        if user is None:
+            login_url = users.create_login_url('/')
+            self.redirect(login_url)
+
 
 class LogoutWebapp(webapp2.RequestHandler):
-    
-	def get(self):
-		user = users.get_current_user()
 
-		if user: 			
-			logout_url = users.create_logout_url('/')
-			self.redirect(logout_url)
+    def get(self):
+        user = users.get_current_user()
 
-class TaskListWebapp(webapp2.RequestHandler):
-    
-	@is_logged	
-	def get(self, user_email):
-		user = User.get_by_email(user_email).get()
-		all_lists = user.lists
-				
-		response = [TaskList.get_by_id(list).to_dict() for list in all_lists]
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(response))
-		
-	@is_logged	
-	def post(self, user_email):
-		user = User.get_by_email(user_email).get()
-		data = json.loads(self.request.body)
-		str_id = data['name'].lower().encode('utf-8')
+        if user:
+            logout_url = users.create_logout_url('/')
+            self.redirect(logout_url)
 
-		list = TaskList(id=str_id) #definindo o id como nome.
-		list.name = data['name']	
-		list.put()
-		
-		user.add_list(str_id)	
-		user.put()
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(list.to_dict()))
-      
+
 class ListWebapp(webapp2.RequestHandler):
 
-	@is_logged	
-	def get(self, user, str_id_list): 		
-		str_id = str_id_list.lower()
-		list = TaskList.get_by_id(str_id)
+    @is_logged
+    def get(self, user_email):
+        user = User.get_by_id(user_email)
+        all_lists = user.lists
 
-		response = [Task.get_by_id(task).to_dict() for task in list.tasks]
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(response))
-		
-	@is_logged	
-	def post(self, user, str_id_list):
-		str_id = str_id_list.lower()
-		list = TaskList.get_by_id(str_id)
-		activity = json.loads(self.request.body)
-		
-		task = Task(id=activity['name']) #definindo o id como nome.
-		task.name = activity['name']
-		task.comment = activity.get('comment')
-		
-		task.put()
-		list.tasks.append(task.name)
-		list.put()
-		
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(task.to_dict()))
+        response = [List.get_by_id(list.id()).to_dict() for list in all_lists]
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(response))
+
+    @is_logged
+    def post(self, user_email):
+        user = User.get_by_id(user_email)
+        data = json.loads(self.request.body)
+
+        list = List()
+        list.name = data['name']
+        list.put()
+
+        user.add_list(list.key)
+        user.put()
+
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(dict_json(list)))
+
+    @is_logged
+    def delete(self, user_email, id_list):
+        user = User.get_by_id(user_email)
+
+        list = List.get_by_id(int(id_list))
+        list.key.delete()
+
+        user.remove_list(list.key)
+        user.put()
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(list.to_dict()))
+
+
+class TaskWebapp(webapp2.RequestHandler):
+
+    @is_logged
+    def get(self, user, id_list):
+
+        list = List.get_by_id(int(id_list))
+        response = [dict_json(Task.get_by_id(task.id())) for task in list.tasks]
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(response))
+
+    @is_logged
+    def post(self, user, id_list):
+
+        list = List.get_by_id(int(id_list))
+        activity = json.loads(self.request.body)
+
+        task = Task()
+        task.name = activity['name']
+        task.comment = activity.get('comment')
+
+        task.put()
+        list.add_task(task.key)
+        list.put()
+
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(dict_json(task)))
+
+    @is_logged
+    def put(self, user, id_list):
+
+        activity = json.loads(self.request.body)
+
+        task = Task.get_by_id(activity)
+        task.status = True
+        task.put()
+
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(dict_json(task)))
+
+    @is_logged
+    def delete(self, user_email, id_list, id_task):
+
+        task = Task.get_by_id(int(id_task))
+        task.key.delete()
+
+        list = List.get_by_id(int(id_list))
+        list.remove_task(task.key)
+        list.put()
+
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(data2json(dict_json(task)))
+
 
 class UserWebapp(webapp2.RequestHandler):
-	@is_logged
-	def get(self, user_email):
-		user = User.get_by_email(user_email)
 
-		if(user is None):
-			user = User.insert(user_email)
-		else:
-			user = user.get()
-		
-		perfil = user.to_dict()
-		print perfil
-		self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-		self.response.write(data2json(perfil))
+    @is_logged
+    def get(self, user_email):
+        user=User.get_by_id(user_email)
+
+        if(user is None):
+            user=User.insert(user_email)
+
+        perfil=user.to_dict()
+        perfil=get_list(perfil)
+        self.response.headers[
+            'Content-Type']='application/json; charset=utf-8'
+        self.response.write(data2json(perfil))
 
 app = webapp2.WSGIApplication([
-	('/login', LoginWebapp),
-	('/logout', LogoutWebapp),
-	('/api/user', UserWebapp),
-	('/api', TaskListWebapp),
-	('/api/(\w+)/list', ListWebapp)
+    ('/login', LoginWebapp),
+    ('/logout', LogoutWebapp),
+    ('/api', UserWebapp),
+    ('/api/list', ListWebapp),
+    ('/api/list/(\w+)', ListWebapp),
+    ('/api/(\w+)/list', TaskWebapp),
+    ('/api/(\w+)/(\w+)', TaskWebapp)
 ], debug=True)
