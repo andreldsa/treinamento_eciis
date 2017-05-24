@@ -17,10 +17,10 @@ var vm
             }
         );
         vm.removeTask = function removeTask(task){
-            DoListService.removeTask(vm.list.id, task).then(
+            DoListService.removeTask(vm.list.id, task.id).then(
                 function sucess(response){
                     _.remove(vm.tasks, function(activity) {
-                       return activity.name == task;
+                       return activity.name == task.name;
                     });
                     return response.data;   
             }, function error(response){
