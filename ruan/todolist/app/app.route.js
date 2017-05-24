@@ -25,6 +25,10 @@
                 url: '/list',
                 component: 'listForm'
             })
+            .state('list-edit', {
+                url: '/list/{listId:int}',
+                component: 'listForm'
+            })
             .state('task-form', {
                 url: '/list/{listId:int}/task/',
                 component: 'taskForm'

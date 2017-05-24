@@ -1,13 +1,3 @@
-<!--<md-list flex>
-    <md-list-item class="md-3-line" ng-repeat="list in vm.lists" ui-sref="list-details({listId: list.id})">
-        <div class="md-list-item-text" layout="column" >
-            <h3>{{ list.title }}</h3>
-            <p>{{ list.description }}</p>
-        </div>
-</md-list-item>
--->
-
-
 <md-card ng-repeat="list in vm.lists" ng-click="null">
     <md-card-content layout="row" layout-align="space-between">
         <md-card-title>
@@ -18,11 +8,15 @@
         </md-card-title>
 
         <md-card-actions layout="column">
-            <md-button class="md-icon-button" aria-label="View List"
+            <md-button class="md-accent md-icon-button" aria-label="View List"
                 ui-sref="list-details({listId: list.id})">
                 <md-icon md-font-icon="md">view_list</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Delete"
+            <md-button class="md-accent md-icon-button" aria-label="Edit"
+                ui-sref="list-edit({listId: list.id})">
+                <md-icon md-font-icon="md">mode_edit</md-icon>
+            </md-button>
+            <md-button class="md-accent md-icon-button" aria-label="Delete"
                 ng-click="vm.deleteList(list.id)">
                 <md-icon md-font-icon="md">delete</md-icon>
             </md-button>

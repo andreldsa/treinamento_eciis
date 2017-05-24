@@ -10,9 +10,7 @@
 
         Object.defineProperties(service, {
             lists: {
-                get: function () {
-                    return _lists;
-                }
+                get: function () { return _lists; }
             }
         })
 
@@ -42,6 +40,12 @@
                         return list.id == listId;
                     });
                 });
+        }
+
+
+        service.updateList = function updateList(listId, list) {
+            console.log('update list');
+            // TODO create method on backend
         }
 
 
