@@ -24,6 +24,7 @@ class ListHandler(BaseHandler):
         newList.title = data.get('title')
         newList.description = data.get('description')
         newList.put()
+        self.response.write(data2json(newList.to_dict()))
         self.response.set_status(201)
 
 
@@ -58,7 +59,6 @@ class TasksHandler(BaseHandler):
 
 
 class ListTasksHandler(BaseHandler):
-    
     # Get all tasks from a list 
     def get(self, listId):
         _list = List.get_by_id(int(listId))
@@ -84,22 +84,23 @@ class ListTasksHandler(BaseHandler):
         newTask.description = data.get('description')
         newTask.priority = data.get('priority')        
         newTask.list = list_key
+        # save task
         task_key = newTask.put()
-        
         # add task key to list
         _list.tasks.append(task_key)
         _list.put()
+        self.response.write(data2json(newTask.to_dict()))        
         self.response.set_status(201)
     
             
 
 
 app = webapp2.WSGIApplication([
+    ('/api/list', ListHandler),     
     ('/api/list/(\d+)', ListHandler), 
-    ('/api/list', ListHandler), 
-    ('/api/lists', ListsHandler), 
     ('/api/list/(\d+)/task', ListTasksHandler), 
     ('/api/list/(\d+)/tasks', ListTasksHandler), 
+    ('/api/lists', ListsHandler), 
     ('/api/task/(\d+)', TaskHandler), 
     ('/api/tasks', TasksHandler)
 ], debug=True)

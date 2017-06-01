@@ -12,20 +12,17 @@
             .state('about', {
                 url: '/about',
                 templateUrl: 'components/about/about.html',
-                controller: 'AboutController',
-                controllerAs: 'vm'
+                controller: 'AboutController as vm'
             })
             .state('lists', {
                 url: '/lists',
                 templateUrl: 'components/lists/lists.html',
-                controller: 'ListsController',
-                controllerAs: 'vm'
+                controller: 'ListsController as vm'
             })
             .state('tasks', {
                 url: '/tasks',
                 templateUrl: 'components/tasks/tasks.html',
-                controller: 'TasksController',
-                controllerAs: 'vm'
+                controller: 'TasksController as vm'
             })
 
     }
